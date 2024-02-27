@@ -31,7 +31,8 @@ public class TaskManager {
     }
 
     public void createTask(Task newTask) {
-
+        newTask.setTaskID(++idCounter);
+        allTasks.put(newTask.getTaskID(), newTask);
     }
 
     public void updateTask(Task newTask) {
