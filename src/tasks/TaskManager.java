@@ -24,7 +24,10 @@ public class TaskManager {
     }
 
     public Task getTaskByID(int id) {
-        return null;
+        if (!allTasks.containsKey(id)) {
+            return null;
+        }
+        return allTasks.get(id);
     }
 
     public void createTask(Task newTask) {
