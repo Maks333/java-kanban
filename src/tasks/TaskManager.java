@@ -20,6 +20,7 @@ public class TaskManager {
     }
 
     public void deleteAllTasks() {
+        allTasks.clear();
     }
 
     public Task getTaskByID(int id) {
