@@ -36,4 +36,28 @@ public class TaskManager {
     public void deleteTaskById(int id) {
 
     }
+
+    public HashMap<Integer, SubTask> getAllSubtasks() {
+        return allSubtasks;
+    }
+
+    public void deleteAllSubTasks() {
+
+    }
+
+    public SubTask getSubTaskById(int id) {
+        return null;
+    }
+
+    public void createSubTask(SubTask newSubTask) {
+
+    }
+
+    public void updateSubTask(SubTask newSubtask) {
+
+    }
+
+    public void deleteSubTaskByID(int id) {
+
+    }
 }
