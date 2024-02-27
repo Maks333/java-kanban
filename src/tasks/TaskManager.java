@@ -1,5 +1,6 @@
 package tasks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
@@ -59,5 +60,33 @@ public class TaskManager {
 
     public void deleteSubTaskByID(int id) {
 
+    }
+
+    public HashMap<Integer, Epic> getAllEpics() {
+        return allEpics;
+    }
+
+    public void deleteAllEpics() {
+
+    }
+
+    public Epic getEpicByID(int id) {
+        return null;
+    }
+
+    public void createEpic(Epic newEpic) {
+
+    }
+
+    public void updateEpic(Epic newEpic) {
+
+    }
+
+    public void deleteEpicByID(int id) {
+
+    }
+
+    public ArrayList<SubTask> getAllSubTasksOfEpic(int epicID) {
+        return null;
     }
 }
