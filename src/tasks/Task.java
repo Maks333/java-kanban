@@ -8,6 +8,19 @@ public class Task {
     private int taskID;
     private TaskStatus status;
 
+    public Task() {}
+
+    public Task(String name, String description, int taskID, TaskStatus status) {
+        this.name = name;
+        this.description = description;
+        this.taskID = taskID;
+        this.status = status;
+    }
+
+    public Task(String name, String description, TaskStatus status) {
+        this(name, description, 0, status);
+    }
+
     public String getName() {
         return name;
     }
