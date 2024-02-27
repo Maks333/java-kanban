@@ -7,7 +7,7 @@ public class TaskManager {
     private final HashMap<Integer, Task> allTasks;
     private final HashMap<Integer, SubTask> allSubtasks;
     private final HashMap<Integer, Epic> allEpics;
-
+    private static int idCounter = 0;
 
     public TaskManager() {
         allTasks = new HashMap<>();
@@ -15,8 +15,8 @@ public class TaskManager {
         allEpics = new HashMap<>();
     }
 
-    public HashMap<Integer, Task> getAllTasks() {
-        return allTasks;
+    public ArrayList<Task> getAllTasks() {
+        return new ArrayList<>(allTasks.values());
     }
 
     public void deleteAllTasks() {
