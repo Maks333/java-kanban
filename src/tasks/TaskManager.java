@@ -40,7 +40,7 @@ public class TaskManager {
     }
 
     public void deleteTaskById(int id) {
-
+        allTasks.remove(id);
     }
 
     public HashMap<Integer, SubTask> getAllSubtasks() {
