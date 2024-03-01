@@ -81,8 +81,8 @@ public class TaskManager {
         allSubTasks.remove(id);
     }
 
-    public HashMap<Integer, Epic> getAllEpics() {
-        return allEpics;
+    public ArrayList<Epic> getAllEpics() {
+        return new ArrayList<>(allEpics.values());
     }
 
     public void deleteAllEpics() {
