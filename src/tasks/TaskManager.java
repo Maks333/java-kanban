@@ -69,8 +69,12 @@ public class TaskManager {
         allSubtasks.put(newSubTask.getTaskID(), newSubTask);
     }
 
-    public void updateSubTask(SubTask newSubtask) {
-
+    public void updateSubTask(SubTask newSubTask) {
+        if (!allSubtasks.containsKey(newSubTask.getTaskID())) {
+            return;
+        }
+        allSubtasks.put(newSubTask.getTaskID(), newSubTask);
+        //check/update epic status
     }
 
     public void deleteSubTaskByID(int id) {
