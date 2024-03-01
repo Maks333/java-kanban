@@ -61,6 +61,12 @@ public class TaskManager {
     }
 
     public void createSubTask(SubTask newSubTask) {
+        int epicID = newSubTask.getEpicID();
+        if (!allEpics.containsKey(epicID)) {
+            return;
+        }
+        newSubTask.setTaskID(++idCounter);
+        allSubtasks.put(newSubTask.getTaskID(), newSubTask);
     }
 
     public void updateSubTask(SubTask newSubtask) {
