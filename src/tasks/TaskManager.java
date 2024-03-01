@@ -86,7 +86,6 @@ public class TaskManager {
     }
 
     public void deleteAllEpics() {
-
     }
 
     public Epic getEpicByID(int id) {
@@ -106,6 +105,12 @@ public class TaskManager {
     }
 
     public ArrayList<SubTask> getAllSubTasksOfEpic(int epicID) {
-        return null;
+        ArrayList<SubTask> subTasks = new ArrayList<>();
+        for (SubTask subTask : allSubTasks.values()) {
+            if (subTask.getEpicID() == epicID) {
+                subTasks.add(subTask);
+            }
+        }
+        return subTasks;
     }
 }
