@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 public class TaskManager {
     private final HashMap<Integer, Task> allTasks;
-    private final HashMap<Integer, SubTask> allSubtasks;
+    private final HashMap<Integer, SubTask> allSubTasks;
     private final HashMap<Integer, Epic> allEpics;
     private static int idCounter = 0;
 
     public TaskManager() {
         allTasks = new HashMap<>();
-        allSubtasks = new HashMap<>();
+        allSubTasks = new HashMap<>();
         allEpics = new HashMap<>();
     }
 
@@ -46,18 +46,18 @@ public class TaskManager {
     }
 
     public ArrayList<SubTask> getAllSubtasks() {
-        return new ArrayList<>(allSubtasks.values());
+        return new ArrayList<>(allSubTasks.values());
     }
 
     public void deleteAllSubTasks() {
-        allSubtasks.clear();
+        allSubTasks.clear();
     }
 
     public SubTask getSubTaskById(int id) {
-        if (!allSubtasks.containsKey(id)) {
+        if (!allSubTasks.containsKey(id)) {
             return null;
         }
-        return allSubtasks.get(id);
+        return allSubTasks.get(id);
     }
 
     public void createSubTask(SubTask newSubTask) {
@@ -66,19 +66,19 @@ public class TaskManager {
             return;
         }
         newSubTask.setTaskID(++idCounter);
-        allSubtasks.put(newSubTask.getTaskID(), newSubTask);
+        allSubTasks.put(newSubTask.getTaskID(), newSubTask);
     }
 
     public void updateSubTask(SubTask newSubTask) {
-        if (!allSubtasks.containsKey(newSubTask.getTaskID())) {
+        if (!allSubTasks.containsKey(newSubTask.getTaskID())) {
             return;
         }
-        allSubtasks.put(newSubTask.getTaskID(), newSubTask);
+        allSubTasks.put(newSubTask.getTaskID(), newSubTask);
         //check/update epic status
     }
 
     public void deleteSubTaskByID(int id) {
-
+        allSubTasks.remove(id);
     }
 
     public HashMap<Integer, Epic> getAllEpics() {
