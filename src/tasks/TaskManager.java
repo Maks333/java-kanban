@@ -54,7 +54,10 @@ public class TaskManager {
     }
 
     public SubTask getSubTaskById(int id) {
-        return null;
+        if (!allSubtasks.containsKey(id)) {
+            return null;
+        }
+        return allSubtasks.get(id);
     }
 
     public void createSubTask(SubTask newSubTask) {
