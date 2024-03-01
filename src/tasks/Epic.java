@@ -11,4 +11,12 @@ public class Epic extends Task{
     public Epic(String name, String description) {
         this(name, description, 0);
     }
+
+    public void addSubTask(SubTask subTask) {
+        subTasks.add(subTask);
+    }
+
+    public void removeSubTask(SubTask subTask) {
+        subTasks.remove(subTask);
+    }
 }
