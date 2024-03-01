@@ -50,7 +50,7 @@ public class TaskManager {
     }
 
     public void deleteAllSubTasks() {
-
+        allSubtasks.clear();
     }
 
     public SubTask getSubTaskById(int id) {
