@@ -61,7 +61,6 @@ public class TaskManager {
     }
 
     public void createSubTask(SubTask newSubTask) {
-
     }
 
     public void updateSubTask(SubTask newSubtask) {
