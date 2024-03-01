@@ -45,8 +45,8 @@ public class TaskManager {
         allTasks.remove(id);
     }
 
-    public HashMap<Integer, SubTask> getAllSubtasks() {
-        return allSubtasks;
+    public ArrayList<SubTask> getAllSubtasks() {
+        return new ArrayList<>(allSubtasks.values());
     }
 
     public void deleteAllSubTasks() {
