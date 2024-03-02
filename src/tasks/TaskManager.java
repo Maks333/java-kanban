@@ -146,7 +146,8 @@ public class TaskManager {
 
         boolean isNewStatusNEW = statusCounters[0] > 0 && (statusCounters[1] == 0 && statusCounters[2] == 0);
         boolean isNewStatusDONE = statusCounters[2] > 0 && (statusCounters[0] == 0 && statusCounters[1] == 0);
-        if (isNewStatusNEW) {
+        boolean isEpicEmpty = statusCounters[0] == 0 && statusCounters[1] == 0 && statusCounters[2] == 0;
+        if (isNewStatusNEW || isEpicEmpty) {
             epic.setStatus(TaskStatus.NEW);
         } else if (isNewStatusDONE) {
             epic.setStatus(TaskStatus.DONE);
