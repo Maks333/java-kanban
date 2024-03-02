@@ -98,7 +98,8 @@ public class TaskManager {
     }
 
     public void createEpic(Epic newEpic) {
-
+        newEpic.setTaskID(++idCounter);
+        allEpics.put(newEpic.getTaskID(), newEpic);
     }
 
     public void updateEpic(Epic newEpic) {
