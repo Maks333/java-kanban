@@ -49,7 +49,7 @@ public class Task {
         return status;
     }
 
-    public void setStatus(TaskStatus status) {
+    protected void setStatus(TaskStatus status) {
         this.status = status;
     }
 
