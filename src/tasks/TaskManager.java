@@ -106,7 +106,11 @@ public class TaskManager {
     }
 
     public void updateEpic(Epic newEpic) {
-
+        if (!allEpics.containsKey(newEpic.getTaskID())) {
+            return;
+        }
+        allEpics.put(newEpic.getTaskID(), newEpic);
+        calculateNewEpicStatus(newEpic.getTaskID());
     }
 
     public void deleteEpicByID(int id) {
