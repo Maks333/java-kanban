@@ -86,6 +86,11 @@ public class TaskManager {
     }
 
     public void deleteAllEpics() {
+        //getAllEpics list
+            //getAllSubTasks of Epic list
+            //remove all SubTasks of Epic from TaskManager
+            //remove all SubTask from Epic
+            //remove epic
     }
 
     public Epic getEpicByID(int id) {
