@@ -98,7 +98,10 @@ public class TaskManager {
     }
 
     public Epic getEpicByID(int id) {
-        return null;
+        if (!allEpics.containsKey(id)) {
+            return null;
+        }
+        return allEpics.get(id);
     }
 
     public void createEpic(Epic newEpic) {
