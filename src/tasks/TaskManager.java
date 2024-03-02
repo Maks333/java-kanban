@@ -75,7 +75,7 @@ public class TaskManager {
             return;
         }
         allSubTasks.put(newSubTask.getTaskID(), newSubTask);
-        //check/update epic status
+        calculateNewEpicStatus(newSubTask.getEpicID());
     }
 
     public void deleteSubTaskByID(int id) {
@@ -87,11 +87,14 @@ public class TaskManager {
     }
 
     public void deleteAllEpics() {
-        //getAllEpics list
-            //getAllSubTasks of Epic list
-            //remove all SubTasks of Epic from TaskManager
-            //remove all SubTask from Epic
-            //remove epic
+        ArrayList<Epic> epics = getAllEpics();
+            for (Epic epic : epics) {
+                ArrayList<SubTask> subTasks = getAllSubTasksOfEpic(epic.getTaskID());
+                for (SubTask subTask : subTasks) {
+                    deleteSubTaskByID(subTask.getTaskID());
+                }
+                deleteEpicByID(epic.getTaskID());
+            }
     }
 
     public Epic getEpicByID(int id) {
