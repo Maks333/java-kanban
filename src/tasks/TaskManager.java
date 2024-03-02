@@ -67,6 +67,7 @@ public class TaskManager {
         }
         newSubTask.setTaskID(++idCounter);
         allSubTasks.put(newSubTask.getTaskID(), newSubTask);
+        calculateNewEpicStatus(epicID);
     }
 
     public void updateSubTask(SubTask newSubTask) {
@@ -108,6 +109,38 @@ public class TaskManager {
 
     public void deleteEpicByID(int id) {
 
+    }
+
+    private void calculateNewEpicStatus(int epicID) {
+        Epic epic = getEpicByID(epicID);
+        ArrayList<SubTask> subTasks = getAllSubTasksOfEpic(epicID);
+        int[] statusCounters = new int[]{0, 0, 0};
+
+        for (SubTask subTask : subTasks) {
+            switch (subTask.getStatus()) {
+                case NEW:
+                    statusCounters[0]++;
+                    break;
+                case IN_PROGRESS:
+                    statusCounters[1]++;
+                    break;
+                case DONE:
+                    statusCounters[2]++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        boolean isNewStatusNEW = statusCounters[0] > 0 && (statusCounters[1] == 0 && statusCounters[2] == 0);
+        boolean isNewStatusDONE = statusCounters[2] > 0 && (statusCounters[0] == 0 && statusCounters[1] == 0);
+        if (isNewStatusNEW) {
+            epic.setStatus(TaskStatus.NEW);
+        } else if (isNewStatusDONE) {
+            epic.setStatus(TaskStatus.DONE);
+        } else {
+            epic.setStatus(TaskStatus.IN_PROGRESS);
+        }
     }
 
     public ArrayList<SubTask> getAllSubTasksOfEpic(int epicID) {
