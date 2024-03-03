@@ -1,20 +1,20 @@
 package tasks;
 
 public class SubTask extends Task{
-    private final int epicID;
+    private final int epicId;
 
-    public SubTask(String name, String description, int taskID, TaskStatus status, int epicID) {
+    public SubTask(String name, String description, int taskID, TaskStatus status, int epicId) {
         super(name, description, taskID, status);
-        this.epicID = epicID;
+        this.epicId = epicId;
     }
 
-    public SubTask(String name, String description, TaskStatus status, int epicID) {
+    public SubTask(String name, String description, TaskStatus status, int epicId) {
         super(name, description, status);
-        this.epicID = epicID;
+        this.epicId = epicId;
     }
 
-    public int getEpicID() {
-        return epicID;
+    public int getEpicId() {
+        return epicId;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class SubTask extends Task{
                 ", description='" + getDescription() + '\'' +
                 ", taskID=" + getTaskID() +
                 ", status=" + getStatus() +
-                ", epicID=" + epicID +
+                ", epicId=" + epicId +
                 '}';
     }
 }
