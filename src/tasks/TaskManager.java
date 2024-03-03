@@ -133,15 +133,17 @@ public class TaskManager {
         epic.setDescription(newEpic.getDescription());
     }
 
-    public void deleteEpicByID(int id) {
-        if (allEpics.containsKey(id)) {
-            Epic epic = allEpics.get(id);
-            for (int subTaskID : epic.getSubTasks()) {
-                allSubTasks.remove(subTaskID);
-            }
-            epic.removeAllSubTasks();
-            allEpics.remove(id);
+    public void deleteEpicById(int id) {
+        if (!allEpics.containsKey(id)) {
+            return;
         }
+
+        Epic epic = allEpics.get(id);
+        for (int subTaskID : epic.getSubTasks()) {
+            allSubTasks.remove(subTaskID);
+        }
+        epic.removeAllSubTasks();
+        allEpics.remove(id);
     }
 
     private void calculateNewEpicStatus(int epicID) {
