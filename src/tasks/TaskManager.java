@@ -34,10 +34,9 @@ public class TaskManager {
     }
 
     public void updateTask(Task newTask) {
-        if (!allTasks.containsKey(newTask.getTaskId())) {
-            return;
+        if (allTasks.containsKey(newTask.getTaskId())) {
+            allTasks.put(newTask.getTaskId(), newTask);
         }
-        allTasks.put(newTask.getTaskId(), newTask);
     }
 
     public void deleteTaskById(int id) {
