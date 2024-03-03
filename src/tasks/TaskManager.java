@@ -173,11 +173,14 @@ public class TaskManager {
     }
 
     public ArrayList<SubTask> getAllSubTasksOfEpic(int epicID) {
+        if (!allEpics.containsKey(epicID)) {
+            return null;
+        }
+
         ArrayList<SubTask> subTasks = new ArrayList<>();
-        for (SubTask subTask : allSubTasks.values()) {
-            if (subTask.getEpicID() == epicID) {
-                subTasks.add(subTask);
-            }
+        Epic epic = allEpics.get(epicID);
+        for (int subTaskID : epic.getSubTasks()) {
+            subTasks.add(allSubTasks.get(subTaskID));
         }
         return subTasks;
     }
