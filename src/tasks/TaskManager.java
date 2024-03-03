@@ -56,9 +56,6 @@ public class TaskManager {
     }
 
     public SubTask getSubTaskById(int id) {
-        if (!allSubTasks.containsKey(id)) {
-            return null;
-        }
         return allSubTasks.get(id);
     }
 
