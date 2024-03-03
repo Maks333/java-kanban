@@ -131,10 +131,11 @@ public class TaskManager {
 
     public void deleteEpicByID(int id) {
         if (allEpics.containsKey(id)) {
-            ArrayList<SubTask> subTasks = getAllSubTasksOfEpic(id);
-            for (SubTask subTask : subTasks) {
-                deleteSubTaskByID(subTask.getTaskID());
+            Epic epic = allEpics.get(id);
+            for (int subTaskID : epic.getSubTasks()) {
+                allSubTasks.remove(subTaskID);
             }
+            epic.removeAllSubTasks();
             allEpics.remove(id);
         }
     }
