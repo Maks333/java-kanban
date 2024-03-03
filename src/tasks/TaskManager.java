@@ -120,9 +120,10 @@ public class TaskManager {
         return allEpics.get(id);
     }
 
-    public void createEpic(Epic newEpic) {
+    public Epic createEpic(Epic newEpic) {
         newEpic.setTaskId(++idCounter);
         allEpics.put(newEpic.getTaskId(), newEpic);
+        return newEpic;
     }
 
     public void updateEpic(Epic newEpic) {
