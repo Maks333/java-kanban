@@ -124,8 +124,9 @@ public class TaskManager {
         if (!allEpics.containsKey(newEpic.getTaskID())) {
             return;
         }
-        allEpics.put(newEpic.getTaskID(), newEpic);
-        calculateNewEpicStatus(newEpic.getTaskID());
+        Epic epic = allEpics.get(newEpic.getTaskID());
+        epic.setName(newEpic.getName());
+        epic.setDescription(newEpic.getDescription());
     }
 
     public void deleteEpicByID(int id) {
