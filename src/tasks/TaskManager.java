@@ -24,9 +24,6 @@ public class TaskManager {
     }
 
     public Task getTaskByID(int id) {
-        if (!allTasks.containsKey(id)) {
-            return null;
-        }
         return allTasks.get(id);
     }
 
