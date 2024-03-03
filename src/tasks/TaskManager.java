@@ -75,14 +75,18 @@ public class TaskManager {
     }
 
     public void updateSubTask(SubTask newSubTask) {
-        if (!allSubTasks.containsKey(newSubTask.getTaskID())) {
+
+        if (!allEpics.containsKey(newSubTask.getEpicID())) {
+            return;
+        }
+
+        boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskID());
+        boolean isSubTaskInEpic = allEpics.get(newSubTask.getEpicID()).getSubTasks().contains(newSubTask.getTaskID());
+        if (!isSubTaskInSystem || !isSubTaskInEpic) {
             return;
         }
         allSubTasks.put(newSubTask.getTaskID(), newSubTask);
 
-        int epicID = newSubTask.getEpicID();
-        Epic epic = getEpicByID(epicID);
-        epic.setSubTasks(getAllSubTasksOfEpic(epicID));
         calculateNewEpicStatus(newSubTask.getEpicID());
     }
 
