@@ -112,9 +112,6 @@ public class TaskManager {
     }
 
     public Epic getEpicByID(int id) {
-        if (!allEpics.containsKey(id)) {
-            return null;
-        }
         return allEpics.get(id);
     }
 
