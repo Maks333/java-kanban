@@ -27,9 +27,10 @@ public class TaskManager {
         return allTasks.get(id);
     }
 
-    public void createTask(Task newTask) {
+    public Task createTask(Task newTask) {
         newTask.setTaskID(++idCounter);
         allTasks.put(newTask.getTaskID(), newTask);
+        return newTask;
     }
 
     public void updateTask(Task newTask) {
