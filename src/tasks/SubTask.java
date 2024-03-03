@@ -22,7 +22,7 @@ public class SubTask extends Task{
         return "SubTask{" +
                 "name='" + getName() + '\'' +
                 ", description='" + getDescription() + '\'' +
-                ", taskID=" + getTaskID() +
+                ", taskId=" + getTaskId() +
                 ", status=" + getStatus() +
                 ", epicId=" + epicId +
                 '}';
