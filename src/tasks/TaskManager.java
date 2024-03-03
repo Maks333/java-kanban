@@ -102,9 +102,6 @@ public class TaskManager {
     }
 
     public void deleteAllEpics() {
-        for (Epic epic : allEpics.values()) {
-            epic.removeAllSubTasks();
-        }
         allEpics.clear();
         allSubTasks.clear();
     }
@@ -137,7 +134,6 @@ public class TaskManager {
         for (int subTaskId : epic.getSubTasks()) {
             allSubTasks.remove(subTaskId);
         }
-        epic.removeAllSubTasks();
         allEpics.remove(id);
     }
 
