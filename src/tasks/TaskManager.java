@@ -75,15 +75,9 @@ public class TaskManager {
     }
 
     public void updateSubTask(SubTask newSubTask) {
-
-        if (!allEpics.containsKey(newSubTask.getEpicId())) {
-            return;
-        }
-
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskId());
-        boolean isSubTaskInEpic = allEpics.get(newSubTask.getEpicId()).getSubTasks().contains(newSubTask.getTaskId());
         boolean isSameEpicId = allSubTasks.get(newSubTask.getTaskId()).getEpicId() == newSubTask.getEpicId();
-        if (!isSubTaskInSystem || !isSubTaskInEpic || !isSameEpicId) {
+        if (!isSubTaskInSystem || !isSameEpicId) {
             return;
         }
 
