@@ -5,20 +5,20 @@ import java.util.Objects;
 public class Task {
     private String name;
     private String description;
-    private int taskID;
+    private int taskId;
     private TaskStatus status;
 
-    public Task() {}
-
-    public Task(String name, String description, int taskID, TaskStatus status) {
+    public Task(String name, String description, int taskId, TaskStatus status) {
         this.name = name;
         this.description = description;
-        this.taskID = taskID;
+        this.taskId = taskId;
         this.status = status;
     }
 
     public Task(String name, String description, TaskStatus status) {
-        this(name, description, 0, status);
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
 
     public String getName() {
@@ -37,12 +37,12 @@ public class Task {
         this.description = description;
     }
 
-    public int getTaskID() {
-        return taskID;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setTaskID(int taskID) {
-        this.taskID = taskID;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     public TaskStatus getStatus() {
@@ -58,20 +58,20 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return taskID == task.taskID && Objects.equals(name, task.name)
+        return taskId == task.taskId && Objects.equals(name, task.name)
                 && Objects.equals(description, task.description) && status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, taskID, status);
+        return Objects.hash(name, description, taskId, status);
     }
     @Override
     public String toString() {
         return "Task{" +
                 "name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", taskID=" + taskID +
+                ", taskId=" + taskId +
                 ", status=" + status +
                 '}';
     }
