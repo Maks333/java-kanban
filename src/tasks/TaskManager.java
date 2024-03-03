@@ -59,17 +59,19 @@ public class TaskManager {
         return allSubTasks.get(id);
     }
 
-    public void createSubTask(SubTask newSubTask) {
+    public SubTask createSubTask(SubTask newSubTask) {
         int epicID = newSubTask.getEpicID();
         if (!allEpics.containsKey(epicID)) {
-            return;
+            return null;
         }
         newSubTask.setTaskID(++idCounter);
         allSubTasks.put(newSubTask.getTaskID(), newSubTask);
 
-        Epic epic = getEpicByID(epicID);
-        epic.setSubTasks(getAllSubTasksOfEpic(epicID));
+        Epic epic = allEpics.get(epicID);
+        epic.addSubTask(newSubTask.getTaskID());
         calculateNewEpicStatus(epicID);
+
+        return newSubTask;
     }
 
     public void updateSubTask(SubTask newSubTask) {
