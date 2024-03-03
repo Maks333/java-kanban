@@ -82,11 +82,12 @@ public class TaskManager {
 
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskID());
         boolean isSubTaskInEpic = allEpics.get(newSubTask.getEpicID()).getSubTasks().contains(newSubTask.getTaskID());
-        if (!isSubTaskInSystem || !isSubTaskInEpic) {
+        boolean isSameEpicID = allSubTasks.get(newSubTask.getTaskID()).getEpicID() == newSubTask.getEpicID();
+        if (!isSubTaskInSystem || !isSubTaskInEpic || !isSameEpicID) {
             return;
         }
-        allSubTasks.put(newSubTask.getTaskID(), newSubTask);
 
+        allSubTasks.put(newSubTask.getTaskID(), newSubTask);
         calculateNewEpicStatus(newSubTask.getEpicID());
     }
 
