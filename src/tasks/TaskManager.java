@@ -91,7 +91,12 @@ public class TaskManager {
     }
 
     public void deleteSubTaskByID(int id) {
-        allSubTasks.remove(id);
+        if (allSubTasks.containsKey(id)) {
+            SubTask subTask = allSubTasks.get(id);
+            Epic epic = allEpics.get(subTask.getEpicID());
+            epic.removeSubTask(id);
+            allSubTasks.remove(id);
+        }
     }
 
     public ArrayList<Epic> getAllEpics() {
