@@ -141,29 +141,28 @@ public class TaskManager {
     }
 
     private void calculateNewEpicStatus(int epicID) {
-        Epic epic = getEpicByID(epicID);
-        ArrayList<SubTask> subTasks = getAllSubTasksOfEpic(epicID);
-        int[] statusCounters = new int[]{0, 0, 0};
+        Epic epic = allEpics.get(epicID);
+        int newCounter = 0;
+        int doneCounter = 0;
 
-        for (SubTask subTask : subTasks) {
+        for (int subTaskID : epic.getSubTasks()) {
+            SubTask subTask = allSubTasks.get(subTaskID);
             switch (subTask.getStatus()) {
                 case NEW:
-                    statusCounters[0]++;
-                    break;
-                case IN_PROGRESS:
-                    statusCounters[1]++;
+                    newCounter++;
                     break;
                 case DONE:
-                    statusCounters[2]++;
+                    doneCounter++;
                     break;
                 default:
                     break;
             }
         }
 
-        boolean isNewStatusNEW = statusCounters[0] > 0 && (statusCounters[1] == 0 && statusCounters[2] == 0);
-        boolean isNewStatusDONE = statusCounters[2] > 0 && (statusCounters[0] == 0 && statusCounters[1] == 0);
-        boolean isEpicEmpty = statusCounters[0] == 0 && statusCounters[1] == 0 && statusCounters[2] == 0;
+        int numberOfSubTasks = epic.getSubTasks().size();
+        boolean isEpicEmpty = numberOfSubTasks == 0;
+        boolean isNewStatusNEW = numberOfSubTasks == newCounter;
+        boolean isNewStatusDONE = numberOfSubTasks == doneCounter;
         if (isNewStatusNEW || isEpicEmpty) {
             epic.setStatus(TaskStatus.NEW);
         } else if (isNewStatusDONE) {
