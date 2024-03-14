@@ -7,12 +7,19 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
     private final HashMap<Integer, SubTask> allSubTasks;
     private final HashMap<Integer, Epic> allEpics;
+    private final ArrayList<Task> history;
     private static int idCounter = 0;
 
     public InMemoryTaskManager() {
         allTasks = new HashMap<>();
         allSubTasks = new HashMap<>();
         allEpics = new HashMap<>();
+        history = new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<Task> getHistory() {
+        return null;
     }
 
     @Override
