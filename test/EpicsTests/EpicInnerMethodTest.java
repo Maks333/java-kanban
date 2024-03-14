@@ -8,6 +8,8 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.TaskStatus;
 
+import java.util.ArrayList;
+
 class EpicInnerMethodTest {
     public Epic epic;
     public SubTask subTask;
@@ -25,6 +27,11 @@ class EpicInnerMethodTest {
 
     @Test
     void addSubTask() {
+        epic.addSubTask(subTask.getTaskId());
+        ArrayList<Integer> subTasks = epic.getSubTasks();
+
+        assertEquals(1, subTasks.size(), "Addition failed");
+        assertEquals(subTask.getTaskId(), subTasks.getFirst(), "Id fields doesn't equals");
     }
 
     @Test
