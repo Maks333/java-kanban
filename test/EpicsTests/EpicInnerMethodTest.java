@@ -1,57 +1,53 @@
 package EpicsTests;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.Epic;
-import tasks.SubTask;
-import tasks.TaskStatus;
 
 import java.util.ArrayList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class EpicInnerMethodTest {
     public Epic epic;
-    public SubTask subTask;
+    int subTaskId = 1;
+    ArrayList<Integer> subTasks;
 
     @BeforeEach
     void beforeEach() {
         epic = new Epic("EpicName", "EpicDescription", 12);
-        subTask = new SubTask("SubTaskName", "SubTaskDescription", TaskStatus.NEW, 12);
+        epic.addSubTask(subTaskId);
     }
 
     @Test
     void removeExistingSubTask() {
-        epic.addSubTask(subTask.getTaskId());
-
-        epic.removeSubTask(subTask.getTaskId());
-        ArrayList<Integer> subTasks = epic.getSubTasks();
+        epic.removeSubTask(subTaskId);
+        subTasks = epic.getSubTasks();
 
         assertEquals(0, subTasks.size(), "List isn't empty");
     }
 
     @Test
     void removeNotExistingSubTask() {
-        epic.addSubTask(subTask.getTaskId());
 
         epic.removeSubTask(10);
 
-        ArrayList<Integer> subTasks = epic.getSubTasks();
+        subTasks = epic.getSubTasks();
         assertEquals(1, subTasks.size(), "List shouldn't be empty");
     }
 
     @Test
     void addSubTask() {
-        epic.addSubTask(subTask.getTaskId());
-        ArrayList<Integer> subTasks = epic.getSubTasks();
+        subTasks = epic.getSubTasks();
 
         assertEquals(1, subTasks.size(), "Addition failed");
-        assertEquals(subTask.getTaskId(), subTasks.getFirst(), "Id fields doesn't equals");
+        assertEquals(subTaskId, subTasks.getFirst(), "Id fields doesn't equals");
     }
 
     @Test
     void removeAllSubTasks() {
-        epic.addSubTask(subTask.getTaskId());
+        epic.addSubTask(subTaskId);
 
         epic.removeAllSubTasks();
 
