@@ -51,5 +51,10 @@ class EpicInnerMethodTest {
 
     @Test
     void removeAllSubTasks() {
+        epic.addSubTask(subTask.getTaskId());
+
+        epic.removeAllSubTasks();
+
+        assertTrue(epic.getSubTasks().isEmpty());
     }
 }
