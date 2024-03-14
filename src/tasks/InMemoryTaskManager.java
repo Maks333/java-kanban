@@ -14,7 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
         allTasks = new HashMap<>();
         allSubTasks = new HashMap<>();
         allEpics = new HashMap<>();
-        history = new ArrayList<>();
+        history = new ArrayList<>(10);
     }
 
     @Override
@@ -34,7 +34,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        return allTasks.get(id);
+        Task task = history.get(id);
+        history.add(task);
+        return task;
     }
 
     @Override
