@@ -21,8 +21,23 @@ class EpicInnerMethodTest {
     }
 
     @Test
-    void removeSubTask() {
+    void removeExistingSubTask() {
+        epic.addSubTask(subTask.getTaskId());
 
+        epic.removeSubTask(subTask.getTaskId());
+        ArrayList<Integer> subTasks = epic.getSubTasks();
+
+        assertEquals(0, subTasks.size(), "List isn't empty");
+    }
+
+    @Test
+    void removeNotExistingSubTask() {
+        epic.addSubTask(subTask.getTaskId());
+
+        epic.removeSubTask(10);
+
+        ArrayList<Integer> subTasks = epic.getSubTasks();
+        assertEquals(1, subTasks.size(), "List shouldn't be empty");
     }
 
     @Test
