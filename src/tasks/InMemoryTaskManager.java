@@ -8,24 +8,19 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
     private final HashMap<Integer, SubTask> allSubTasks;
     private final HashMap<Integer, Epic> allEpics;
-    private final ArrayList<Task> history;
+    private final HistoryManager history;
     private static int idCounter = 0;
 
     public InMemoryTaskManager() {
         allTasks = new HashMap<>();
         allSubTasks = new HashMap<>();
         allEpics = new HashMap<>();
-        history = new ArrayList<>();
+        history = Managers.getDefaultHistory();
     }
 
     @Override
     public List<Task> getHistory() {
-        int oldestElement = 0;
-        int MAX_HISTORY_SIZE = 10;
-        while (history.size() > MAX_HISTORY_SIZE) {
-            history.remove(oldestElement);
-        }
-        return history;
+        return history.getHistory();
     }
 
     @Override
@@ -40,7 +35,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        Task task = history.get(id);
+        Task task = allTasks.get(id);
         history.add(task);
         return task;
     }
