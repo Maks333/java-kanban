@@ -3,7 +3,7 @@ import tasks.*;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = new InMemoryTaskManager();
 
         Task task1 = new Task("Task1", "Desc of task1", TaskStatus.NEW);
         Task task2 = new Task("Task2", "Desc of task2", TaskStatus.NEW);
