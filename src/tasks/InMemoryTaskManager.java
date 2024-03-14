@@ -2,6 +2,7 @@ package tasks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
@@ -14,12 +15,17 @@ public class InMemoryTaskManager implements TaskManager {
         allTasks = new HashMap<>();
         allSubTasks = new HashMap<>();
         allEpics = new HashMap<>();
-        history = new ArrayList<>(10);
+        history = new ArrayList<>();
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
-        return null;
+    public List<Task> getHistory() {
+        int oldestElement = 0;
+        int MAX_HISTORY_SIZE = 10;
+        while (history.size() > MAX_HISTORY_SIZE) {
+            history.remove(oldestElement);
+        }
+        return history;
     }
 
     @Override
