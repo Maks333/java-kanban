@@ -65,13 +65,17 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return taskId == task.taskId && Objects.equals(name, task.name)
-                && Objects.equals(description, task.description) && status == task.status;
+        /*return taskId == task.taskId && Objects.equals(name, task.name)
+                && Objects.equals(description, task.description) && status == task.status;*/
+
+        //экземпляры класса Task(или его наследников) равны друг другу, если равен их id, тогда
+        return taskId == task.taskId;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, taskId, status);
+        //return Objects.hash(name, description, taskId, status);
+        return Objects.hash(taskId);
     }
     @Override
     public String toString() {
