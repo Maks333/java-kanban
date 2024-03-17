@@ -9,18 +9,17 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ManagerWithSubTasksTest {
 
     private TaskManager manager;
-    private Epic epic;
-    private SubTask subTask;
 
     @BeforeEach
     void beforeEach() {
         manager = Managers.getDefault();
-        epic = new Epic("EpicName", "EpicDescription", 10);
+        Epic epic = new Epic("EpicName", "EpicDescription");
+        manager.createEpic(epic);
     }
 
     @Test
     void cannotMakeSubTaskEpicOfItself() {
-        subTask = new SubTask("SubTaskName", "SubTaskDescription", TaskStatus.NEW, 10);
+        SubTask subTask = new SubTask("SubTaskName", "SubTaskDescription", TaskStatus.NEW, 1);
         int subTaskId = manager.createSubTask(subTask);
 
         SubTask newSubTask = new SubTask("NewSubTaskName", "NewSubTaskDescription", subTaskId,
@@ -31,6 +30,6 @@ public class ManagerWithSubTasksTest {
         subTask = manager.getSubTaskById(subTaskId);
 
         assertNotNull(subTask);
-        //assertEquals(10, subTask.getEpicId());
+        assertNotEquals(subTask.getTaskId(), subTask.getEpicId());
     }
 }
