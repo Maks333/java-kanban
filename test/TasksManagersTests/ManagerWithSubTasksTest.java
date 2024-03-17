@@ -29,7 +29,7 @@ public class ManagerWithSubTasksTest {
 
         subTask = manager.getSubTaskById(subTaskId);
 
-        assertNotNull(subTask);
-        assertNotEquals(subTask.getTaskId(), subTask.getEpicId());
+        assertNotNull(subTask, "SubTask should be in the TaskManager");
+        assertNotEquals(subTask.getTaskId(), subTask.getEpicId(), "SubTask id and epicId cannot be equal");
     }
 }
