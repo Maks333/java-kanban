@@ -32,4 +32,41 @@ public class ManagerWithSubTasksTest {
         assertNotNull(subTask, "SubTask should be in the TaskManager");
         assertNotEquals(subTask.getTaskId(), subTask.getEpicId(), "SubTask id and epicId cannot be equal");
     }
+
+    //проверьте, что экземпляры класса Task равны друг другу, если равен их id;
+    //Я так понимаю, что они должны быть равны внутри TaskManager'a , чтобы можно было сделать обновление
+    @Test
+    void twoSubTasksWithSameIdShouldBeEqual() {
+
+    }
+
+    @Test
+    void twoSubTasksWithDifferentIdShouldNotBeEqual() {
+
+    }
+
+    @Test
+    void addNewSubTask() {
+
+    }
+
+    @Test
+    void SubTasksWithGeneratedIdAndAssignedIdShouldNotConflict() {
+
+    }
+
+    @Test
+    void SubTaskShouldBeTheSameAfterAdditionInTaskManager() {
+
+    }
+
+    @Test
+    void historyManagerContainsPreviousVersionOfSubTask() {
+
+    }
+
+    @Test
+    void shouldRemoveSubTaskWithExistingId() {
+
+    }
 }
