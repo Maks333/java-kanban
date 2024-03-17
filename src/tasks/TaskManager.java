@@ -10,7 +10,7 @@ public interface TaskManager {
 
     Task getTaskById(int id);
 
-    Task createTask(Task newTask);
+    int createTask(Task newTask);
 
     void updateTask(Task newTask);
 
@@ -22,7 +22,7 @@ public interface TaskManager {
 
     SubTask getSubTaskById(int id);
 
-    SubTask createSubTask(SubTask newSubTask);
+    int createSubTask(SubTask newSubTask);
 
     void updateSubTask(SubTask newSubTask);
 
@@ -34,7 +34,7 @@ public interface TaskManager {
 
     Epic getEpicByID(int id);
 
-    Epic createEpic(Epic newEpic);
+    int createEpic(Epic newEpic);
 
     void updateEpic(Epic newEpic);
 
