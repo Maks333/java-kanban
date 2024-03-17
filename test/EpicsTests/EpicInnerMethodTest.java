@@ -53,4 +53,13 @@ class EpicInnerMethodTest {
 
         assertTrue(epic.getSubTasks().isEmpty());
     }
+
+    @Test
+    void cannotMakeEpicSubTaskOfItself() {
+        epic.addSubTask(epic.getTaskId());
+        subTasks = epic.getSubTasks();
+
+        assertEquals(subTaskId, subTasks.getFirst());
+        assertEquals(1, subTasks.size());
+    }
 }
