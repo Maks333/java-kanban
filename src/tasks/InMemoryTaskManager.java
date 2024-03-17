@@ -41,10 +41,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(Task newTask) {
+    public int createTask(Task newTask) {
         newTask.setTaskId(++idCounter);
         allTasks.put(newTask.getTaskId(), newTask);
-        return newTask;
+        return newTask.getTaskId();
     }
 
     @Override
@@ -81,10 +81,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTask createSubTask(SubTask newSubTask) {
+    public int createSubTask(SubTask newSubTask) {
         int epicId = newSubTask.getEpicId();
         if (!allEpics.containsKey(epicId)) {
-            return null;
+            return -1;
         }
         newSubTask.setTaskId(++idCounter);
         allSubTasks.put(newSubTask.getTaskId(), newSubTask);
@@ -93,14 +93,18 @@ public class InMemoryTaskManager implements TaskManager {
         epic.addSubTask(newSubTask.getTaskId());
         calculateNewEpicStatus(epicId);
 
-        return newSubTask;
+        return newSubTask.getTaskId();
     }
 
     @Override
     public void updateSubTask(SubTask newSubTask) {
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskId());
+        if (!isSubTaskInSystem) {
+            return;
+        }
+
         boolean isSameEpicId = allSubTasks.get(newSubTask.getTaskId()).getEpicId() == newSubTask.getEpicId();
-        if (!isSubTaskInSystem || !isSameEpicId) {
+        if (!isSameEpicId) {
             return;
         }
 
@@ -140,10 +144,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic createEpic(Epic newEpic) {
+    public int createEpic(Epic newEpic) {
         newEpic.setTaskId(++idCounter);
         allEpics.put(newEpic.getTaskId(), newEpic);
-        return newEpic;
+        return newEpic.getTaskId();
     }
 
     @Override
