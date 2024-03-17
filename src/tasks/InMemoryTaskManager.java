@@ -42,6 +42,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createTask(Task newTask) {
+        if (newTask == null) {
+            return -1;
+        }
         newTask.setTaskId(++idCounter);
         allTasks.put(newTask.getTaskId(), newTask);
         return newTask.getTaskId();
@@ -49,6 +52,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task newTask) {
+        if (newTask == null) {
+            return;
+        }
         if (allTasks.containsKey(newTask.getTaskId())) {
             allTasks.put(newTask.getTaskId(), newTask);
         }
@@ -82,6 +88,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubTask(SubTask newSubTask) {
+        if (newSubTask == null)  {
+            return -1;
+        }
+
         int epicId = newSubTask.getEpicId();
         if (!allEpics.containsKey(epicId)) {
             return -1;
@@ -98,6 +108,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubTask(SubTask newSubTask) {
+        if (newSubTask == null) {
+            return;
+        }
+
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskId());
         if (!isSubTaskInSystem) {
             return;
@@ -145,6 +159,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createEpic(Epic newEpic) {
+        if (newEpic == null) {
+            return -1;
+        }
         newEpic.setTaskId(++idCounter);
         allEpics.put(newEpic.getTaskId(), newEpic);
         return newEpic.getTaskId();
@@ -152,6 +169,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateEpic(Epic newEpic) {
+        if (newEpic == null) {
+            return;
+        }
+
         if (!allEpics.containsKey(newEpic.getTaskId())) {
             return;
         }
