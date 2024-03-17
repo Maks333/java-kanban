@@ -99,8 +99,12 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubTask(SubTask newSubTask) {
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskId());
+        if (!isSubTaskInSystem) {
+            return;
+        }
+
         boolean isSameEpicId = allSubTasks.get(newSubTask.getTaskId()).getEpicId() == newSubTask.getEpicId();
-        if (!isSubTaskInSystem || !isSameEpicId) {
+        if (!isSameEpicId) {
             return;
         }
 
