@@ -77,9 +77,26 @@ public class ManagerWithSubTasksTest {
         assertEquals(subTask1, subTasks.getFirst(), "SubTasks aren't equal");
     }
 
+    //проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
+    //Не совсем ясна проверка, если менеджер сам задаёт поле id перед добавлением
     @Test
     void SubTasksWithGeneratedIdAndAssignedIdShouldNotConflict() {
+        SubTask generatedSubTask = new SubTask("GeneratedSubTaskName", "GeneratedSubTaskDesc",
+                TaskStatus.NEW, 1);
+        int generatedSubTaskId = manager.createSubTask(generatedSubTask);
 
+        SubTask assignedSubTask = new SubTask("AssignedSubTaskName", "AssignedSubTaskDesc",
+                generatedSubTaskId, TaskStatus.NEW, 1);
+
+        int assignedSubTaskId = manager.createSubTask(assignedSubTask);
+
+        SubTask savedGeneratedSubtask = manager.getSubTaskById(generatedSubTaskId);
+        SubTask savedAssignedSubTask = manager.getSubTaskById(assignedSubTaskId);
+
+        assertNotNull(savedGeneratedSubtask);
+        assertNotNull(savedAssignedSubTask);
+        assertNotEquals(savedGeneratedSubtask.getTaskId(), savedAssignedSubTask.getTaskId(),
+                "Id should not conflict");
     }
 
     @Test
