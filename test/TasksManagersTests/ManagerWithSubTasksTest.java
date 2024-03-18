@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.*;
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagerWithSubTasksTest {
@@ -61,7 +63,18 @@ public class ManagerWithSubTasksTest {
 
     @Test
     void addNewSubTask() {
+        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW, 1);
+        int subTask1Id = manager.createSubTask(subTask1);
 
+        SubTask savedSubTask = manager.getSubTaskById(subTask1Id);
+        assertNotNull(savedSubTask, "SubTask should be in the manager");
+        assertEquals(subTask1, savedSubTask, "SubTasks should be equal");
+
+        ArrayList<SubTask> subTasks = manager.getAllSubtasks();
+
+        assertNotNull(subTasks, "There should be 1 subtask");
+        assertEquals(1, subTasks.size(), "Incorrect number of subtasks");
+        assertEquals(subTask1, subTasks.getFirst(), "SubTasks aren't equal");
     }
 
     @Test
