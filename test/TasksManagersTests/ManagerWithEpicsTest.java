@@ -97,4 +97,16 @@ public class ManagerWithEpicsTest {
         assertNotEquals(savedGeneratedEpic.getTaskId(), savedAssignedEpic.getTaskId(),
                 "Id should not conflict");
     }
+
+    @Test
+    void EpicShouldBeTheSameAfterAdditionInTaskManager() {
+        Epic EpicBeforeAddition = new Epic("EpicNameBeforeAddition", "EpicNameBeforeAddition");
+        int EpicId = manager.createEpic(EpicBeforeAddition);
+
+        Epic EpicAfterAddition = manager.getEpicByID(EpicId);
+
+        assertNotNull(EpicAfterAddition, "Epic should be in the manager");
+        assertEquals(EpicBeforeAddition, EpicAfterAddition, "Epic should remain the same after" +
+                " addition");
+    }
 }
