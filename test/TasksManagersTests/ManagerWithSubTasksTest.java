@@ -37,12 +37,26 @@ public class ManagerWithSubTasksTest {
     //Я так понимаю, что они должны быть равны внутри TaskManager'a , чтобы можно было сделать обновление
     @Test
     void twoSubTasksWithSameIdShouldBeEqual() {
+        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW,1);
+        int subTask1ID = manager.createSubTask(subTask1);
 
+        SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", subTask1ID, TaskStatus.NEW,
+                1 );
+
+        manager.updateSubTask(subTask2);
+        assertEquals(manager.getSubTaskById(subTask1ID), subTask2);
     }
 
     @Test
     void twoSubTasksWithDifferentIdShouldNotBeEqual() {
+        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW,1);
+        int subTask1ID = manager.createSubTask(subTask1);
 
+        SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", 3, TaskStatus.NEW,
+                1 );
+
+        manager.updateSubTask(subTask2);
+        assertNotEquals(manager.getSubTaskById(subTask1ID), subTask2);
     }
 
     @Test
