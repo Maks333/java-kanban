@@ -99,9 +99,20 @@ public class ManagerWithSubTasksTest {
                 "Id should not conflict");
     }
 
+
+    //создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер
+    //Но при добавлении задачи меняется её id
     @Test
     void SubTaskShouldBeTheSameAfterAdditionInTaskManager() {
+        SubTask subTaskBeforeAddition = new SubTask("SubTaskNameBeforeAddition", "SubTaskNameBeforeAddition",
+                TaskStatus.NEW, 1);
+        int subTaskId = manager.createSubTask(subTaskBeforeAddition);
 
+        SubTask subTaskAfterAddition = manager.getSubTaskById(subTaskId);
+
+        assertNotNull(subTaskAfterAddition, "SubTask should be in the manager");
+        assertEquals(subTaskBeforeAddition, subTaskAfterAddition, "SubTask should remain the same after" +
+                " addition");
     }
 
     @Test
