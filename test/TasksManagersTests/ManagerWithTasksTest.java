@@ -24,4 +24,15 @@ public class ManagerWithTasksTest {
         manager.updateTask(Task2);
         assertEquals(manager.getTaskById(Task1ID), Task2);
     }
+
+    @Test
+    void twoTasksWithDifferentIdShouldNotBeEqual() {
+        Task Task1 = new Task("Task1Name", "Task1Description", TaskStatus.NEW);
+        int Task1ID = manager.createTask(Task1);
+
+        Task Task2 = new Task("Task2Name", "Task2Description", 5, TaskStatus.NEW);
+
+        manager.updateTask(Task2);
+        assertNotEquals(manager.getTaskById(Task1ID), Task2);
+    }
 }
