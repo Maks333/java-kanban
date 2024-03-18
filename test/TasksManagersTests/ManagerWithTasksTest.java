@@ -51,7 +51,7 @@ public class ManagerWithTasksTest {
 
         ArrayList<Task> tasks = manager.getAllTasks();
 
-        assertNotNull(tasks, "There should be 1 subtask");
+        assertNotNull(tasks, "There should be 1 Task");
         assertEquals(1, tasks.size(), "Incorrect number of tasks");
         assertEquals(task, tasks.getFirst(), "Tasks aren't equal");
     }
@@ -109,5 +109,23 @@ public class ManagerWithTasksTest {
 
         assertNotEquals(updatedVersion, TaskFromHistory, "History doesn't contain previous version of Task");
         assertEquals(previousVersion, TaskFromHistory, "History doesn't contain previous version of Task");
+    }
+
+    @Test
+    void shouldRemoveTaskWithExistingId() {
+        Task Task1 = new Task("Task1Name", "Task1Description", TaskStatus.NEW);
+        int Task1Id = manager.createTask(Task1);
+
+        ArrayList<Task> Tasks = manager.getAllTasks();
+        assertNotNull(Tasks);
+        assertEquals(1, Tasks.size());
+
+        manager.deleteTaskById(Task1Id);
+
+        Task notExistingTask = manager.getTaskById(Task1Id);
+        assertNull(notExistingTask);
+
+        ArrayList<Task> TasksAfterDeletion = manager.getAllTasks();
+        assertTrue(TasksAfterDeletion.isEmpty());
     }
 }
