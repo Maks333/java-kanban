@@ -54,4 +54,24 @@ public class ManagerWithTasksTest {
         assertEquals(1, tasks.size(), "Incorrect number of tasks");
         assertEquals(task, tasks.getFirst(), "Tasks aren't equal");
     }
+
+    @Test
+    void TasksWithGeneratedIdAndAssignedIdShouldNotConflict() {
+        Task generatedTask = new Task("GeneratedTaskName", "GeneratedTaskDesc",
+                TaskStatus.NEW);
+        int generatedTaskId = manager.createTask(generatedTask);
+
+        Task assignedTask = new Task("AssignedTaskName", "AssignedTaskDesc",
+                generatedTaskId, TaskStatus.NEW);
+
+        int assignedTaskId = manager.createTask(assignedTask);
+
+        Task savedGeneratedTask = manager.getTaskById(generatedTaskId);
+        Task savedAssignedTask = manager.getTaskById(assignedTaskId);
+
+        assertNotNull(savedGeneratedTask);
+        assertNotNull(savedAssignedTask);
+        assertNotEquals(savedGeneratedTask.getTaskId(), savedAssignedTask.getTaskId(),
+                "Id should not conflict");
+    }
 }
