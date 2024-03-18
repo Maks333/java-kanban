@@ -78,4 +78,23 @@ public class ManagerWithEpicsTest {
         assertEquals(1, manager.getAllSubTasksOfEpic(epicId).size());
         assertEquals(savedSubTask, manager.getAllSubTasksOfEpic(epicId).getFirst());
     }
+
+    @Test
+    void EpicsWithGeneratedIdAndAssignedIdShouldNotConflict() {
+        Epic generatedEpic = new Epic("GeneratedEpicName", "GeneratedEpicDesc");
+        int generatedEpicId = manager.createEpic(generatedEpic);
+
+        Epic assignedEpic = new Epic("AssignedEpicName", "AssignedEpicDesc",
+                generatedEpicId);
+
+        int assignedEpicId = manager.createEpic(assignedEpic);
+
+        Epic savedGeneratedEpic = manager.getEpicByID(generatedEpicId);
+        Epic savedAssignedEpic = manager.getEpicByID(assignedEpicId);
+
+        assertNotNull(savedGeneratedEpic);
+        assertNotNull(savedAssignedEpic);
+        assertNotEquals(savedGeneratedEpic.getTaskId(), savedAssignedEpic.getTaskId(),
+                "Id should not conflict");
+    }
 }
