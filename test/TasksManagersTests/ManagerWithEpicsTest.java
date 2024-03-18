@@ -150,4 +150,27 @@ public class ManagerWithEpicsTest {
         ArrayList<Epic> EpicsAfterDeletion = manager.getAllEpics();
         assertTrue(EpicsAfterDeletion.isEmpty());
     }
+
+    @Test
+    void shouldRemoveEpicAlongWithSubTask() {
+        Epic Epic1 = new Epic("Epic1Name", "Epic1Description");
+        int Epic1Id = manager.createEpic(Epic1);
+        SubTask subTask = new SubTask("SubTaskName", "SubTaskDescription", TaskStatus.NEW, Epic1Id);
+        int subTaskId = manager.createSubTask(subTask);
+
+        ArrayList<Epic> epics = manager.getAllEpics();
+        assertNotNull(epics);
+        assertEquals(1, epics.size());
+
+        ArrayList<SubTask> subTasks = manager.getAllSubtasks();
+        assertNotNull(subTasks);
+        assertEquals(1, subTasks.size());
+
+        manager.deleteEpicById(Epic1Id);
+
+        assertNull(manager.getEpicByID(Epic1Id));
+        assertNull(manager.getSubTaskById(subTaskId));
+        assertTrue(manager.getAllEpics().isEmpty());
+        assertTrue(manager.getAllSubtasks().isEmpty());
+    }
 }
