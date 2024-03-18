@@ -74,4 +74,17 @@ public class ManagerWithTasksTest {
         assertNotEquals(savedGeneratedTask.getTaskId(), savedAssignedTask.getTaskId(),
                 "Id should not conflict");
     }
+
+    @Test
+    void TaskShouldBeTheSameAfterAdditionInTaskManager() {
+        Task TaskBeforeAddition = new Task("TaskNameBeforeAddition", "TaskNameBeforeAddition",
+                TaskStatus.NEW);
+        int TaskId = manager.createTask(TaskBeforeAddition);
+
+        Task TaskAfterAddition = manager.getTaskById(TaskId);
+
+        assertNotNull(TaskAfterAddition, "Task should be in the manager");
+        assertEquals(TaskBeforeAddition, TaskAfterAddition, "Task should remain the same after" +
+                " addition");
+    }
 }
