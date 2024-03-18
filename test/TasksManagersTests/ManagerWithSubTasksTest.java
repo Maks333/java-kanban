@@ -140,6 +140,19 @@ public class ManagerWithSubTasksTest {
 
     @Test
     void shouldRemoveSubTaskWithExistingId() {
+        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW, 1);
+        int subTask1Id = manager.createSubTask(subTask1);
 
+        ArrayList<SubTask> subTasks = manager.getAllSubtasks();
+        assertNotNull(subTasks);
+        assertEquals(1, subTasks.size());
+
+        manager.deleteSubTaskById(subTask1Id);
+
+        SubTask notExistingSubTask = manager.getSubTaskById(subTask1Id);
+        assertNull(notExistingSubTask);
+
+        ArrayList<SubTask> subTasksAfterDeletion = manager.getAllSubtasks();
+        assertTrue(subTasksAfterDeletion.isEmpty());
     }
 }
