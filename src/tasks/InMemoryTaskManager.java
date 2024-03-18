@@ -9,7 +9,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, SubTask> allSubTasks;
     private final HashMap<Integer, Epic> allEpics;
     private final HistoryManager history;
-    private static int idCounter = 0;
+    private int idCounter = 0;
 
     public InMemoryTaskManager() {
         allTasks = new HashMap<>();
@@ -41,14 +41,20 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(Task newTask) {
+    public int createTask(Task newTask) {
+        if (newTask == null) {
+            return -1;
+        }
         newTask.setTaskId(++idCounter);
         allTasks.put(newTask.getTaskId(), newTask);
-        return newTask;
+        return newTask.getTaskId();
     }
 
     @Override
     public void updateTask(Task newTask) {
+        if (newTask == null) {
+            return;
+        }
         if (allTasks.containsKey(newTask.getTaskId())) {
             allTasks.put(newTask.getTaskId(), newTask);
         }
@@ -81,10 +87,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public SubTask createSubTask(SubTask newSubTask) {
+    public int createSubTask(SubTask newSubTask) {
+        if (newSubTask == null)  {
+            return -1;
+        }
+
         int epicId = newSubTask.getEpicId();
         if (!allEpics.containsKey(epicId)) {
-            return null;
+            return -1;
         }
         newSubTask.setTaskId(++idCounter);
         allSubTasks.put(newSubTask.getTaskId(), newSubTask);
@@ -93,14 +103,22 @@ public class InMemoryTaskManager implements TaskManager {
         epic.addSubTask(newSubTask.getTaskId());
         calculateNewEpicStatus(epicId);
 
-        return newSubTask;
+        return newSubTask.getTaskId();
     }
 
     @Override
     public void updateSubTask(SubTask newSubTask) {
+        if (newSubTask == null) {
+            return;
+        }
+
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskId());
+        if (!isSubTaskInSystem) {
+            return;
+        }
+
         boolean isSameEpicId = allSubTasks.get(newSubTask.getTaskId()).getEpicId() == newSubTask.getEpicId();
-        if (!isSubTaskInSystem || !isSameEpicId) {
+        if (!isSameEpicId) {
             return;
         }
 
@@ -140,14 +158,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic createEpic(Epic newEpic) {
+    public int createEpic(Epic newEpic) {
+        if (newEpic == null) {
+            return -1;
+        }
         newEpic.setTaskId(++idCounter);
         allEpics.put(newEpic.getTaskId(), newEpic);
-        return newEpic;
+        return newEpic.getTaskId();
     }
 
     @Override
     public void updateEpic(Epic newEpic) {
+        if (newEpic == null) {
+            return;
+        }
+
         if (!allEpics.containsKey(newEpic.getTaskId())) {
             return;
         }

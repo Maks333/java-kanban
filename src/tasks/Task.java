@@ -67,6 +67,9 @@ public class Task {
         Task task = (Task) o;
         return taskId == task.taskId && Objects.equals(name, task.name)
                 && Objects.equals(description, task.description) && status == task.status;
+
+        //экземпляры класса Task(или его наследников) равны друг другу, если равен их id, тогда
+        //return taskId == task.taskId;
     }
 
     @Override
