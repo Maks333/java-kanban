@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import tasks.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -86,5 +87,27 @@ public class ManagerWithTasksTest {
         assertNotNull(TaskAfterAddition, "Task should be in the manager");
         assertEquals(TaskBeforeAddition, TaskAfterAddition, "Task should remain the same after" +
                 " addition");
+    }
+
+    @Test
+    void historyManagerContainsPreviousVersionOfTask() {
+        Task Task1 = new Task("SubTask1Name", "Subtask1Description", TaskStatus.NEW);
+        int Task1Id = manager.createTask(Task1);
+
+        Task previousVersion = new Task(manager.getTaskById(Task1Id));
+
+        Task updatedVersion = new Task("Task updated Name", "Task updated description",
+                Task1Id, TaskStatus.NEW);
+        manager.updateTask(updatedVersion);
+
+        List<Task> history = manager.getHistory();
+
+        assertNotNull(history, "History should not be empty");
+        assertEquals(1, history.size(), "Task should be in the history");
+
+        Task TaskFromHistory = history.getFirst();
+
+        assertNotEquals(updatedVersion, TaskFromHistory, "History doesn't contain previous version of Task");
+        assertEquals(previousVersion, TaskFromHistory, "History doesn't contain previous version of Task");
     }
 }
