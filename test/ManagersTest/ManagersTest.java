@@ -1,6 +1,7 @@
 package ManagersTest;
 
 import org.junit.jupiter.api.Test;
+import tasks.HistoryManager;
 import tasks.Managers;
 import tasks.TaskManager;
 
@@ -13,5 +14,12 @@ public class ManagersTest {
         TaskManager manager = Managers.getDefault();
 
         assertNotNull(manager);
+    }
+
+    @Test
+    public void ManagersProperlyInitializeHistoryManager() {
+        HistoryManager historyManager = Managers.getDefaultHistory();
+
+        assertNotNull(historyManager);
     }
 }
