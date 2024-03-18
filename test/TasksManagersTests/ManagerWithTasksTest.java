@@ -91,7 +91,7 @@ public class ManagerWithTasksTest {
 
     @Test
     void historyManagerContainsPreviousVersionOfTask() {
-        Task Task1 = new Task("SubTask1Name", "Subtask1Description", TaskStatus.NEW);
+        Task Task1 = new Task("Task1Name", "Task1Description", TaskStatus.NEW);
         int Task1Id = manager.createTask(Task1);
 
         Task previousVersion = new Task(manager.getTaskById(Task1Id));
