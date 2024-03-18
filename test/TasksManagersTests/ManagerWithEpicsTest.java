@@ -132,4 +132,22 @@ public class ManagerWithEpicsTest {
         assertNotEquals(updatedVersion, EpicFromHistory, "History doesn't contain previous version of Epic");
         assertEquals(previousVersion, EpicFromHistory, "History doesn't contain previous version of Epic");
     }
+
+    @Test
+    void shouldRemoveEpicWithExistingId() {
+        Epic Epic1 = new Epic("Epic1Name", "Epic1Description");
+        int Epic1Id = manager.createEpic(Epic1);
+
+        ArrayList<Epic> Epics = manager.getAllEpics();
+        assertNotNull(Epics);
+        assertEquals(1, Epics.size());
+
+        manager.deleteEpicById(Epic1Id);
+
+        Epic notExistingEpic = manager.getEpicByID(Epic1Id);
+        assertNull(notExistingEpic);
+
+        ArrayList<Epic> EpicsAfterDeletion = manager.getAllEpics();
+        assertTrue(EpicsAfterDeletion.isEmpty());
+    }
 }
