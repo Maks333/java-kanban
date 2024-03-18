@@ -59,4 +59,23 @@ public class ManagerWithEpicsTest {
         assertEquals(1, epics.size(), "Incorrect number of tasks");
         assertEquals(epic, epics.getFirst(), "Tasks aren't equal");
     }
+
+    @Test
+    void addNewEpicWithSubTask() {
+        Epic epic = new Epic("EpicName", "Epic Description");
+        int epicId = manager.createEpic(epic);
+
+        SubTask subTask = new SubTask("SubTaskName", "SubTaskDescription", TaskStatus.IN_PROGRESS,
+                epicId);
+        int subTaskId = manager.createSubTask(subTask);
+
+        Epic savedEpic = manager.getEpicByID(epicId);
+        SubTask savedSubTask = manager.getSubTaskById(subTaskId);
+
+        assertEquals(savedEpic.getStatus(), TaskStatus.IN_PROGRESS);
+        assertEquals( 1, savedEpic.getSubTasks().size());
+        assertEquals(savedSubTask.getTaskId(), savedEpic.getSubTasks().getFirst());
+        assertEquals(1, manager.getAllSubTasksOfEpic(epicId).size());
+        assertEquals(savedSubTask, manager.getAllSubTasksOfEpic(epicId).getFirst());
+    }
 }
