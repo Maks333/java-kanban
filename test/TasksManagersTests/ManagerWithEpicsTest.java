@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import tasks.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class ManagerWithEpicsTest {
 
@@ -24,5 +25,16 @@ public class ManagerWithEpicsTest {
 
         manager.updateEpic(epic2);
         assertEquals(manager.getEpicByID(epicId1), epic2);
+    }
+
+    @Test
+    void twoEpicsWithDifferentIdShouldNotBeEqual() {
+        Epic epic1 = new Epic("Epic1Name", "Epic1Description");
+        int epicId1 = manager.createEpic(epic1);
+
+        Epic epic2 = new Epic("Epic2Name", "Epic2Description", 3);
+
+        manager.updateEpic(epic2);
+        assertNotEquals(manager.getEpicByID(epicId1), epic2);
     }
 }
