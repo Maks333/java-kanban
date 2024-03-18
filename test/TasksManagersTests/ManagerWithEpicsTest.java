@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class ManagerWithEpicsTest {
 
@@ -36,5 +38,25 @@ public class ManagerWithEpicsTest {
 
         manager.updateEpic(epic2);
         assertNotEquals(manager.getEpicByID(epicId1), epic2);
+    }
+
+    @Test
+    void addNewEpicWithoutSubTasks() {
+        Epic epic = new Epic("EpicName", "Epic Description");
+        int epicId = manager.createEpic(epic);
+
+        Epic savedEpic = manager.getEpicByID(epicId);
+
+        assertNotNull(savedEpic, "Epic isn't found");
+        assertEquals(epic, savedEpic, "Epics aren't equal");
+        assertEquals(savedEpic.getStatus(), TaskStatus.NEW, "Epic status isn't NEW");
+        assertTrue(epic.getSubTasks().isEmpty(), "Epic doesn't have any SubTasks");
+        assertTrue(manager.getAllSubTasksOfEpic(epicId).isEmpty(), "Epic doesn't have any SubTasks");
+
+        ArrayList<Epic> epics = manager.getAllEpics();
+
+        assertNotNull(epics, "There should be 1 Task");
+        assertEquals(1, epics.size(), "Incorrect number of tasks");
+        assertEquals(epic, epics.getFirst(), "Tasks aren't equal");
     }
 }
