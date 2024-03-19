@@ -1,10 +1,10 @@
 package HistoryManagersTest;
 
 import org.junit.jupiter.api.Test;
-import tasks.HistoryManager;
-import tasks.Managers;
-import tasks.Task;
-import tasks.TaskStatus;
+import Managers.HistoryManager;
+import Managers.Managers;
+import Tasks.Task;
+import Tasks.TaskStatus;
 
 import java.util.List;
 

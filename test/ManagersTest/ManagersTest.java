@@ -1,9 +1,9 @@
 package ManagersTest;
 
 import org.junit.jupiter.api.Test;
-import tasks.HistoryManager;
-import tasks.Managers;
-import tasks.TaskManager;
+import Managers.HistoryManager;
+import Managers.Managers;
+import Managers.TaskManager;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

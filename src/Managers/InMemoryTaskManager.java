@@ -1,4 +1,6 @@
-package tasks;
+package Managers;
+
+import Tasks.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -202,10 +204,10 @@ public class InMemoryTaskManager implements TaskManager {
         for (int subTaskId : epic.getSubTasks()) {
             SubTask subTask = allSubTasks.get(subTaskId);
             switch (subTask.getStatus()) {
-                case NEW:
+                case TaskStatus.NEW:
                     newCounter++;
                     break;
-                case DONE:
+                case TaskStatus.DONE:
                     doneCounter++;
                     break;
                 default:
