@@ -1,10 +1,10 @@
 package TasksManagersTests;
 
+import Managers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import Tasks.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,7 +71,7 @@ public class ManagerWithSubTasksTest {
         assertNotNull(savedSubTask, "SubTask should be in the manager");
         assertEquals(subTask1, savedSubTask, "SubTasks should be equal");
 
-        ArrayList<SubTask> subTasks = manager.getAllSubtasks();
+        List<SubTask> subTasks = manager.getAllSubtasks();
 
         assertNotNull(subTasks, "There should be 1 subtask");
         assertEquals(1, subTasks.size(), "Incorrect number of subtasks");
@@ -143,7 +143,7 @@ public class ManagerWithSubTasksTest {
         SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW, 1);
         int subTask1Id = manager.createSubTask(subTask1);
 
-        ArrayList<SubTask> subTasks = manager.getAllSubtasks();
+        List<SubTask> subTasks = manager.getAllSubtasks();
         assertNotNull(subTasks);
         assertEquals(1, subTasks.size());
 
@@ -152,7 +152,7 @@ public class ManagerWithSubTasksTest {
         SubTask notExistingSubTask = manager.getSubTaskById(subTask1Id);
         assertNull(notExistingSubTask);
 
-        ArrayList<SubTask> subTasksAfterDeletion = manager.getAllSubtasks();
+        List<SubTask> subTasksAfterDeletion = manager.getAllSubtasks();
         assertTrue(subTasksAfterDeletion.isEmpty());
     }
 }

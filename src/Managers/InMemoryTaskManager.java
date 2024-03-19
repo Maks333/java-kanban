@@ -1,4 +1,6 @@
-package tasks;
+package Managers;
+
+import Tasks.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
+    public List<Task> getAllTasks() {
         return new ArrayList<>(allTasks.values());
     }
 
@@ -66,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getAllSubtasks() {
+    public List<SubTask> getAllSubtasks() {
         return new ArrayList<>(allSubTasks.values());
     }
 
@@ -140,7 +142,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Epic> getAllEpics() {
+    public List<Epic> getAllEpics() {
         return new ArrayList<>(allEpics.values());
     }
 
@@ -176,9 +178,12 @@ public class InMemoryTaskManager implements TaskManager {
         if (!allEpics.containsKey(newEpic.getTaskId())) {
             return;
         }
+
         Epic epic = allEpics.get(newEpic.getTaskId());
-        epic.setName(newEpic.getName());
-        epic.setDescription(newEpic.getDescription());
+        Epic epicToUpdate = new Epic(epic);
+        epicToUpdate.setName(newEpic.getName());
+        epicToUpdate.setDescription(newEpic.getDescription());
+        allEpics.put(epicToUpdate.getTaskId(), epicToUpdate);
     }
 
     @Override
@@ -202,10 +207,10 @@ public class InMemoryTaskManager implements TaskManager {
         for (int subTaskId : epic.getSubTasks()) {
             SubTask subTask = allSubTasks.get(subTaskId);
             switch (subTask.getStatus()) {
-                case NEW:
+                case TaskStatus.NEW:
                     newCounter++;
                     break;
-                case DONE:
+                case TaskStatus.DONE:
                     doneCounter++;
                     break;
                 default:
@@ -227,7 +232,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<SubTask> getAllSubTasksOfEpic(int epicId) {
+    public List<SubTask> getAllSubTasksOfEpic(int epicId) {
         if (!allEpics.containsKey(epicId)) {
             return null;
         }

@@ -1,10 +1,10 @@
 package TasksManagersTests;
 
+import Managers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tasks.*;
+import Tasks.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +54,7 @@ public class ManagerWithEpicsTest {
         assertTrue(epic.getSubTasks().isEmpty(), "Epic doesn't have any SubTasks");
         assertTrue(manager.getAllSubTasksOfEpic(epicId).isEmpty(), "Epic doesn't have any SubTasks");
 
-        ArrayList<Epic> epics = manager.getAllEpics();
+        List<Epic> epics = manager.getAllEpics();
 
         assertNotNull(epics, "There should be 1 Task");
         assertEquals(1, epics.size(), "Incorrect number of tasks");
@@ -138,7 +138,7 @@ public class ManagerWithEpicsTest {
         Epic Epic1 = new Epic("Epic1Name", "Epic1Description");
         int Epic1Id = manager.createEpic(Epic1);
 
-        ArrayList<Epic> Epics = manager.getAllEpics();
+        List<Epic> Epics = manager.getAllEpics();
         assertNotNull(Epics);
         assertEquals(1, Epics.size());
 
@@ -147,7 +147,7 @@ public class ManagerWithEpicsTest {
         Epic notExistingEpic = manager.getEpicByID(Epic1Id);
         assertNull(notExistingEpic);
 
-        ArrayList<Epic> EpicsAfterDeletion = manager.getAllEpics();
+        List<Epic> EpicsAfterDeletion = manager.getAllEpics();
         assertTrue(EpicsAfterDeletion.isEmpty());
     }
 
@@ -158,11 +158,11 @@ public class ManagerWithEpicsTest {
         SubTask subTask = new SubTask("SubTaskName", "SubTaskDescription", TaskStatus.NEW, Epic1Id);
         int subTaskId = manager.createSubTask(subTask);
 
-        ArrayList<Epic> epics = manager.getAllEpics();
+        List<Epic> epics = manager.getAllEpics();
         assertNotNull(epics);
         assertEquals(1, epics.size());
 
-        ArrayList<SubTask> subTasks = manager.getAllSubtasks();
+        List<SubTask> subTasks = manager.getAllSubtasks();
         assertNotNull(subTasks);
         assertEquals(1, subTasks.size());
 
