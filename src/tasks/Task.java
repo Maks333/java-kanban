@@ -56,7 +56,7 @@ public class Task {
         return status;
     }
 
-    protected void setStatus(TaskStatus status) {
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
