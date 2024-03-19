@@ -1,10 +1,9 @@
 package tasks;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface TaskManager {
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
     void deleteAllTasks();
 
@@ -16,7 +15,7 @@ public interface TaskManager {
 
     void deleteTaskById(int id);
 
-    ArrayList<SubTask> getAllSubtasks();
+    List<SubTask> getAllSubtasks();
 
     void deleteAllSubTasks();
 
@@ -28,7 +27,7 @@ public interface TaskManager {
 
     void deleteSubTaskById(int id);
 
-    ArrayList<Epic> getAllEpics();
+    List<Epic> getAllEpics();
 
     void deleteAllEpics();
 
@@ -40,7 +39,7 @@ public interface TaskManager {
 
     void deleteEpicById(int id);
 
-    ArrayList<SubTask> getAllSubTasksOfEpic(int epicId);
+    List<SubTask> getAllSubTasksOfEpic(int epicId);
 
     List<Task> getHistory();
 }
