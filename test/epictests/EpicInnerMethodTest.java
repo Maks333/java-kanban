@@ -1,8 +1,8 @@
-package EpicsTests;
+package epictests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Tasks.Epic;
+import tasks.Epic;
 
 import java.util.ArrayList;
 

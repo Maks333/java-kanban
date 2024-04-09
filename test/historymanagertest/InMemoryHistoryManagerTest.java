@@ -1,13 +1,13 @@
-package HistoryManagersTest;
+package historymanagertest;
 
-import Tasks.Epic;
-import Tasks.SubTask;
+import tasks.Epic;
+import tasks.SubTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Managers.Managers;
-import Tasks.Task;
-import Tasks.TaskStatus;
-import Managers.TaskManager;
+import managers.Managers;
+import tasks.Task;
+import tasks.TaskStatus;
+import managers.TaskManager;
 
 import java.util.List;
 

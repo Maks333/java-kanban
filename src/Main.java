@@ -1,6 +1,6 @@
-import Managers.InMemoryTaskManager;
-import Managers.TaskManager;
-import Tasks.*;
+import managers.InMemoryTaskManager;
+import managers.TaskManager;
+import tasks.*;
 
 public class Main {
 

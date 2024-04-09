@@ -1,9 +1,9 @@
-package TasksManagersTests;
+package taskmanagerstests;
 
-import Managers.*;
+import managers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Tasks.*;
+import tasks.*;
 
 import java.util.List;
 
