@@ -10,6 +10,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node head = null;
     private Node tail = null;
 
+    @Override
+    public void remove(int id) {
+
+    }
+
     private final HashMap<Integer, Node> nodeById;
 
     class Node {
