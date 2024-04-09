@@ -238,5 +238,23 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void ShouldRemoveEpicWithSubTaskFromManagerAndHistory() {}
+    public void ShouldRemoveEpicWithSubTaskFromManagerAndHistory() {
+        Epic epic = new Epic("EpicName", "EpicDesc");
+        int epicId = manager.createEpic(epic);
+        SubTask subTask = new SubTask("SubTaskName", "TaskDescription", TaskStatus.NEW, epicId);
+        int subTaskId = manager.createSubTask(subTask);
+        manager.getSubTaskById(subTaskId);
+        manager.getEpicByID(epicId);
+
+        List<Task> history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(2, history.size());
+        assertEquals(subTask, history.getFirst());
+        assertEquals(epic, history.getLast());
+
+        manager.deleteEpicById(epicId);
+        history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(0, history.size());
+    }
 }
