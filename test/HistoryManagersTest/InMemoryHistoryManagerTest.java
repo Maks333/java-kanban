@@ -15,7 +15,7 @@ public class InMemoryHistoryManagerTest {
 
 
     @Test
-    public void HistoryShouldStoreOnlyTenTasks() {
+    public void HistoryShouldRemoveDuplicates() {
         HistoryManager historyManager = Managers.getDefaultHistory();
         Task task = new Task("TaskName", "TaskDescription", TaskStatus.NEW);
 
@@ -31,6 +31,7 @@ public class InMemoryHistoryManagerTest {
         List<Task> historyAfterAddition = historyManager.getHistory();
 
         assertNotNull(historyAfterAddition);
-        assertEquals(10, historyAfterAddition.size());
+        assertEquals(1, historyAfterAddition.size());
+        assertEquals(historyAfterAddition.getFirst(), task);
     }
 }
