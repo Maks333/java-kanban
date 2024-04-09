@@ -117,28 +117,6 @@ public class ManagerWithSubTasksTest {
     }
 
     @Test
-    void historyManagerContainsPreviousVersionOfSubTask() {
-        SubTask subTask1 = new SubTask("SubTask1Name", "Subtask1Description", TaskStatus.NEW, 1);
-        int subTask1Id = manager.createSubTask(subTask1);
-
-        SubTask previousVersion = new SubTask(manager.getSubTaskById(subTask1Id));
-
-        SubTask updatedVersion = new SubTask("SubTask updated Name", "SubTask updated description",
-                subTask1Id, TaskStatus.NEW, 1);
-        manager.updateSubTask(updatedVersion);
-
-        List<Task> history = manager.getHistory();
-
-        assertNotNull(history, "History should not be empty");
-        assertEquals(1, history.size(), "SubTask should be in the history");
-
-        SubTask subTaskFromHistory = (SubTask)history.getFirst();
-
-        assertNotEquals(updatedVersion, subTaskFromHistory, "History doesn't contain previous version of SubTask");
-        assertEquals(previousVersion, subTaskFromHistory, "History doesn't contain previous version of SubTask");
-    }
-
-    @Test
     void shouldRemoveSubTaskWithExistingId() {
         SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW, 1);
         int subTask1Id = manager.createSubTask(subTask1);

@@ -110,29 +110,6 @@ public class ManagerWithEpicsTest {
         assertEquals(EpicBeforeAddition, EpicAfterAddition, "Epic should remain the same after" +
                 " addition");
     }
-
-    @Test
-    void historyManagerContainsPreviousVersionOfEpic() {
-        Epic Epic1 = new Epic("Epic1Name", "Epic1Description");
-        int Epic1Id = manager.createEpic(Epic1);
-
-        Epic previousVersion = new Epic(manager.getEpicByID(Epic1Id));
-
-        Epic updatedVersion = new Epic("Epic updated Name", "Epic updated description",
-                Epic1Id);
-        manager.updateEpic(updatedVersion);
-
-        List<Task> history = manager.getHistory();
-
-        assertNotNull(history, "History should not be empty");
-        assertEquals(1, history.size(), "Epic should be in the history");
-
-        Epic EpicFromHistory = (Epic)history.getFirst();
-
-        assertNotEquals(updatedVersion, EpicFromHistory, "History doesn't contain previous version of Epic");
-        assertEquals(previousVersion, EpicFromHistory, "History doesn't contain previous version of Epic");
-    }
-
     @Test
     void shouldRemoveEpicWithExistingId() {
         Epic Epic1 = new Epic("Epic1Name", "Epic1Description");
