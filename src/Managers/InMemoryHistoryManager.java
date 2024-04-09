@@ -41,7 +41,11 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private List<Task> getTasks() {
-        return new ArrayList<>();
+        List<Task> tasks = new ArrayList<>();
+        for (Node node : nodeById.values()) {
+            tasks.add(node.task);
+        }
+        return tasks;
     }
 
     private void removeNode(Node nodeToRemove) {
