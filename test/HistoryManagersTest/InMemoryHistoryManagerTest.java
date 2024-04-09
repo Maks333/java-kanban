@@ -74,6 +74,33 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
+    public void HistoryCorrectlyMoveTaskInHistoryAfterSecondAccess() {
+        Task task1 = new Task("Task1Name", "Task1Description", TaskStatus.NEW);
+        Task task2 = new Task("Task2Name", "Task2Description", TaskStatus.NEW);
+
+        int task1Id = manager.createTask(task1);
+        int task2Id = manager.createTask(task2);
+
+        manager.getTaskById(task1Id);
+        manager.getTaskById(task2Id);
+
+        List<Task> history = manager.getHistory();
+
+        assertNotNull(history);
+        assertEquals(2, history.size());
+        assertEquals(task1, history.getFirst());
+        assertEquals(task2, history.getLast());
+
+        manager.getTaskById(task1Id);
+
+        history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(2, history.size());
+        assertEquals(task2, history.getFirst());
+        assertEquals(task1, history.getLast());
+    }
+
+    @Test
     public void HistoryCorrectlyRemoveOneTask() {}
 
     @Test
