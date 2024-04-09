@@ -1,5 +1,7 @@
 package HistoryManagersTest;
 
+import Tasks.Epic;
+import Tasks.SubTask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import Managers.Managers;
@@ -200,10 +202,23 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void ShouldRemoveTaskFromManagerAndHistory() {}
+    public void ShouldRemoveSubTaskFromManagerAndHistory() {
+        Epic epic = new Epic("EpicName", "EpicDesc");
+        int epicId = manager.createEpic(epic);
+        SubTask subTask = new SubTask("SubTaskName", "TaskDescription", TaskStatus.NEW, epicId);
+        int subTaskId = manager.createSubTask(subTask);
+        manager.getSubTaskById(subTaskId);
 
-    @Test
-    public void ShouldRemoveSubTaskFromManagerAndHistory() {}
+        List<Task> history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(1, history.size());
+        assertEquals(subTask, history.getFirst());
+
+        manager.deleteSubTaskById(subTaskId);
+        history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(0, history.size());
+    }
 
     @Test
     public void ShouldRemoveEpicFromManagerAndHistory() {}
