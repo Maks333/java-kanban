@@ -55,7 +55,23 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void HistoryCorrectlyAddTwoTasks() {}
+    public void HistoryCorrectlyAddTwoTasks() {
+        Task task1 = new Task("Task1Name", "Task1Description", TaskStatus.NEW);
+        Task task2 = new Task("Task2Name", "Task2Description", TaskStatus.NEW);
+
+        int task1Id = manager.createTask(task1);
+        int task2Id = manager.createTask(task2);
+
+        manager.getTaskById(task1Id);
+        manager.getTaskById(task2Id);
+
+        List<Task> history = manager.getHistory();
+
+        assertNotNull(history);
+        assertEquals(2, history.size());
+        assertEquals(task1, history.getFirst());
+        assertEquals(task2, history.getLast());
+    }
 
     @Test
     public void HistoryCorrectlyRemoveOneTask() {}
