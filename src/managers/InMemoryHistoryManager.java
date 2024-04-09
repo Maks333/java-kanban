@@ -25,6 +25,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node next = null;
         Node previous;
         Task task;
+
         Node(Node previous, Task task) {
             this.previous = previous;
             this.task = task;
