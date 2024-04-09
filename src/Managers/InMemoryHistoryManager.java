@@ -49,7 +49,27 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void removeNode(Node nodeToRemove) {
-
+        if (nodeToRemove.next == null && nodeToRemove.previous == null) {
+            head = null;
+            tail = null;
+            nodeToRemove = null;
+        } else if (nodeToRemove.previous == null && nodeToRemove.next != null) {
+            head = head.next;
+            head.previous = null;
+            nodeToRemove.next = null;
+            nodeToRemove = null;
+        } else if (nodeToRemove.previous != null && nodeToRemove.next == null) {
+            tail = tail.previous;
+            tail.next = null;
+            nodeToRemove.previous = null;
+            nodeToRemove = null;
+        } else {
+            nodeToRemove.previous.next = nodeToRemove.next;
+            nodeToRemove.next.previous = nodeToRemove.previous;
+            nodeToRemove.next = null;
+            nodeToRemove.previous = null;
+            nodeToRemove = null;
+        }
     }
 
     @Override
