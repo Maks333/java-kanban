@@ -2,7 +2,6 @@ package HistoryManagersTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Managers.HistoryManager;
 import Managers.Managers;
 import Tasks.Task;
 import Tasks.TaskStatus;
@@ -101,7 +100,21 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void HistoryCorrectlyRemoveOneTask() {}
+    public void HistoryCorrectlyRemoveOneTask() {
+        Task task = new Task("TaskName", "TaskDescription", TaskStatus.NEW);
+        int taskId = manager.createTask(task);
+        manager.getTaskById(taskId);
+
+        List<Task> history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(1, history.size());
+        assertEquals(task, history.getFirst());
+
+        manager.deleteTaskById(taskId);
+        history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(0, history.size());
+    }
 
     @Test
     public void HistoryCorrectlyRemoveHeadTask() {}
