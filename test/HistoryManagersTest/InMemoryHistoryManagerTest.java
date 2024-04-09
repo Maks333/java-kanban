@@ -42,11 +42,17 @@ public class InMemoryHistoryManagerTest {
         assertEquals(1, history.size());
         assertEquals(task, history.getFirst());
     }
+    @Test
+    public void HistoryCorrectlyAddOneTask() {
+        Task task = new Task("TaskName", "TaskDescription", TaskStatus.NEW);
+        int taskId = manager.createTask(task);
+        manager.getTaskById(taskId);
 
-    @Test
-    public void RemovingFromManagerAlsoRemoveTaskFromHistory() {}
-    @Test
-    public void HistoryCorrectlyAddOneTask() {}
+        List<Task> history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(1, history.size());
+        assertEquals(task, history.getFirst());
+    }
 
     @Test
     public void HistoryCorrectlyAddTwoTasks() {}
