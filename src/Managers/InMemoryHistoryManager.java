@@ -3,10 +3,16 @@ package Managers;
 import Tasks.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
     private final ArrayList<Task> history;
+
+    private Node head;
+    private Node tail;
+
+    private final HashMap<Integer, Node> nodeById = new HashMap<>();
 
     class Node {
         Node next;
@@ -20,6 +26,18 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     public InMemoryHistoryManager() {
         history = new ArrayList<>();
+    }
+
+    private void linkLast(Task task) {
+
+    }
+
+    private List<Task> getTasks() {
+        return new ArrayList<>();
+    }
+
+    private void removeNode(Node nodeToRemove) {
+
     }
 
     @Override
