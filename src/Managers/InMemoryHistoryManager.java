@@ -28,16 +28,18 @@ public class InMemoryHistoryManager implements HistoryManager {
         history = new ArrayList<>();
     }
 
-    private void linkLast(Task task) {
+    private Node linkLast(Task task) {
+        Node node;
         if (tail == null && head == null) {
-            Node node = new Node(null, task);
+            node = new Node(null, task);
             tail = node;
             head = node;
         } else {
-            Node node = new Node(tail, task);
+            node = new Node(tail, task);
             tail.next = node;
             tail = node;
         }
+        return node;
     }
 
     private List<Task> getTasks() {
@@ -76,11 +78,19 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (task == null) return;
 
-        final int MAX_HISTORY_SIZE = 10;
-        if (history.size() >= MAX_HISTORY_SIZE) {
-            history.removeFirst();
+//        final int MAX_HISTORY_SIZE = 10;
+//        if (history.size() >= MAX_HISTORY_SIZE) {
+//            history.removeFirst();
+//        }
+//        history.add(task);
+        if (nodeById.containsKey(task.getTaskId())) {
+            Node nodeToRemove = nodeById.get(task.getTaskId());
+            removeNode(nodeToRemove);
+            nodeById.remove(task.getTaskId());
         }
-        history.add(task);
+
+        Node linkedNode = linkLast(task);
+        nodeById.put(task.getTaskId(), linkedNode);
     }
 
     @Override
