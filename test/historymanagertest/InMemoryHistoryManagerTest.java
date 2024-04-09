@@ -43,6 +43,7 @@ public class InMemoryHistoryManagerTest {
         assertEquals(1, history.size());
         assertEquals(task, history.getFirst());
     }
+
     @Test
     public void HistoryCorrectlyAddOneTask() {
         Task task = new Task("TaskName", "TaskDescription", TaskStatus.NEW);

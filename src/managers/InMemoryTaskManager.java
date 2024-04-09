@@ -97,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubTask(SubTask newSubTask) {
-        if (newSubTask == null)  {
+        if (newSubTask == null) {
             return -1;
         }
 
