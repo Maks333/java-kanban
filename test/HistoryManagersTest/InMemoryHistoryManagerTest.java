@@ -169,7 +169,35 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void HistoryCorrectlyRemoveTaskFromTheMiddle() {}
+    public void HistoryCorrectlyRemoveTaskFromTheMiddle() {
+        Task task1 = new Task("Task1Name", "Task1Description", TaskStatus.NEW);
+        Task task2 = new Task("Task2Name", "Task2Description", TaskStatus.NEW);
+        Task task3 = new Task("Task3Name", "Task3Description", TaskStatus.NEW);
+
+        int task1Id = manager.createTask(task1);
+        int task2Id = manager.createTask(task2);
+        int task3Id = manager.createTask(task3);
+
+        manager.getTaskById(task1Id);
+        manager.getTaskById(task2Id);
+        manager.getTaskById(task3Id);
+
+        List<Task> history = manager.getHistory();
+
+        assertNotNull(history);
+        assertEquals(3, history.size());
+        assertEquals(task1, history.getFirst());
+        assertEquals(task2, history.get(1));
+        assertEquals(task3, history.getLast());
+
+        manager.deleteTaskById(task2Id);
+        history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(2, history.size());
+        assertEquals(task1, history.getFirst());
+        assertEquals(task3, history.getLast());
+
+    }
 
     @Test
     public void ShouldRemoveTaskFromManagerAndHistory() {}
