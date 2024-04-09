@@ -24,23 +24,23 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     public void HistoryShouldRemoveDuplicates() {
-        HistoryManager historyManager = Managers.getDefaultHistory();
         Task task = new Task("TaskName", "TaskDescription", TaskStatus.NEW);
+        int taskId = manager.createTask(task);
 
-        List<Task> historyBeforeAddition = historyManager.getHistory();
+        List<Task> history = manager.getHistory();
 
-        assertNotNull(historyBeforeAddition);
-        assertEquals(0, historyBeforeAddition.size());
+        assertNotNull(history);
+        assertEquals(0, history.size());
 
-        for (int i = 0; i < 11; i++) {
-            historyManager.add(task);
-        }
 
-        List<Task> historyAfterAddition = historyManager.getHistory();
+        manager.getTaskById(taskId);
+        manager.getTaskById(taskId);
+        manager.getTaskById(taskId);
 
-        assertNotNull(historyAfterAddition);
-        assertEquals(1, historyAfterAddition.size());
-        assertEquals(historyAfterAddition.getFirst(), task);
+        history = manager.getHistory();
+        assertNotNull(history);
+        assertEquals(1, history.size());
+        assertEquals(task, history.getFirst());
     }
 
     @Test
