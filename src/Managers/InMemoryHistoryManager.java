@@ -12,7 +12,9 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-
+        Node nodeToRemove = nodeById.get(id);
+        removeNode(nodeToRemove);
+        nodeById.remove(id);
     }
 
     private final HashMap<Integer, Node> nodeById;
