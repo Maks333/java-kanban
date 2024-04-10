@@ -9,16 +9,6 @@ import java.util.List;
 public class InMemoryHistoryManager implements HistoryManager {
     private Node head = null;
     private Node tail = null;
-
-    @Override
-    public void remove(int id) {
-        if (nodeById.containsKey(id)) {
-            Node nodeToRemove = nodeById.get(id);
-            removeNode(nodeToRemove);
-            nodeById.remove(id);
-        }
-    }
-
     private final HashMap<Integer, Node> nodeById;
 
     class Node {
@@ -61,22 +51,20 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     private void removeNode(Node nodeToRemove) {
-        if (nodeToRemove.next == null && nodeToRemove.previous == null) {
-            head = null;
-            tail = null;
-        } else if (nodeToRemove.previous == null) {
-            head = head.next;
-            head.previous = null;
-            nodeToRemove.next = null;
-        } else if (nodeToRemove.next == null) {
-            tail = tail.previous;
-            tail.next = null;
-            nodeToRemove.previous = null;
-        } else {
-            nodeToRemove.previous.next = nodeToRemove.next;
-            nodeToRemove.next.previous = nodeToRemove.previous;
-            nodeToRemove.next = null;
-            nodeToRemove.previous = null;
+        if (nodeToRemove != null) {
+            if (nodeToRemove == head && nodeToRemove == tail) {
+                head = null;
+                tail = null;
+            } else if (nodeToRemove == head) {
+                head = head.next;
+                head.previous = null;
+            } else if (nodeToRemove == tail) {
+                tail = tail.previous;
+                tail.next = null;
+            } else {
+                nodeToRemove.previous.next = nodeToRemove.next;
+                nodeToRemove.next.previous = nodeToRemove.previous;
+            }
         }
     }
 
@@ -84,13 +72,18 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (task == null) return;
 
-        if (nodeById.containsKey(task.getTaskId())) {
-            Node nodeToRemove = nodeById.get(task.getTaskId());
-            removeNode(nodeToRemove);
-        }
+        Node nodeToRemove = nodeById.get(task.getTaskId());
+        removeNode(nodeToRemove);
 
         Node linkedNode = linkLast(task);
         nodeById.put(task.getTaskId(), linkedNode);
+    }
+
+    @Override
+    public void remove(int id) {
+        Node nodeToRemove = nodeById.get(id);
+        removeNode(nodeToRemove);
+        nodeById.remove(id);
     }
 
     @Override
