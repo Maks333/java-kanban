@@ -1,9 +1,9 @@
-package TasksManagersTests;
+package taskmanagerstests;
 
-import Managers.*;
+import managers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Tasks.*;
+import tasks.*;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class ManagerWithEpicsTest {
         SubTask savedSubTask = manager.getSubTaskById(subTaskId);
 
         assertEquals(savedEpic.getStatus(), TaskStatus.IN_PROGRESS);
-        assertEquals( 1, savedEpic.getSubTasks().size());
+        assertEquals(1, savedEpic.getSubTasks().size());
         assertEquals(savedSubTask.getTaskId(), savedEpic.getSubTasks().getFirst());
         assertEquals(1, manager.getAllSubTasksOfEpic(epicId).size());
         assertEquals(savedSubTask, manager.getAllSubTasksOfEpic(epicId).getFirst());
@@ -109,28 +109,6 @@ public class ManagerWithEpicsTest {
         assertNotNull(EpicAfterAddition, "Epic should be in the manager");
         assertEquals(EpicBeforeAddition, EpicAfterAddition, "Epic should remain the same after" +
                 " addition");
-    }
-
-    @Test
-    void historyManagerContainsPreviousVersionOfEpic() {
-        Epic Epic1 = new Epic("Epic1Name", "Epic1Description");
-        int Epic1Id = manager.createEpic(Epic1);
-
-        Epic previousVersion = new Epic(manager.getEpicByID(Epic1Id));
-
-        Epic updatedVersion = new Epic("Epic updated Name", "Epic updated description",
-                Epic1Id);
-        manager.updateEpic(updatedVersion);
-
-        List<Task> history = manager.getHistory();
-
-        assertNotNull(history, "History should not be empty");
-        assertEquals(1, history.size(), "Epic should be in the history");
-
-        Epic EpicFromHistory = (Epic)history.getFirst();
-
-        assertNotEquals(updatedVersion, EpicFromHistory, "History doesn't contain previous version of Epic");
-        assertEquals(previousVersion, EpicFromHistory, "History doesn't contain previous version of Epic");
     }
 
     @Test

@@ -1,10 +1,15 @@
-import Managers.InMemoryTaskManager;
-import Managers.TaskManager;
-import Tasks.*;
+import managers.InMemoryTaskManager;
+import managers.TaskManager;
+import tasks.*;
 
 public class Main {
 
     public static void main(String[] args) {
+        //managerTestingScenario();
+        historyTestingScenario();
+    }
+
+    private static void managerTestingScenario() {
         TaskManager taskManager = new InMemoryTaskManager();
 
         Task task1 = new Task("Task1", "Desc of task1", TaskStatus.NEW);
@@ -64,31 +69,53 @@ public class Main {
         System.out.println(taskManager.getAllTasks());
         System.out.println(taskManager.getAllSubtasks());
         System.out.println(taskManager.getAllEpics());
-
-        printAllTasks(taskManager);
     }
 
-    private static void printAllTasks(TaskManager manager) {
-        System.out.println("\n\n\nЗадачи:");
-        for (Task task : manager.getAllTasks()) {
-            System.out.println(task);
-        }
-        System.out.println("Эпики:");
-        for (Task epic : manager.getAllEpics()) {
-            System.out.println(epic);
+    private static void historyTestingScenario() {
+        TaskManager manager = new InMemoryTaskManager();
 
-            for (Task task : manager.getAllSubTasksOfEpic(epic.getTaskId())) {
-                System.out.println("--> " + task);
-            }
-        }
-        System.out.println("Подзадачи:");
-        for (Task subtask : manager.getAllSubtasks()) {
-            System.out.println(subtask);
-        }
+        Task task1 = new Task("task1", "task1Desc", TaskStatus.NEW);
+        Task task2 = new Task("task2", "task2Desc", TaskStatus.IN_PROGRESS);
+        manager.createTask(task1);
+        manager.createTask(task2);
 
-        System.out.println("История:");
-        for (Task task : manager.getHistory()) {
-            System.out.println(task);
-        }
+        Epic epic1 = new Epic("epic1", "epic2Desc");
+        int epic1Id = manager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("subTask1", "subTask1Desc", TaskStatus.NEW, epic1Id);
+        SubTask subTask2 = new SubTask("subTask2", "subTask2Desc", TaskStatus.NEW, epic1Id);
+        SubTask subTask3 = new SubTask("subTask3", "subTask3Desc", TaskStatus.NEW, epic1Id);
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+        manager.createSubTask(subTask3);
+
+        Epic epic2 = new Epic("epic2", "epic2Desc");
+        manager.createEpic(epic2);
+
+        manager.getTaskById(task1.getTaskId());
+        manager.getTaskById(task2.getTaskId());
+        manager.getEpicByID(epic2.getTaskId());
+        manager.getSubTaskById(subTask1.getTaskId());
+        manager.getSubTaskById(subTask2.getTaskId());
+        manager.getSubTaskById(subTask3.getTaskId());
+        manager.getEpicByID(epic1.getTaskId());
+
+        System.out.println("\n\n\nFIRST ITERATION");
+        System.out.println(manager.getHistory());
+
+
+        manager.getSubTaskById(subTask1.getTaskId());
+        manager.getTaskById(task1.getTaskId());
+        manager.getSubTaskById(subTask2.getTaskId());
+
+        System.out.println("\n\n\nSECOND ITERATION");
+        System.out.println(manager.getHistory());
+
+        System.out.println("\n\n\nREMOVE ONE TASK");
+        manager.deleteTaskById(task1.getTaskId());
+        System.out.println(manager.getHistory());
+
+        System.out.println("\n\n\nREMOVE EPIC WITH THREE SUBTASKS");
+        manager.deleteEpicById(epic1.getTaskId());
+        System.out.println(manager.getHistory());
     }
 }

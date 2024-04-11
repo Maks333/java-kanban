@@ -1,9 +1,9 @@
-package TasksManagersTests;
+package taskmanagerstests;
 
-import Managers.*;
+import managers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import Tasks.*;
+import tasks.*;
 
 import java.util.List;
 
@@ -40,11 +40,11 @@ public class ManagerWithSubTasksTest {
     //Я так понимаю, что они должны быть равны внутри TaskManager'a , чтобы можно было сделать обновление
     @Test
     void twoSubTasksWithSameIdShouldBeEqual() {
-        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW,1);
+        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW, 1);
         int subTask1ID = manager.createSubTask(subTask1);
 
         SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", subTask1ID, TaskStatus.NEW,
-                1 );
+                1);
 
         manager.updateSubTask(subTask2);
         assertEquals(manager.getSubTaskById(subTask1ID), subTask2);
@@ -52,11 +52,11 @@ public class ManagerWithSubTasksTest {
 
     @Test
     void twoSubTasksWithDifferentIdShouldNotBeEqual() {
-        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW,1);
+        SubTask subTask1 = new SubTask("SubTask1Name", "SubTask1Description", TaskStatus.NEW, 1);
         int subTask1ID = manager.createSubTask(subTask1);
 
         SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", 3, TaskStatus.NEW,
-                1 );
+                1);
 
         manager.updateSubTask(subTask2);
         assertNotEquals(manager.getSubTaskById(subTask1ID), subTask2);
@@ -114,28 +114,6 @@ public class ManagerWithSubTasksTest {
         assertNotNull(subTaskAfterAddition, "SubTask should be in the manager");
         assertEquals(subTaskBeforeAddition, subTaskAfterAddition, "SubTask should remain the same after" +
                 " addition");
-    }
-
-    @Test
-    void historyManagerContainsPreviousVersionOfSubTask() {
-        SubTask subTask1 = new SubTask("SubTask1Name", "Subtask1Description", TaskStatus.NEW, 1);
-        int subTask1Id = manager.createSubTask(subTask1);
-
-        SubTask previousVersion = new SubTask(manager.getSubTaskById(subTask1Id));
-
-        SubTask updatedVersion = new SubTask("SubTask updated Name", "SubTask updated description",
-                subTask1Id, TaskStatus.NEW, 1);
-        manager.updateSubTask(updatedVersion);
-
-        List<Task> history = manager.getHistory();
-
-        assertNotNull(history, "History should not be empty");
-        assertEquals(1, history.size(), "SubTask should be in the history");
-
-        SubTask subTaskFromHistory = (SubTask)history.getFirst();
-
-        assertNotEquals(updatedVersion, subTaskFromHistory, "History doesn't contain previous version of SubTask");
-        assertEquals(previousVersion, subTaskFromHistory, "History doesn't contain previous version of SubTask");
     }
 
     @Test
