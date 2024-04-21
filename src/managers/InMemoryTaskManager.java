@@ -51,7 +51,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (newTask == null) {
             return -1;
         }
-        newTask.setTaskId(++idCounter);
+        int oldId = newTask.getTaskId();
+        if (oldId != 0 && !isIdOccupied(oldId)) {
+            if (idCounter < oldId) {
+                idCounter = oldId;
+            }
+        } else {
+            newTask.setTaskId(++idCounter);
+        }
         allTasks.put(newTask.getTaskId(), newTask);
         return newTask.getTaskId();
     }
