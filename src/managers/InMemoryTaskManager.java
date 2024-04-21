@@ -261,4 +261,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
         return subTasks;
     }
+
+    private boolean isIdOccupied(int id) {
+        return false;
+    }
 }
