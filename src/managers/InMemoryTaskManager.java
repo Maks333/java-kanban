@@ -195,7 +195,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (newEpic == null) {
             return -1;
         }
-        newEpic.setTaskId(++idCounter);
+        int oldId = newEpic.getTaskId();
+        if (oldId != 0 && !isIdOccupied(oldId)) {
+            if (idCounter < oldId) {
+                idCounter = oldId;
+            }
+        } else {
+            newEpic.setTaskId(++idCounter);
+        }
         allEpics.put(newEpic.getTaskId(), newEpic);
         return newEpic.getTaskId();
     }
