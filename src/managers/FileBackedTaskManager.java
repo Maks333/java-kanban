@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,6 +41,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         int id = super.createTask(newTask);
         save();
         return id;
+    }
+
+    @Override
+    public void updateTask(Task newTask) {
+        super.updateTask(newTask);
+        save();
+    }
+
+    @Override
+    public void updateSubTask(SubTask newSubTask) {
+        super.updateSubTask(newSubTask);
+        save();
+    }
+
+    @Override
+    public void updateEpic(Epic newEpic) {
+        super.updateEpic(newEpic);
+        save();
     }
 
     private void save() {
@@ -119,7 +136,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String content;
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         try {
-            content = Files.readString(file.toPath()).trim();
+            content = Files.readString(file.toPath());
         } catch (IOException e) {
             throw new ManagerSaveException();
         }
@@ -159,5 +176,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         int epic2Id = tm.createEpic(new Epic("Epic2", "Epic2Desc"));
         tm.createSubTask(new SubTask("SubTask4", "SubTask4Desc", TaskStatus.DONE, epic2Id));
+        System.out.println("Before:");
+        System.out.println(tm.getAllTasks());
+        System.out.println(tm.getAllSubtasks());
+        System.out.println(tm.getAllEpics());
+
+        tm = FileBackedTaskManager.loadFromFile(file);
+        System.out.println("\n\nAfter:");
+        System.out.println(tm.getAllTasks());
+        System.out.println(tm.getAllSubtasks());
+        System.out.println(tm.getAllEpics());
     }
 }
