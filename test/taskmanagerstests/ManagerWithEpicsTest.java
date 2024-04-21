@@ -151,4 +151,16 @@ public class ManagerWithEpicsTest {
         assertTrue(manager.getAllEpics().isEmpty());
         assertTrue(manager.getAllSubtasks().isEmpty());
     }
+
+    @Test
+    void shouldAddEpicWithIdIfIdIsNotInTheSystem() {
+        Epic epic = new Epic("EpicName", "Epic Description", 10);
+        int epicId = manager.createEpic(epic);
+        assertEquals(10, epicId, "Should be equal to 10");
+
+        List<Epic> epics = manager.getAllEpics();
+
+        assertNotNull(epics, "There should be 1 Task");
+        assertEquals(1, epics.size(), "Incorrect number of tasks");
+    }
 }
