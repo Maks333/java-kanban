@@ -3,6 +3,7 @@ package managers;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
+import tasks.TaskTypes;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -66,7 +67,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
-        return null;
+        String result;
+        if (task instanceof SubTask) {
+            SubTask subTask = (SubTask) task;
+            result = String.format("%d,%s,%s,%s,%s,%d", subTask.getTaskId(), TaskTypes.SUBTASK, subTask.getName(),
+                    subTask.getStatus(), subTask.getDescription(), subTask.getEpicId());
+        } else if (task instanceof Epic) {
+            Epic epic = (Epic) task;
+            result = String.format("%d,%s,%s,%s,%s", epic.getTaskId(), TaskTypes.EPIC, epic.getName(),
+                    epic.getStatus(), epic.getDescription());
+        } else {
+            result = String.format("%d,%s,%s,%s,%s", task.getTaskId(), TaskTypes.TASK, task.getName(), task.getStatus(),
+                    task.getDescription());
+        }
+        return result;
     }
 
     private Task fromString(String value) {
