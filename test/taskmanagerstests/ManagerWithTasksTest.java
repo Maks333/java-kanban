@@ -124,6 +124,18 @@ public class ManagerWithTasksTest {
 
     @Test
     void shouldAddTaskWithAssignedIdIfIdIsOccupied() {
+        Task task1 = new Task("Task1Name", "Task1Description", 10, TaskStatus.NEW);
+        int task1Id = manager.createTask(task1);
+        assertEquals(task1Id, task1.getTaskId(), "There is not task that occupies that id");
+
+        Task task2 = new Task("Task2Name", "Task2Description", 10, TaskStatus.NEW);
+        int task2Id = manager.createTask(task2);
+        assertEquals(11, task2Id, "Id should be equal to 11");
+
+        List<Task> tasks = manager.getAllTasks();
+
+        assertNotNull(tasks, "There should be 2 Tasks");
+        assertEquals(2, tasks.size(), "Incorrect number of tasks");
     }
 
     @Test
