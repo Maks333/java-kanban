@@ -3,6 +3,7 @@ package managers;
 import tasks.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -262,7 +263,18 @@ public class InMemoryTaskManager implements TaskManager {
         return subTasks;
     }
 
-    private boolean isIdOccupied(int id) {
+    private boolean isIdOccupied(int target) {
+        List<Integer> Ids = new ArrayList<>();
+        Ids.addAll(allTasks.keySet());
+        Ids.addAll(allSubTasks.keySet());
+        Ids.addAll(allEpics.keySet());
+        Ids.sort(Comparator.naturalOrder());
+
+        for (Integer id : Ids) {
+            if (id == target) {
+                return true;
+            }
+        }
         return false;
     }
 }
