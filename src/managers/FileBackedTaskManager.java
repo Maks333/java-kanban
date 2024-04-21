@@ -82,7 +82,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("Error: Unable to save changes to file.");
         }
     }
 
@@ -136,7 +136,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             content = Files.readString(file.toPath());
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("Error: Unable to load content from file.");
         }
 
         String[] tasks = content.split("\n");
