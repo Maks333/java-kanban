@@ -8,17 +8,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
 
     public FileBackedTaskManager(File file) {
-//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-//            String  firstLine = "id,type,name,status,description,epic";
-//            bw.write(firstLine);
-//        } catch (IOException e) {
-//            e.;
-//        }
         this.file = file;
     }
 
@@ -128,5 +125,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static FileBackedTaskManager loadFromFile(File fie) {
         return null;
+    }
+
+    public static void main(String[] args) {
+        Path path = Paths.get("example.txt");
+        File file = path.toFile();
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        FileBackedTaskManager tm = new FileBackedTaskManager(file);
+        tm.createTask(new Task("Task1", "Task1Desc", TaskStatus.NEW));
+        tm.createTask(new Task("Task2", "Task2Desc", TaskStatus.IN_PROGRESS));
+
+        int epic1Id = tm.createEpic(new Epic("Epic1", "Epic1Desc"));
+        tm.createSubTask(new SubTask("SubTask1", "SubTask1Desc", TaskStatus.NEW, epic1Id));
+        tm.createSubTask(new SubTask("SubTask2", "SubTask2Desc", TaskStatus.IN_PROGRESS, epic1Id));
+        tm.createSubTask(new SubTask("SubTask3", "SubTask3Desc", TaskStatus.NEW, epic1Id));
+
+        int epic2Id = tm.createEpic(new Epic("Epic2", "Epic2Desc"));
+        tm.createSubTask(new SubTask("SubTask4", "SubTask4Desc", TaskStatus.DONE, epic2Id));
     }
 }
