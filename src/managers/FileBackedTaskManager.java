@@ -9,14 +9,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-    private File file;
+    private final File file;
 
     public FileBackedTaskManager(File file) {
         this.file = file;
@@ -156,14 +154,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-        Path path = Paths.get("example.txt");
-        File file = path.toFile();
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
+        File file;
+        try {
+            file = File.createTempFile("example", ".txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         FileBackedTaskManager tm = new FileBackedTaskManager(file);
         tm.createTask(new Task("Task1", "Task1Desc", TaskStatus.NEW));
