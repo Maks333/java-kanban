@@ -1,9 +1,6 @@
 package managers;
 
-import tasks.Epic;
-import tasks.SubTask;
-import tasks.Task;
-import tasks.TaskTypes;
+import tasks.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -84,6 +81,29 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private Task fromString(String value) {
-        return null;
+        String[] tokens = value.split(",");
+
+        int id = Integer.parseInt(tokens[0]);
+        TaskTypes type = TaskTypes.valueOf(tokens[1]);
+        String name = tokens[2];
+        TaskStatus status = TaskStatus.valueOf(tokens[3]);
+        String description = tokens[4];
+
+        Task task;
+        switch (type) {
+            case TASK:
+                task = new Task(name, description, id, status);
+                break;
+            case SUBTASK:
+                int epicId = Integer.parseInt(tokens[5]);
+                task = new SubTask(name, description, id, status, epicId);
+                break;
+            case EPIC:
+                task = new Epic(name, description, id, status);
+                break;
+            default:
+                task = null;
+        }
+        return task;
     }
 }
