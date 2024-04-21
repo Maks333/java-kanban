@@ -4,7 +4,25 @@ import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
 public class FileBackedTaskManager extends InMemoryTaskManager {
+    private File file;
+
+    public FileBackedTaskManager(File file) {
+//        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
+//            String  firstLine = "id,type,name,status,description,epic";
+//            bw.write(firstLine);
+//        } catch (IOException e) {
+//            e.;
+//        }
+        this.file = file;
+    }
+
     @Override
     public void updateEpic(Epic newEpic) {
         super.updateEpic(newEpic);
