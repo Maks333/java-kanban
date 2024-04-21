@@ -64,4 +64,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
     }
+
+    private String toString(Task task) {
+        return null;
+    }
 }
