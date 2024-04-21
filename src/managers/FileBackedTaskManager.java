@@ -106,4 +106,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
         return task;
     }
+
+    public static FileBackedTaskManager loadFromFile(File fie) {
+        return null;
+    }
 }
