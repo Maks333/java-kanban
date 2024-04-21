@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.ManagerSaveException;
 import tasks.*;
 
 import java.io.BufferedWriter;
@@ -77,7 +78,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 bw.write(toString(subTask));
             }
         } catch (IOException e) {
-
+            throw new ManagerSaveException();
         }
     }
 
