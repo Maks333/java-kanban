@@ -113,7 +113,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (!allEpics.containsKey(epicId)) {
             return -1;
         }
-        newSubTask.setTaskId(++idCounter);
+
+        int oldId = newSubTask.getTaskId();
+        if (oldId != 0 && !isIdOccupied(oldId)) {
+            if (idCounter < oldId) {
+                idCounter = oldId;
+            }
+        } else {
+            newSubTask.setTaskId(++idCounter);
+        }
         allSubTasks.put(newSubTask.getTaskId(), newSubTask);
 
         Epic epic = allEpics.get(epicId);
