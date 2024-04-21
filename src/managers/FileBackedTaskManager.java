@@ -68,4 +68,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     private String toString(Task task) {
         return null;
     }
+
+    private Task fromString(String value) {
+        return null;
+    }
 }
