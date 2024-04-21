@@ -106,4 +106,27 @@ public class ManagerWithTasksTest {
         List<Task> TasksAfterDeletion = manager.getAllTasks();
         assertTrue(TasksAfterDeletion.isEmpty());
     }
+
+    @Test
+    void shouldAddTaskWithIdIfIdIsNotInTheSystem() {
+        Task Task1 = new Task("Task1Name", "Task1Description", 10, TaskStatus.NEW);
+        int task1Id = manager.createTask(Task1);
+        assertEquals(task1Id, Task1.getTaskId(), "There is not task that occupies that id");
+
+        Task savedTask = manager.getTaskById(task1Id);
+        assertNotNull(savedTask, "Task isn't found");
+        List<Task> tasks = manager.getAllTasks();
+
+        assertNotNull(tasks, "There should be 1 Task");
+        assertEquals(1, tasks.size(), "Incorrect number of tasks");
+        assertEquals(savedTask, tasks.getFirst(), "Tasks aren't equal");
+    }
+
+    @Test
+    void shouldAddTaskWithAssignedIdIfIdIsOccupied() {
+    }
+
+    @Test
+    void shouldContinueAssigningIdFromCurrentMaxValue() {
+    }
 }
