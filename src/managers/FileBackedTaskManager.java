@@ -67,14 +67,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String result;
         if (task instanceof SubTask) {
             SubTask subTask = (SubTask) task;
-            result = String.format("%d,%s,%s,%s,%s,%d", subTask.getTaskId(), TaskTypes.SUBTASK, subTask.getName(),
+            result = String.format("%d,%s,%s,%s,%s,%d,\n", subTask.getTaskId(), TaskTypes.SUBTASK, subTask.getName(),
                     subTask.getStatus(), subTask.getDescription(), subTask.getEpicId());
         } else if (task instanceof Epic) {
             Epic epic = (Epic) task;
-            result = String.format("%d,%s,%s,%s,%s", epic.getTaskId(), TaskTypes.EPIC, epic.getName(),
+            result = String.format("%d,%s,%s,%s,%s,\n", epic.getTaskId(), TaskTypes.EPIC, epic.getName(),
                     epic.getStatus(), epic.getDescription());
         } else {
-            result = String.format("%d,%s,%s,%s,%s", task.getTaskId(), TaskTypes.TASK, task.getName(), task.getStatus(),
+            result = String.format("%d,%s,%s,%s,%s,\n", task.getTaskId(), TaskTypes.TASK, task.getName(), task.getStatus(),
                     task.getDescription());
         }
         return result;
