@@ -115,8 +115,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return task;
     }
 
-    public static FileBackedTaskManager loadFromFile(File fie) {
-        return null;
+    public static FileBackedTaskManager loadFromFile(File file) {
+        String content;
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        try {
+            content = Files.readString(file.toPath()).trim();
+        } catch (IOException e) {
+            throw new ManagerSaveException();
+        }
+
+        String[] tasks = content.split("\n");
+        for (int i = 1; i < tasks.length; i++) {
+            Task task = manager.fromString(tasks[i]);
+            if (task instanceof SubTask) {
+                manager.createSubTask((SubTask) task);
+            } else if (task instanceof Epic) {
+                manager.createEpic((Epic) task);
+            } else {
+                manager.createTask(task);
+            }
+        }
+        return manager;
     }
 
     public static void main(String[] args) {
