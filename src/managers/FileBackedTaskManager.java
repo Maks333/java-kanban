@@ -11,6 +11,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
@@ -45,17 +49,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             String firstLine = "id,type,name,status,description,epic\n";
             bw.write(firstLine);
 
-            for (Task task : getAllTasks()) {
+            List<Task> tasks = new ArrayList<>();
+            tasks.addAll(getAllTasks());
+            tasks.addAll(getAllEpics());
+            tasks.addAll(getAllSubtasks());
+
+            Comparator<Task> comparator = new Comparator<Task>() {
+                @Override
+                public int compare(Task o1, Task o2) {
+                    return Integer.compare(o1.getTaskId(), o2.getTaskId());
+                }
+            };
+            tasks.sort(comparator);
+
+            for (Task task : tasks) {
                 bw.write(toString(task));
             }
 
-            for (Epic epic : getAllEpics()) {
-                bw.write(toString(epic));
-            }
-
-            for (SubTask subTask : getAllSubtasks()) {
-                bw.write(toString(subTask));
-            }
         } catch (IOException e) {
             throw new ManagerSaveException();
         }
