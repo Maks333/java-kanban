@@ -286,13 +286,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private boolean isIdOccupied(int target) {
-        List<Integer> Ids = new ArrayList<>();
-        Ids.addAll(allTasks.keySet());
-        Ids.addAll(allSubTasks.keySet());
-        Ids.addAll(allEpics.keySet());
-        Ids.sort(Comparator.naturalOrder());
+        List<Integer> ids = new ArrayList<>();
+        ids.addAll(allTasks.keySet());
+        ids.addAll(allSubTasks.keySet());
+        ids.addAll(allEpics.keySet());
+        ids.sort(Comparator.naturalOrder());
 
-        for (Integer id : Ids) {
+        for (Integer id : ids) {
             if (id == target) {
                 return true;
             }
