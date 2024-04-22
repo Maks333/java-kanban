@@ -4,9 +4,11 @@ import managers.FileBackedTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTaskManagerTest {
@@ -119,5 +121,47 @@ public class FileBackedTaskManagerTest {
         int newTaskId = manager.createTask(newTask);
         assertEquals(7, newTaskId, "Should start assign new id after previous max(6)");
         assertEquals(2, manager.getAllTasks().size(), "Should be 2 tasks");
+    }
+
+    @Test
+    void fileShouldBeEmptyAfterDeletionOfAllTasks() {
+        try {
+            String content = Files.readString(file.toPath());
+            assertEquals("", content, "Should be empty");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        manager.createTask(task);
+        int epicId = manager.createEpic(epic);
+        subTask = new SubTask("subtask", "subtask desc", TaskStatus.NEW, epicId);
+        manager.createSubTask(subTask);
+
+        try {
+            String content = Files.readString(file.toPath());
+            assertNotEquals("", content, "Should not be empty");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        manager.deleteAllEpics();
+        assertEquals(0, manager.getAllEpics().size(), "Should delete all Epics");
+        assertEquals(0, manager.getAllSubtasks().size(), "Should delete all SubTasks");
+
+        try {
+            String content = Files.readString(file.toPath());
+            assertNotEquals("", content, "Should not be empty");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        manager.deleteAllTasks();
+        assertEquals(0, manager.getAllTasks().size(), "Should delete all Tasks");
+
+        try {
+            String content = Files.readString(file.toPath());
+            assertEquals("", content, "Should be empty");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
