@@ -4,12 +4,9 @@ import managers.FileBackedTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tasks.*;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTaskManagerTest {
@@ -76,5 +73,51 @@ public class FileBackedTaskManagerTest {
 
         assertEquals(1, manager.getAllSubtasks().size(), "Should be 1 SubTask");
         assertEquals(savedSubTask, manager.getAllSubtasks().getFirst(), "Should be equal to previous version");
+    }
+
+    @Test
+    void shouldLoadProperlyTasksWithNotConsecutiveIds() {
+        task.setTaskId(3);
+        epic.setTaskId(6);
+        subTask = new SubTask("subtask", "subtask desc", 2, TaskStatus.NEW, 6);
+
+        int taskId = manager.createTask(task);
+        int epicId = manager.createEpic(epic);
+        int subTaskId = manager.createSubTask(subTask);
+
+        assertEquals(taskId, 3, "Id should be equal to 3");
+        assertEquals(epicId, 6, "Id should be equal to 6");
+        assertEquals(subTaskId, 2, "Id should be equal to 2");
+
+        try {
+            String content = Files.readString(file.toPath());
+            assertNotEquals("", content, "Should not be empty");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        manager = FileBackedTaskManager.loadFromFile(file);
+        assertNotNull(manager, "Should be initialized");
+
+        Task taskFromFile = manager.getAllTasks().getFirst();
+        Epic epicFromFile = manager.getAllEpics().getFirst();
+        SubTask subTaskFromFile = manager.getAllSubtasks().getFirst();
+
+        assertNotNull(taskFromFile, "Should be not null");
+        assertEquals(3, taskFromFile.getTaskId(), "Should properly load its id");
+        assertEquals(1, manager.getAllTasks().size(), "Should be one task");
+
+        assertNotNull(epicFromFile, "Should be not null");
+        assertEquals(6, epicFromFile.getTaskId(), "Should properly load its id");
+        assertEquals(1, manager.getAllEpics().size(), "Should be one epic");
+
+        assertNotNull(subTaskFromFile, "Should be not null");
+        assertEquals(2, subTaskFromFile.getTaskId(), "Should properly load its id");
+        assertEquals(1, manager.getAllSubtasks().size(), "Should be one subTask");
+
+        Task newTask = new Task("task1", "task1 desc", TaskStatus.NEW);
+        int newTaskId = manager.createTask(newTask);
+        assertEquals(7, newTaskId, "Should start assign new id after previous max(6)");
+        assertEquals(2, manager.getAllTasks().size(), "Should be 2 tasks");
     }
 }

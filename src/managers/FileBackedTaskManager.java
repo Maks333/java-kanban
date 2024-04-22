@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -104,14 +103,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             tasks.addAll(getAllTasks());
             tasks.addAll(getAllEpics());
             tasks.addAll(getAllSubtasks());
-
-            Comparator<Task> comparator = new Comparator<Task>() {
-                @Override
-                public int compare(Task o1, Task o2) {
-                    return Integer.compare(o1.getTaskId(), o2.getTaskId());
-                }
-            };
-            tasks.sort(comparator);
 
             for (Task task : tasks) {
                 bw.write(toString(task));
