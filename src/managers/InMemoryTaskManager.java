@@ -292,11 +292,6 @@ public class InMemoryTaskManager implements TaskManager {
         ids.addAll(allEpics.keySet());
         ids.sort(Comparator.naturalOrder());
 
-        for (Integer id : ids) {
-            if (id == target) {
-                return true;
-            }
-        }
-        return false;
+        return ids.contains(target);
     }
 }
