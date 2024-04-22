@@ -1,4 +1,4 @@
-package taskmanagerstests;
+package inmemorytaskmanagertest;
 
 import managers.*;
 import org.junit.jupiter.api.BeforeEach;
