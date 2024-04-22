@@ -156,7 +156,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 task = new Epic(name, description, id, status);
                 break;
             default:
-                task = null;
+                throw new ManagerSaveException("Error: Unknown type of task");
         }
         return task;
     }
