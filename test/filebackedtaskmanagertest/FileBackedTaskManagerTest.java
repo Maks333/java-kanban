@@ -164,4 +164,36 @@ public class FileBackedTaskManagerTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    void epicShouldContainItsSubTasksIdsInInnerStorageAfterLoadingManagerFromFile() {
+        int epicID = manager.createEpic(epic);
+
+        subTask = new SubTask("subTask", "subTask desc", TaskStatus.NEW, epicID);
+        SubTask subTask1 = new SubTask("subTask1", "subTask1 desc", TaskStatus.NEW, epicID);
+        SubTask subTask2 = new SubTask("subTask2", "subTask2 desc", TaskStatus.NEW, epicID);
+        manager.createSubTask(subTask);
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+
+        assertEquals(3, manager.getAllSubtasks().size(), "Should be 3 subTasks in manager");
+        assertEquals(3, epic.getSubTasks().size(), "Should be 3 ids in epic inner storage");
+        assertTrue(epic.getSubTasks().contains(2), "Epic should contain id of subTask");
+        assertTrue(epic.getSubTasks().contains(3), "Epic should contain id of subTask1");
+        assertTrue(epic.getSubTasks().contains(4), "Epic should contain id of subTask2");
+
+        manager = FileBackedTaskManager.loadFromFile(file);
+        Epic epicFromFile = manager.getEpicByID(1);
+
+        assertNotNull(manager, "Manager should be initialized");
+        assertEquals(1, manager.getAllEpics().size(), "Manager should load 1 epic");
+        assertEquals(3, manager.getAllSubtasks().size(), "Manager should load 3 subTasks");
+        assertNotNull(epicFromFile, "Epic from file should be initialized");
+        assertEquals(3, epicFromFile.getSubTasks().size(), "Should be 3 ids in epic from file inner" +
+                "storage");
+        assertTrue(epicFromFile.getSubTasks().contains(2), "Epic from file should contain id of subTask");
+        assertTrue(epicFromFile.getSubTasks().contains(3), "Epic from file should contain id of subTask1");
+        assertTrue(epicFromFile.getSubTasks().contains(4), "Epic from file should contain id of subTask2");
+        assertEquals(epicFromFile.getStatus(), TaskStatus.NEW, "Epic from file status should be NEW");
+    }
 }
