@@ -1,4 +1,4 @@
-package taskmanagerstests;
+package inmemorytaskmanagertest;
 
 import managers.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -150,5 +150,49 @@ public class ManagerWithEpicsTest {
         assertNull(manager.getSubTaskById(subTaskId));
         assertTrue(manager.getAllEpics().isEmpty());
         assertTrue(manager.getAllSubtasks().isEmpty());
+    }
+
+    @Test
+    void shouldAddEpicWithIdIfIdIsNotInTheSystem() {
+        Epic epic = new Epic("EpicName", "Epic Description", 10);
+        int epicId = manager.createEpic(epic);
+        assertEquals(10, epicId, "Should be equal to 10");
+
+        List<Epic> epics = manager.getAllEpics();
+
+        assertNotNull(epics, "There should be 1 Epic");
+        assertEquals(1, epics.size(), "Incorrect number of Epics");
+    }
+
+    @Test
+    void shouldAddEpicWithAssignedIdIfIdIsOccupied() {
+        Epic epic = new Epic("EpicName", "Epic Description", 10);
+        int epicId = manager.createEpic(epic);
+        assertEquals(10, epicId, "Should be equal to 10");
+
+        Epic epic1 = new Epic("Epic1Name", "Epic1 Description", 10);
+        int epic1Id = manager.createEpic(epic);
+        assertEquals(11, epic1Id, "Should be equal to 11");
+
+        List<Epic> epics = manager.getAllEpics();
+
+        assertNotNull(epics, "There should be 1 Epic");
+        assertEquals(2, epics.size(), "Incorrect number of Epics");
+    }
+
+    @Test
+    void shouldContinueAssigningIdFromCurrentMaxValue() {
+        Epic epic = new Epic("EpicName", "Epic Description", 10);
+        int epicId = manager.createEpic(epic);
+        assertEquals(10, epicId, "Should be equal to 10");
+
+        Epic epic1 = new Epic("Epic1Name", "Epic1 Description");
+        int epic1Id = manager.createEpic(epic);
+        assertEquals(11, epic1Id, "Should be equal to 11");
+
+        List<Epic> epics = manager.getAllEpics();
+
+        assertNotNull(epics, "There should be 1 Epic");
+        assertEquals(2, epics.size(), "Incorrect number of Epics");
     }
 }

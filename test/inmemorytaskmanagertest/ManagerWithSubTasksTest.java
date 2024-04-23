@@ -1,4 +1,4 @@
-package taskmanagerstests;
+package inmemorytaskmanagertest;
 
 import managers.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -132,5 +132,60 @@ public class ManagerWithSubTasksTest {
 
         List<SubTask> subTasksAfterDeletion = manager.getAllSubtasks();
         assertTrue(subTasksAfterDeletion.isEmpty());
+    }
+
+    @Test
+    void shouldAddSubTaskWithIdIfIdIsNotInTheSystem() {
+        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 10,
+                TaskStatus.NEW, 1);
+        int subTaskId = manager.createSubTask(subTask);
+        assertEquals(subTaskId, subTask.getTaskId(), "There is not task that occupies that id");
+
+        Task savedTask = manager.getSubTaskById(subTaskId);
+        assertNotNull(savedTask, "Task isn't found");
+        List<SubTask> tasks = manager.getAllSubtasks();
+
+        assertNotNull(tasks, "There should be 1 SubTask");
+        assertEquals(1, tasks.size(), "Incorrect number of subTasks");
+        assertEquals(savedTask, tasks.getFirst(), "SubTasks aren't equal");
+    }
+
+    @Test
+    void shouldAddSubTaskWithAssignedIdIfIdIsOccupied() {
+        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 10,
+                TaskStatus.NEW, 1);
+        int subTaskId = manager.createSubTask(subTask);
+        assertEquals(subTaskId, subTask.getTaskId(), "There is not task that occupies that id");
+
+        SubTask subTask1 = new SubTask("SubTask2Name", "SubTask2Description", 10,
+                TaskStatus.NEW, 1);
+        int subTask1Id = manager.createSubTask(subTask1);
+        assertEquals(11, subTask1Id, "Should be equal to 11");
+
+        Task savedTask = manager.getSubTaskById(subTaskId);
+        assertNotNull(savedTask, "Task isn't found");
+        List<SubTask> tasks = manager.getAllSubtasks();
+
+        assertNotNull(tasks, "There should be 2 SubTask");
+        assertEquals(2, tasks.size(), "Incorrect number of subTasks");
+    }
+
+    @Test
+    void shouldContinueAssigningIdFromCurrentMaxValue() {
+        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 10,
+                TaskStatus.NEW, 1);
+        int subTaskId = manager.createSubTask(subTask);
+        assertEquals(subTaskId, subTask.getTaskId(), "There is not task that occupies that id");
+
+        SubTask subTask1 = new SubTask("SubTask2Name", "SubTask2Description", TaskStatus.NEW, 1);
+        int subTask1Id = manager.createSubTask(subTask1);
+        assertEquals(11, subTask1Id, "Should be equal to 11");
+
+        Task savedTask = manager.getSubTaskById(subTaskId);
+        assertNotNull(savedTask, "Task isn't found");
+        List<SubTask> tasks = manager.getAllSubtasks();
+
+        assertNotNull(tasks, "There should be 2 SubTask");
+        assertEquals(2, tasks.size(), "Incorrect number of subTasks");
     }
 }

@@ -3,6 +3,7 @@ package managers;
 import tasks.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,7 +51,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (newTask == null) {
             return -1;
         }
-        newTask.setTaskId(++idCounter);
+        int oldId = newTask.getTaskId();
+        if (oldId != 0 && !isIdOccupied(oldId)) {
+            if (idCounter < oldId) {
+                idCounter = oldId;
+            }
+        } else {
+            newTask.setTaskId(++idCounter);
+        }
         allTasks.put(newTask.getTaskId(), newTask);
         return newTask.getTaskId();
     }
@@ -105,7 +113,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (!allEpics.containsKey(epicId)) {
             return -1;
         }
-        newSubTask.setTaskId(++idCounter);
+
+        int oldId = newSubTask.getTaskId();
+        if (oldId != 0 && !isIdOccupied(oldId)) {
+            if (idCounter < oldId) {
+                idCounter = oldId;
+            }
+        } else {
+            newSubTask.setTaskId(++idCounter);
+        }
         allSubTasks.put(newSubTask.getTaskId(), newSubTask);
 
         Epic epic = allEpics.get(epicId);
@@ -179,7 +195,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (newEpic == null) {
             return -1;
         }
-        newEpic.setTaskId(++idCounter);
+        int oldId = newEpic.getTaskId();
+        if (oldId != 0 && !isIdOccupied(oldId)) {
+            if (idCounter < oldId) {
+                idCounter = oldId;
+            }
+        } else {
+            newEpic.setTaskId(++idCounter);
+        }
         allEpics.put(newEpic.getTaskId(), newEpic);
         return newEpic.getTaskId();
     }
@@ -260,5 +283,15 @@ public class InMemoryTaskManager implements TaskManager {
             subTasks.add(allSubTasks.get(subTaskId));
         }
         return subTasks;
+    }
+
+    private boolean isIdOccupied(int target) {
+        List<Integer> ids = new ArrayList<>();
+        ids.addAll(allTasks.keySet());
+        ids.addAll(allSubTasks.keySet());
+        ids.addAll(allEpics.keySet());
+        ids.sort(Comparator.naturalOrder());
+
+        return ids.contains(target);
     }
 }
