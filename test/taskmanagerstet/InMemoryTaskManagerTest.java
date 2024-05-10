@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
-
     @Override
     @BeforeEach
     public void beforeEach() {
