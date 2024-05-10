@@ -110,8 +110,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         assertEquals(4, epicFromFile.getTaskId(), "Should properly load its id");
         assertEquals(1, manager.getAllEpics().size(), "Should be one epic");
         assertEquals(1, epicFromFile.getSubTasks().size(), "Epic should have 1 subTask");
-        assertTrue(epicFromFile.getSubTasks().contains(subTaskFromFile.getTaskId()), "Epic contains " +
-                "correct id of subTask");
+        assertTrue(epicFromFile.getSubTasks().contains(subTaskFromFile.getTaskId()), "Epic contains " + "correct id of subTask");
 
         assertNotNull(subTaskFromFile, "Should be not null");
         assertEquals(11, subTaskFromFile.getTaskId(), "Should properly load its id");
@@ -186,12 +185,10 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         assertNotNull(epicFromFile, "Epic from file should be initialized");
         assertEquals(1, manager.getAllEpics().size(), "Manager should load 1 epic");
         assertEquals(3, manager.getAllSubtasks().size(), "Manager should load 3 subTasks");
-        assertEquals(3, epicFromFile.getSubTasks().size(), "Should be 3 ids in epic from file inner" +
-                "storage");
+        assertEquals(3, epicFromFile.getSubTasks().size(), "Should be 3 ids in epic from file inner" + "storage");
         assertTrue(epicFromFile.getSubTasks().contains(5), "Epic from file should contain id of subTask1");
         assertTrue(epicFromFile.getSubTasks().contains(6), "Epic from file should contain id of subTask2");
         assertTrue(epicFromFile.getSubTasks().contains(7), "Epic from file should contain id of subTask3");
-        assertEquals(epicFromFile.getStatus(), TaskStatus.IN_PROGRESS, "Epic from file status" +
-                "should be IN_PROGRESS");
+        assertEquals(epicFromFile.getStatus(), TaskStatus.IN_PROGRESS, "Epic from file status" + "should be IN_PROGRESS");
     }
 }

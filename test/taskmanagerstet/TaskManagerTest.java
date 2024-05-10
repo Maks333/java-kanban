@@ -3,14 +3,14 @@ package taskmanagerstet;
 import managers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
     Task task1;
@@ -80,8 +80,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void TasksWithGeneratedIdAndAssignedIdShouldNotConflict() {
-        Task generatedTask = new Task("GeneratedTaskName", "GeneratedTaskDesc",
-                TaskStatus.NEW);
+        Task generatedTask = new Task("GeneratedTaskName", "GeneratedTaskDesc", TaskStatus.NEW);
         int generatedTaskId = manager.createTask(generatedTask);
 
         int assignedTaskId = manager.createTask(task1);
@@ -91,8 +90,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedGeneratedTask, "Task should be created");
         assertNotNull(savedAssignedTask, "Task should be created");
-        assertNotEquals(savedGeneratedTask.getTaskId(), savedAssignedTask.getTaskId(),
-                "Id should not conflict");
+        assertNotEquals(savedGeneratedTask.getTaskId(), savedAssignedTask.getTaskId(), "Id should not conflict");
     }
 
     @Test
@@ -102,8 +100,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task TaskAfterAddition = manager.getTaskById(TaskId);
 
         assertNotNull(TaskAfterAddition, "Task should be in the manager");
-        assertEquals(task1, TaskAfterAddition, "Task should remain the same after" +
-                " addition");
+        assertEquals(task1, TaskAfterAddition, "Task should remain the same after" + " addition");
     }
 
     @Test
@@ -177,8 +174,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.createEpic(epic1);
         int subTaskId = manager.createSubTask(subTask1);
 
-        SubTask newSubTask = new SubTask("NewSubTaskName", "NewSubTaskDescription", subTaskId,
-                TaskStatus.NEW, 4);
+        SubTask newSubTask = new SubTask("NewSubTaskName", "NewSubTaskDescription", subTaskId, TaskStatus.NEW, 4);
 
         manager.updateSubTask(newSubTask);
 
@@ -194,8 +190,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         int epicId = manager.createEpic(epic1);
         int subTask1ID = manager.createSubTask(subTask1);
 
-        SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", subTask1ID, TaskStatus.NEW,
-                epicId);
+        SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", subTask1ID, TaskStatus.NEW, epicId);
 
         manager.updateSubTask(subTask2);
         assertEquals(manager.getSubTaskById(subTask1ID), subTask2, "SubTask should have the same id");
@@ -206,8 +201,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.createEpic(epic1);
         int subTask1ID = manager.createSubTask(subTask1);
 
-        SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", 15, TaskStatus.NEW,
-                epic1.getTaskId());
+        SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", 15, TaskStatus.NEW, epic1.getTaskId());
 
         manager.updateSubTask(subTask2);
         assertNotEquals(manager.getSubTaskById(subTask1ID), subTask2, "Should not have the same id");
@@ -232,8 +226,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void SubTasksWithGeneratedIdAndAssignedIdShouldNotConflict() {
         int epicID = manager.createEpic(epic1);
-        SubTask generatedSubTask = new SubTask("GeneratedSubTaskName", "GeneratedSubTaskDesc",
-                TaskStatus.NEW, epicID);
+        SubTask generatedSubTask = new SubTask("GeneratedSubTaskName", "GeneratedSubTaskDesc", TaskStatus.NEW, epicID);
         int generatedSubTaskId = manager.createSubTask(generatedSubTask);
 
         int assignedSubTaskId = manager.createSubTask(subTask1);
@@ -243,8 +236,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedGeneratedSubtask, "SubTask with generated id should be in the system");
         assertNotNull(savedAssignedSubTask, "SubTask with assigned id should be in the system");
-        assertNotEquals(savedGeneratedSubtask.getTaskId(), savedAssignedSubTask.getTaskId(),
-                "Id should not conflict");
+        assertNotEquals(savedGeneratedSubtask.getTaskId(), savedAssignedSubTask.getTaskId(), "Id should not conflict");
     }
 
     @Test
@@ -255,12 +247,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         SubTask subTaskAfterAddition = manager.getSubTaskById(subTaskId);
 
         assertNotNull(subTaskAfterAddition, "SubTask should be in the manager");
-        assertEquals(subTask1, subTaskAfterAddition, "SubTask should remain the same after" +
-                " addition");
+        assertEquals(subTask1, subTaskAfterAddition, "SubTask should remain the same after" + " addition");
         assertEquals(subTask1.getEpicId(), subTaskAfterAddition.getEpicId(), "Should have the same id");
         assertEquals(subTask1.getName(), subTaskAfterAddition.getName(), "Should have the same name");
-        assertEquals(subTask1.getDescription(), subTaskAfterAddition.getDescription(), "Should have " +
-                "the same description");
+        assertEquals(subTask1.getDescription(), subTaskAfterAddition.getDescription(), "Should have " + "the same description");
         assertEquals(subTask1.getStatus(), subTaskAfterAddition.getStatus(), "Should have the same status");
     }
 
@@ -285,8 +275,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldAddSubTaskWithIdIfIdIsNotInTheSystem() {
         int epicId = manager.createEpic(epic1);
-        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 15,
-                TaskStatus.NEW, epicId);
+        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 15, TaskStatus.NEW, epicId);
         int subTaskId = manager.createSubTask(subTask);
         assertEquals(subTaskId, subTask.getTaskId(), "There is not task that occupies that id");
 
@@ -302,13 +291,11 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldAddSubTaskWithAssignedIdIfIdIsOccupied() {
         int epicId = manager.createEpic(epic1);
-        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 15,
-                TaskStatus.NEW, epicId);
+        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 15, TaskStatus.NEW, epicId);
         int subTaskId = manager.createSubTask(subTask);
         assertEquals(subTaskId, subTask.getTaskId(), "There is not task that occupies that id");
 
-        SubTask subTask1 = new SubTask("SubTask2Name", "SubTask2Description", 15,
-                TaskStatus.NEW, epicId);
+        SubTask subTask1 = new SubTask("SubTask2Name", "SubTask2Description", 15, TaskStatus.NEW, epicId);
         int subTask1Id = manager.createSubTask(subTask1);
         assertEquals(16, subTask1Id, "Should be equal to 16");
 
@@ -323,8 +310,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldContinueAssigningIdFromCurrentMaxValueWithSubTasks() {
         int epicId = manager.createEpic(epic1);
-        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 15,
-                TaskStatus.NEW, epicId);
+        SubTask subTask = new SubTask("SubTask1Name", "SubTask1Description", 15, TaskStatus.NEW, epicId);
         int subTaskId = manager.createSubTask(subTask);
         assertEquals(subTaskId, subTask.getTaskId(), "There is not task that occupies that id");
 
@@ -447,8 +433,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(1, savedEpic.getSubTasks().size(), "Epic inner list should have 1 subTask");
         assertEquals(savedSubTask.getTaskId(), savedEpic.getSubTasks().getFirst(), "Manager should have 1 subTask");
         assertEquals(1, manager.getAllSubTasksOfEpic(epicId).size(), "Epic should have 1 subTask");
-        assertEquals(savedSubTask, manager.getAllSubTasksOfEpic(epicId).getFirst(), "inner and actual id" +
-                " of subTask should be equal");
+        assertEquals(savedSubTask, manager.getAllSubTasksOfEpic(epicId).getFirst(), "inner and actual id" + " of subTask should be equal");
     }
 
     @Test
@@ -464,8 +449,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(savedGeneratedEpic, "Generated epic should be in the system");
         assertNotNull(savedAssignedEpic, "Assigned epic should be in the system");
-        assertNotEquals(savedGeneratedEpic.getTaskId(), savedAssignedEpic.getTaskId(),
-                "Id should not conflict");
+        assertNotEquals(savedGeneratedEpic.getTaskId(), savedAssignedEpic.getTaskId(), "Id should not conflict");
     }
 
     @Test
@@ -475,10 +459,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Epic epicAfterAddition = manager.getEpicByID(epicId);
 
         assertNotNull(epicAfterAddition, "Epic should be in the manager");
-        assertEquals(epic1, epicAfterAddition, "Epic should remain the same after" +
-                " addition");
-        assertEquals(epic1.getSubTasks().size(), epicAfterAddition.getSubTasks().size(), "Should " +
-                "have the same amount of subTask");
+        assertEquals(epic1, epicAfterAddition, "Epic should remain the same after" + " addition");
+        assertEquals(epic1.getSubTasks().size(), epicAfterAddition.getSubTasks().size(), "Should " + "have the same amount of subTask");
         assertEquals(epic1.getTaskId(), epicAfterAddition.getTaskId(), "Should have the same id");
         assertEquals(epic1.getName(), epicAfterAddition.getName(), "Should have the same name");
         assertEquals(epic1.getDescription(), epicAfterAddition.getDescription(), "Should have the same description");
