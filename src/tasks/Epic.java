@@ -1,9 +1,11 @@
 package tasks;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subTasks;
+    private LocalDateTime endTime;
 
     public Epic(String name, String description, int taskID, TaskStatus status) {
         super(name, description, taskID, status);
