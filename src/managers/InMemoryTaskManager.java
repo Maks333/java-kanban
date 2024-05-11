@@ -2,6 +2,8 @@ package managers;
 
 import tasks.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -127,6 +129,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = allEpics.get(epicId);
         epic.addSubTask(newSubTask.getTaskId());
         calculateNewEpicStatus(epicId);
+        calculateNewEpicTime(epicId);
 
         return newSubTask.getTaskId();
     }
@@ -269,6 +272,31 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
+    }
+
+    private void calculateNewEpicTime(int epicId) {
+        Epic epic = allEpics.get(epicId);
+        LocalDateTime newStartTime = LocalDateTime.MAX;
+        LocalDateTime newEndTime = LocalDateTime.MIN;
+        Duration newDuration = Duration.ZERO;
+
+        for (int subTaskId : epic.getSubTasks()) {
+            SubTask subTask = allSubTasks.get(subTaskId);
+            LocalDateTime subTaskStartTime = subTask.getStartTime();
+            LocalDateTime subTaskEndTime = subTask.getEndTime();
+            Duration subTaskDuration = subTask.getDuration();
+
+            if (subTaskStartTime.isBefore(newStartTime) || subTaskStartTime.isEqual(newStartTime)) {
+                newStartTime = subTaskStartTime;
+            }
+            if (subTaskEndTime.isAfter(newEndTime) || subTaskEndTime.isEqual(newEndTime)) {
+                newEndTime = subTaskEndTime;
+            }
+            newDuration = newDuration.plus(subTaskDuration);
+        }
+        epic.setDuration(newDuration);
+        epic.setStartTime(newStartTime);
+        epic.setEndTime(newEndTime);
     }
 
     @Override
