@@ -1,5 +1,7 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -7,6 +9,18 @@ public class Task {
     private String description;
     private int taskId;
     private TaskStatus status;
+    private Duration duration;
+    private LocalDateTime startTime;
+
+    public Task(String name, String description, int taskId, TaskStatus status, Duration duration,
+                LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.taskId = taskId;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
 
     public Task(String name, String description, int taskId, TaskStatus status) {
         this.name = name;
@@ -65,14 +79,11 @@ public class Task {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        /*return taskId == task.taskId && Objects.equals(name, task.name)
-                && Objects.equals(description, task.description) && status == task.status;*/
         return taskId == task.taskId;
     }
 
     @Override
     public int hashCode() {
-        //return Objects.hash(name, description, taskId, status);
         return Objects.hash(taskId);
     }
 
@@ -83,6 +94,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", taskId=" + taskId +
                 ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
 }
