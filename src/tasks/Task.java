@@ -2,6 +2,7 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -114,8 +115,8 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", taskId=" + taskId +
                 ", status=" + status +
-                ", duration=" + duration +
-                ", startTime=" + startTime +
+                ", duration=" + duration.toMinutes() +
+                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")) +
                 '}';
     }
 }

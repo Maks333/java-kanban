@@ -153,7 +153,6 @@ public class InMemoryTaskManager implements TaskManager {
 
         allSubTasks.put(newSubTask.getTaskId(), newSubTask);
         calculateNewEpicStatus(newSubTask.getEpicId());
-        //TODO test
         calculateNewEpicTime(newSubTask.getEpicId());
     }
 
