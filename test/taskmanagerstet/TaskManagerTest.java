@@ -181,15 +181,11 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 LocalDateTime.now().plus(Duration.ofMinutes(5)));
         assertEquals(Duration.ofMinutes(10), task.getDuration(), "Should be equal to 10");
 
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getHour(), task.getStartTime().getHour(),
-                "Hour should be the same");
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getMinute(), task.getStartTime().getMinute(),
-                "Minutes should be the same");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).withNano(0),
+                task.getStartTime().withNano(0), "Should be proper startTime");
 
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getHour(), task.getEndTime().getHour(),
-                "Hour should be the same");
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getMinute(), task.getEndTime().getMinute(),
-                "Should be the same amount of minutes");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).withNano(0),
+                task.getEndTime().withNano(0), "Should be proper endTime");
     }
     //End of Task testing section
 
@@ -363,15 +359,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 LocalDateTime.now().plus(Duration.ofMinutes(5)));
         assertEquals(Duration.ofMinutes(10), subTask.getDuration(), "Should be equal to 10");
 
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getHour(), subTask.getStartTime().getHour(),
-                "Hour should be the same");
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getMinute(), subTask.getStartTime().getMinute(),
-                "Minutes should be the same");
-
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getHour(), subTask.getEndTime().getHour(),
-                "Hour should be the same");
-        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getMinute(), subTask.getEndTime().getMinute(),
-                "Should be the same amount of minutes");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).withNano(0),
+                subTask.getStartTime().withNano(0), "Should be proper startTime");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).withNano(0),
+                subTask.getEndTime().withNano(0), "Should be proper endTime");
     }
     //End of SubTask testing section
 
@@ -596,5 +587,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(epics, "There should be 2 Epic");
         assertEquals(2, epics.size(), "Incorrect number of Epics");
     }
+
     //End of Epic testing section
 }
