@@ -8,6 +8,8 @@ import tasks.SubTask;
 import tasks.Task;
 import tasks.TaskStatus;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -165,6 +167,29 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         assertNotNull(tasks, "There should be 2 Tasks");
         assertEquals(2, tasks.size(), "Incorrect number of tasks");
+    }
+
+    @Test
+    void shouldProperlyWorkWithTimeVariablesOfTask() {
+        Task task = new Task("task", "taskDesc", 15, TaskStatus.NEW);
+        assertEquals(Duration.ZERO, task.getDuration(), "Should be zero");
+        assertEquals(LocalDateTime.MIN, task.getStartTime(), "Should be default value");
+        assertEquals(LocalDateTime.MIN, task.getEndTime(), "Should be default value");
+
+
+        task = new Task("task", "taskDesc", 16, TaskStatus.NEW, Duration.ofMinutes(10),
+                LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        assertEquals(Duration.ofMinutes(10), task.getDuration(), "Should be equal to 10");
+
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getHour(), task.getStartTime().getHour(),
+                "Hour should be the same");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getMinute(), task.getStartTime().getMinute(),
+                "Minutes should be the same");
+
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getHour(), task.getEndTime().getHour(),
+                "Hour should be the same");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getMinute(), task.getEndTime().getMinute(),
+                "Should be the same amount of minutes");
     }
     //End of Task testing section
 
