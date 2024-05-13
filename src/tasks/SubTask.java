@@ -2,6 +2,7 @@ package tasks;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class SubTask extends Task {
     private final int epicId;
@@ -39,6 +40,11 @@ public class SubTask extends Task {
                 ", taskId=" + getTaskId() +
                 ", status=" + getStatus() +
                 ", epicId=" + epicId +
+                ", duration=" + getDuration().toMinutes() +
+                ", startTime=" +
+                (getStartTime().equals(LocalDateTime.MIN)
+                        ? "identified"
+                        : getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))) +
                 '}';
     }
 }

@@ -41,6 +41,8 @@ public class Task {
         description = task.getDescription();
         taskId = task.getTaskId();
         status = task.getStatus();
+        duration = task.getDuration();
+        startTime = task.getStartTime();
     }
 
     public String getName() {
@@ -116,7 +118,10 @@ public class Task {
                 ", taskId=" + taskId +
                 ", status=" + status +
                 ", duration=" + duration.toMinutes() +
-                ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss")) +
+                ", startTime=" +
+                (startTime.equals(LocalDateTime.MIN)
+                        ? "identified"
+                        : startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))) +
                 '}';
     }
 }
