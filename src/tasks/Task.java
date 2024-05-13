@@ -9,8 +9,8 @@ public class Task {
     private String description;
     private int taskId;
     private TaskStatus status;
-    private Duration duration;
-    private LocalDateTime startTime;
+    private Duration duration = Duration.ZERO;
+    private LocalDateTime startTime = LocalDateTime.MIN;
 
     public Task(String name, String description, int taskId, TaskStatus status, Duration duration,
                 LocalDateTime startTime) {
