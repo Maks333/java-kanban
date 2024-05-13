@@ -372,4 +372,9 @@ public class InMemoryTaskManager implements TaskManager {
 
         return ids.contains(target);
     }
+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<>(prioritizedTasks);
+    }
 }
