@@ -11,6 +11,8 @@ import tasks.TaskStatus;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -190,5 +192,43 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         assertTrue(epicFromFile.getSubTasks().contains(6), "Epic from file should contain id of subTask2");
         assertTrue(epicFromFile.getSubTasks().contains(7), "Epic from file should contain id of subTask3");
         assertEquals(epicFromFile.getStatus(), TaskStatus.IN_PROGRESS, "Epic from file status" + "should be IN_PROGRESS");
+    }
+
+    @Test
+    void shouldProperlyRecoverTimeVariables() {
+        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(1)));
+        task1.setDuration(Duration.ofMinutes(1));
+
+        subTask4.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        subTask4.setDuration(Duration.ofMinutes(5));
+
+        manager.createTask(task1);
+        manager.createEpic(epic2);
+        manager.createSubTask(subTask4);
+
+        assertEquals(subTask4.getStartTime(), epic2.getStartTime(), "Should be equal to startTime of subTask");
+        assertEquals(subTask4.getDuration(), epic2.getDuration(), "Should be equal to duration of subTask");
+        assertEquals(subTask4.getEndTime(), epic2.getEndTime(), "Should be equal to endTime of subTask");
+
+        manager = FileBackedTaskManager.loadFromFile(file);
+        assertNotNull(manager, "Should load without errors");
+
+        Task task = manager.getTaskById(task1.getTaskId());
+        assertNotNull(task, "Should be in the system");
+        assertEquals(task.getStartTime(), task1.getStartTime(), "Should have the same startTime");
+        assertEquals(task.getDuration(), task1.getDuration(), "Should have the same duration");
+        assertEquals(task.getEndTime(), task1.getEndTime(), "Should have the same endTime");
+
+        SubTask subTask = manager.getSubTaskById(subTask4.getTaskId());
+        assertNotNull(subTask, "Should be in the system");
+        assertEquals(subTask.getStartTime(), subTask4.getStartTime(), "Should have the same startTime");
+        assertEquals(subTask.getDuration(), subTask4.getDuration(), "Should have the same duration");
+        assertEquals(subTask.getEndTime(), subTask4.getEndTime(), "Should have the same endTime");
+
+        Epic epic = manager.getEpicByID(epic2.getTaskId());
+        assertNotNull(epic, "Should be in the system");
+        assertEquals(epic.getStartTime(), epic2.getStartTime(), "Should have the same startTime");
+        assertEquals(epic.getDuration(), epic2.getDuration(), "Should have the same duration");
+        assertEquals(epic.getEndTime(), epic2.getEndTime(), "Should have the same endTime");
     }
 }
