@@ -45,6 +45,8 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : allTasks.keySet()) {
             history.remove(id);
         }
+        //TODO
+        prioritizedTasks.removeAll(allTasks.values());
         allTasks.clear();
     }
 
@@ -68,6 +70,11 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             newTask.setTaskId(++idCounter);
         }
+
+        //TODO test
+        if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
+            prioritizedTasks.add(newTask);
+        }
         allTasks.put(newTask.getTaskId(), newTask);
         return newTask.getTaskId();
     }
@@ -80,11 +87,19 @@ public class InMemoryTaskManager implements TaskManager {
         if (allTasks.containsKey(newTask.getTaskId())) {
             allTasks.put(newTask.getTaskId(), newTask);
         }
+
+        //TODO test
+        prioritizedTasks.remove(newTask);
+        if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
+            prioritizedTasks.add(newTask);
+        }
     }
 
     @Override
     public void deleteTaskById(int id) {
         history.remove(id);
+        //TODO test
+        prioritizedTasks.remove(allTasks.get(id));
         allTasks.remove(id);
     }
 
