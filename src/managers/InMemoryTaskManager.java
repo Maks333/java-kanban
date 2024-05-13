@@ -95,7 +95,6 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : allEpics.values()) {
             epic.removeAllSubTasks();
             calculateNewEpicStatus(epic.getTaskId());
-            //TODO test
             calculateNewEpicTime(epic.getTaskId());
         }
     }

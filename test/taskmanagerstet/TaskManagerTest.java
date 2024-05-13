@@ -668,5 +668,37 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(Duration.ZERO, epic1.getDuration(), "Should be equal to default duration");
         assertEquals(LocalDateTime.MAX, epic1.getEndTime(), "Should be equal to default endTime");
     }
+
+    @Test
+    void shouldProperlyCalculateTimeForEpicDuringUpdatingOfSubTasks() {
+        int epicId = manager.createEpic(epic2);
+        epic2 = manager.getEpicByID(epicId);
+        assertEquals(LocalDateTime.MIN, epic2.getStartTime(), "Should be equal to default startTime");
+        assertEquals(Duration.ZERO, epic2.getDuration(), "Should be equal to default duration");
+        assertEquals(LocalDateTime.MAX, epic2.getEndTime(), "Should be equal to default endTime");
+
+        subTask4.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(4)));
+        subTask4.setDuration(Duration.ofMinutes(3));
+
+        int subTask4Id = manager.createSubTask(subTask4);
+        epic2 = manager.getEpicByID(epicId);
+        assertEquals(subTask4.getStartTime().withNano(0),
+                epic2.getStartTime().withNano(0), "Should be equal to earliest subTask");
+        assertEquals(subTask4.getEndTime().withNano(0),
+                epic2.getEndTime().withNano(0), "Should be equal to latest subTask");
+        assertEquals(Duration.ofMinutes(3), epic2.getDuration(), "Should be the sum of all subTasks");
+
+        SubTask newSubTask = new SubTask("subtask", "subTaskDesc", subTask4Id, subTask4.getStatus(),
+                epicId, Duration.ofMinutes(10), LocalDateTime.now().plus(Duration.ofMinutes(20)));
+        manager.updateSubTask(newSubTask);
+
+        subTask4 = manager.getSubTaskById(subTask4Id);
+        epic2 = manager.getEpicByID(epicId);
+        assertEquals(subTask4.getStartTime().withNano(0),
+                epic2.getStartTime().withNano(0), "Should be equal to earliest subTask");
+        assertEquals(subTask4.getEndTime().withNano(0),
+                epic2.getEndTime().withNano(0), "Should be equal to latest subTask");
+        assertEquals(Duration.ofMinutes(10), epic2.getDuration(), "Should be the sum of all subTasks");
+    }
     //End of Epic testing section
 }
