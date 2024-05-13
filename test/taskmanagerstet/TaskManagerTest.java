@@ -350,6 +350,29 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(tasks, "There should be 2 SubTask");
         assertEquals(2, tasks.size(), "Incorrect number of subTasks");
     }
+
+    @Test
+    void shouldProperlyWorkWithTimeVariablesOfSubTask() {
+        SubTask subTask = new SubTask("subTask", "subTaskDesc", 15, TaskStatus.NEW, 4);
+        assertEquals(Duration.ZERO, subTask.getDuration(), "Should be zero");
+        assertEquals(LocalDateTime.MIN, subTask.getStartTime(), "Should be default value");
+        assertEquals(LocalDateTime.MIN, subTask.getEndTime(), "Should be default value");
+
+
+        subTask = new SubTask("subTask", "subTaskDesc", 16, TaskStatus.NEW, 4, Duration.ofMinutes(10),
+                LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        assertEquals(Duration.ofMinutes(10), subTask.getDuration(), "Should be equal to 10");
+
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getHour(), subTask.getStartTime().getHour(),
+                "Hour should be the same");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(5)).getMinute(), subTask.getStartTime().getMinute(),
+                "Minutes should be the same");
+
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getHour(), subTask.getEndTime().getHour(),
+                "Hour should be the same");
+        assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).getMinute(), subTask.getEndTime().getMinute(),
+                "Should be the same amount of minutes");
+    }
     //End of SubTask testing section
 
     //Start of Epic testing section
