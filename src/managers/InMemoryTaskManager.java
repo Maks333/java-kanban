@@ -306,7 +306,9 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStartTime(newStartTime);
         }
         epic.setDuration(newDuration);
-        epic.setEndTime(newEndTime);
+        if (!newEndTime.equals(LocalDateTime.MIN)) {
+            epic.setEndTime(newEndTime);
+        }
     }
 
     @Override

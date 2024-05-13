@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subTasks;
-    private LocalDateTime endTime;
+    private LocalDateTime endTime = LocalDateTime.MAX;
 
     public Epic(String name, String description, int taskID, TaskStatus status) {
         super(name, description, taskID, status);

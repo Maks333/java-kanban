@@ -588,5 +588,36 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(2, epics.size(), "Incorrect number of Epics");
     }
 
+    @Test
+    void shouldProperlyCalculateTimeForEpicDuringAdditionOfSubTasks() {
+        int epicId = manager.createEpic(epic1);
+        epic1 = manager.getEpicByID(epicId);
+        assertEquals(LocalDateTime.MIN, epic1.getStartTime(), "Should be equal to default startTime");
+        assertEquals(Duration.ZERO, epic1.getDuration(), "Should be equal to default duration");
+        assertEquals(LocalDateTime.MAX, epic1.getEndTime(), "Should be equal to default endTime");
+
+        subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        subTask1.setDuration(Duration.ofMinutes(1));
+
+        subTask2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(4)));
+        subTask2.setDuration(Duration.ofMinutes(3));
+
+        subTask3.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(6)));
+        subTask3.setDuration(Duration.ofMinutes(5));
+
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+        manager.createSubTask(subTask3);
+
+        epic1 = manager.getEpicByID(epicId);
+        assertEquals(subTask1.getStartTime().withNano(0),
+                epic1.getStartTime().withNano(0), "Should be equal to earliest subTask");
+        assertEquals(subTask3.getEndTime().withNano(0),
+                epic1.getEndTime().withNano(0), "Should be equal to latest subTask");
+        assertEquals(Duration.ofMinutes(9), epic1.getDuration(), "Should be the sum of all subTasks");
+        assertEquals(epic1.getEndTime().withNano(0),
+                epic1.getStartTime().plus(epic1.getDuration()).withNano(0),
+                "EndTime should be startTime plus duration");
+    }
     //End of Epic testing section
 }
