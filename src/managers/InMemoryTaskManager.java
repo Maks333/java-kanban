@@ -4,16 +4,14 @@ import tasks.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
     private final HashMap<Integer, SubTask> allSubTasks;
     private final HashMap<Integer, Epic> allEpics;
     private final HistoryManager history;
+    private final TreeSet<Task> prioritizedTasks;
     private int idCounter = 0;
 
     public InMemoryTaskManager() {
@@ -21,6 +19,15 @@ public class InMemoryTaskManager implements TaskManager {
         allSubTasks = new HashMap<>();
         allEpics = new HashMap<>();
         history = Managers.getDefaultHistory();
+        prioritizedTasks = new TreeSet<>((t1, t2) -> {
+            if (t1.getStartTime().isBefore(t2.getStartTime())) {
+                return -1;
+            } else if (t1.getStartTime().isAfter(t2.getStartTime())) {
+                return 1;
+            } else {
+                return 0;
+            }
+        });
     }
 
     @Override
