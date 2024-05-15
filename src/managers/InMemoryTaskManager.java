@@ -71,7 +71,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
-            //TODO test
             if (isTaskOverlap(newTask)) {
                 return -1;
             }
@@ -88,7 +87,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)
                 && isTaskOverlap(newTask)) {
-            //TODO test
             return;
         }
 
@@ -159,7 +157,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)) {
-            //TODO test
             if (isTaskOverlap(newSubTask)) {
                 return -1;
             }
@@ -194,7 +191,6 @@ public class InMemoryTaskManager implements TaskManager {
 
         if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)
                 && isTaskOverlap(newSubTask)) {
-            //TODO test
             return;
         }
 
