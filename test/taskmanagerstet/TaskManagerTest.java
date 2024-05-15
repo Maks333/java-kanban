@@ -280,6 +280,35 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
         assertEquals(task1, manager.getPrioritizedTasks().getFirst(), "Should be only one task");
     }
+
+    @Test
+    public void shouldContainOldVersionOfTaskIfNewIsOverlap() {
+        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        task1.setDuration(Duration.ofMinutes(5));
+
+        task2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        task2.setDuration(Duration.ofMinutes(1));
+
+        manager.createTask(task1);
+        manager.createTask(task2);
+
+        assertEquals(2, manager.getAllTasks().size(), "Should be added");
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
+
+        Task task = new Task(task2.getName(), task2.getDescription(), task2.getTaskId(),
+                task2.getStatus(), Duration.ofMinutes(5), LocalDateTime.now().plus(Duration.ofMinutes(11)));
+        manager.updateTask(task);
+
+        assertEquals(2, manager.getAllTasks().size(), "Should be added");
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
+        assertEquals(task2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(task1, manager.getPrioritizedTasks().getLast(), "Should be second");
+        assertEquals(task2.getStartTime().withNano(0),
+                manager.getPrioritizedTasks().getFirst().getStartTime().withNano(0),
+                "Should have old startTime");
+        assertEquals(task2.getDuration(), manager.getPrioritizedTasks().getFirst().getDuration(),
+                "Should have old duration");
+    }
     //End of Task testing section
 
     //Start of SubTask testing section

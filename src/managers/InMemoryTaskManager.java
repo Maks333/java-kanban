@@ -86,6 +86,12 @@ public class InMemoryTaskManager implements TaskManager {
         if (newTask == null) {
             return;
         }
+        if (!newTask.getStartTime().equals(LocalDateTime.MIN)
+                && isTaskOverlap(newTask)) {
+            //TODO test
+            return;
+        }
+
         if (allTasks.containsKey(newTask.getTaskId())) {
             allTasks.put(newTask.getTaskId(), newTask);
         }
@@ -95,10 +101,6 @@ public class InMemoryTaskManager implements TaskManager {
                 .findFirst().orElse(newTask);
         prioritizedTasks.remove(taskToRemove);
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
-            //TODO test
-            if (isTaskOverlap(newTask)) {
-                return;
-            }
             prioritizedTasks.add(newTask);
         }
     }
