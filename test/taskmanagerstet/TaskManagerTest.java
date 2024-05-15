@@ -589,22 +589,24 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.deleteAllEpics();
         assertEquals(0, manager.getPrioritizedTasks().size(), "Should be empty");
     }
-    /*@Test
-    public void twoTaskShouldNotOverlap() {
-        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
-        task1.setDuration(Duration.ofMinutes(1));
 
-        task2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
-        task2.setDuration(Duration.ofMinutes(1));
+    @Test
+    public void twoSubTaskShouldNotOverlap() {
+        manager.createEpic(epic1);
+        subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        subTask1.setDuration(Duration.ofMinutes(1));
 
-        manager.createTask(task1);
-        manager.createTask(task2);
+        subTask2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        subTask2.setDuration(Duration.ofMinutes(1));
+
+        manager.createTask(subTask1);
+        manager.createTask(subTask2);
 
         assertEquals(2, manager.getAllTasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
     }
 
-    @Test
+    /*@Test
     public void twoTaskShouldOverlap() {
         task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(3)));
         task1.setDuration(Duration.ofMinutes(1));
