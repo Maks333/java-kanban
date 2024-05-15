@@ -989,5 +989,26 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 epic2.getEndTime().withNano(0), "Should be equal to latest subTask");
         assertEquals(Duration.ofMinutes(10), epic2.getDuration(), "Should be the sum of all subTasks");
     }
+
+    @Test
+    public void epicWithAllNewSubTaskStatuses() {
+        int epicId = manager.createEpic(epic1);
+        Epic epicFromManager = manager.getEpicByID(epicId);
+
+        assertEquals(1, manager.getAllEpics().size(), "Should be one epic");
+        assertEquals(TaskStatus.NEW, epicFromManager.getStatus(), "Default status should be NEW");
+
+        subTask1.setStatus(TaskStatus.NEW);
+        subTask2.setStatus(TaskStatus.NEW);
+        subTask3.setStatus(TaskStatus.NEW);
+
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+        manager.createSubTask(subTask3);
+
+        epicFromManager = manager.getEpicByID(epicId);
+        assertEquals(3, manager.getAllSubtasks().size(), "Should be 3 subTasks");
+        assertEquals(TaskStatus.NEW, epicFromManager.getStatus(), "Status should be NEW");
+    }
     //End of Epic testing section
 }
