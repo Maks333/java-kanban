@@ -187,6 +187,68 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).withNano(0),
                 task.getEndTime().withNano(0), "Should be proper endTime");
     }
+
+    @Test
+    void shouldProperlyPrioritizeTasks() {
+        assertNotNull(manager.getPrioritizedTasks(), "Should be initialized");
+        assertEquals(0, manager.getPrioritizedTasks().size(), "Should not have tasks");
+
+        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        task1.setDuration(Duration.ofMinutes(5));
+
+        task2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        task2.setDuration(Duration.ofMinutes(2));
+
+        manager.createTask(task1);
+        manager.createTask(task2);
+
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should have tasks");
+        assertEquals(task2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(task1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        int task3Id = manager.createTask(task3);
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should have the same amount of tasks");
+        assertFalse(manager.getPrioritizedTasks().contains(task3), "Should not contain this task");
+        assertEquals(task2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(task1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        Task task = new Task(task3.getName(), task3.getDescription(), task3.getTaskId(),
+                task3.getStatus(), Duration.ofMinutes(1), LocalDateTime.now().plus(Duration.ofMinutes(5)));
+
+        manager.updateTask(task);
+        assertEquals(3, manager.getPrioritizedTasks().size(), "Should include updated tasks");
+        assertTrue(manager.getPrioritizedTasks().contains(task), "Should contain this task");
+        assertEquals(task, manager.getPrioritizedTasks().get(1), "Updated task should be in the middle");
+        assertEquals(task2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(task1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        manager.deleteTaskById(task3Id);
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Task should be removed");
+        assertFalse(manager.getPrioritizedTasks().contains(task), "This task should be removed");
+        assertEquals(task2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(task1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        task = new Task(task2.getName(), task2.getDescription(), task2.getTaskId(), task2.getStatus());
+        manager.updateTask(task);
+        assertEquals(1, manager.getPrioritizedTasks().size(), "Should remove tasks with default time");
+        assertFalse(manager.getPrioritizedTasks().contains(task), "This task should be removed");
+        assertEquals(task1, manager.getPrioritizedTasks().getFirst(), "Should be first");
+
+        task = new Task(task1.getName(), task1.getDescription(), task1.getTaskId(),
+                task1.getStatus(), Duration.ofMinutes(1), LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        manager.updateTask(task);
+        assertEquals(1, manager.getPrioritizedTasks().size(), "Should update tasks with different time");
+        assertEquals(task1, manager.getPrioritizedTasks().getFirst());
+        assertEquals(Duration.ofMinutes(1), manager.getPrioritizedTasks().getFirst().getDuration()
+                , "Should have the same duration");
+        assertEquals(task.getStartTime().withNano(0),
+                manager.getPrioritizedTasks().getFirst().getStartTime().withNano(0),
+                "Should have the same startTime");
+
+        manager.deleteAllTasks();
+        assertNotNull(manager.getPrioritizedTasks(), "Should be not null");
+        assertEquals(0, manager.getPrioritizedTasks().size(), "All tasks should be removed");
+    }
     //End of Task testing section
 
     //Start of SubTask testing section

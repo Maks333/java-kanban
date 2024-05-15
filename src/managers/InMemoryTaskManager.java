@@ -5,6 +5,7 @@ import tasks.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
@@ -45,7 +46,6 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : allTasks.keySet()) {
             history.remove(id);
         }
-        //TODO
         prioritizedTasks.removeAll(allTasks.values());
         allTasks.clear();
     }
@@ -71,7 +71,6 @@ public class InMemoryTaskManager implements TaskManager {
             newTask.setTaskId(++idCounter);
         }
 
-        //TODO test
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
             prioritizedTasks.add(newTask);
         }
@@ -88,8 +87,10 @@ public class InMemoryTaskManager implements TaskManager {
             allTasks.put(newTask.getTaskId(), newTask);
         }
 
-        //TODO test
-        prioritizedTasks.remove(newTask);
+        Task taskToRemove = prioritizedTasks.stream().
+                filter(t -> t.equals(newTask)).
+                findFirst().orElse(newTask);
+        prioritizedTasks.remove(taskToRemove);
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
             prioritizedTasks.add(newTask);
         }
@@ -98,7 +99,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int id) {
         history.remove(id);
-        //TODO test
         prioritizedTasks.remove(allTasks.get(id));
         allTasks.remove(id);
     }
@@ -182,7 +182,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         //TODO test
-        prioritizedTasks.remove(newSubTask);
+        SubTask subTaskToRemove = (SubTask) prioritizedTasks.stream().
+                filter(t -> t.equals(newSubTask)).
+                findFirst().orElse(newSubTask);
+        prioritizedTasks.remove(subTaskToRemove);
         if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)) {
             prioritizedTasks.add(newSubTask);
         }
@@ -224,6 +227,8 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : allSubTasks.keySet()) {
             history.remove(id);
         }
+        //TODO test
+        prioritizedTasks.removeAll(allSubTasks.values());
         allSubTasks.clear();
     }
 
@@ -277,6 +282,8 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = allEpics.get(id);
         for (int subTaskId : epic.getSubTasks()) {
             history.remove(subTaskId);
+            //TODO test
+            prioritizedTasks.remove(allSubTasks.get(subTaskId));
             allSubTasks.remove(subTaskId);
         }
         history.remove(id);
