@@ -5,7 +5,6 @@ import tasks.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
@@ -87,9 +86,9 @@ public class InMemoryTaskManager implements TaskManager {
             allTasks.put(newTask.getTaskId(), newTask);
         }
 
-        Task taskToRemove = prioritizedTasks.stream().
-                filter(t -> t.equals(newTask)).
-                findFirst().orElse(newTask);
+        Task taskToRemove = prioritizedTasks.stream()
+                .filter(t -> t.equals(newTask))
+                .findFirst().orElse(newTask);
         prioritizedTasks.remove(taskToRemove);
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
             prioritizedTasks.add(newTask);
@@ -179,9 +178,9 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        SubTask subTaskToRemove = (SubTask) prioritizedTasks.stream().
-                filter(t -> t.equals(newSubTask)).
-                findFirst().orElse(newSubTask);
+        SubTask subTaskToRemove = (SubTask) prioritizedTasks.stream()
+                .filter(t -> t.equals(newSubTask))
+                .findFirst().orElse(newSubTask);
         prioritizedTasks.remove(subTaskToRemove);
         if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)) {
             prioritizedTasks.add(newSubTask);
@@ -378,5 +377,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getPrioritizedTasks() {
         return new ArrayList<>(prioritizedTasks);
+    }
+
+    private boolean isTaskOverlap(Task task) {
+        return prioritizedTasks.stream()
+                .anyMatch(t -> task.getEndTime().withNano(0)
+                        .isAfter(t.getStartTime().withNano(0)));
     }
 }
