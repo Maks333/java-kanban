@@ -599,30 +599,31 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subTask2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
         subTask2.setDuration(Duration.ofMinutes(1));
 
-        manager.createTask(subTask1);
-        manager.createTask(subTask2);
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
 
-        assertEquals(2, manager.getAllTasks().size(), "Should be added");
+        assertEquals(2, manager.getAllSubtasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
     }
 
-    /*@Test
-    public void twoTaskShouldOverlap() {
-        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(3)));
-        task1.setDuration(Duration.ofMinutes(1));
+    @Test
+    public void twoSubTaskShouldOverlap() {
+        manager.createEpic(epic1);
+        subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(3)));
+        subTask1.setDuration(Duration.ofMinutes(1));
 
-        task2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
-        task2.setDuration(Duration.ofMinutes(3));
+        subTask2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        subTask2.setDuration(Duration.ofMinutes(3));
 
-        manager.createTask(task1);
-        manager.createTask(task2);
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
 
-        assertEquals(1, manager.getAllTasks().size(), "Should be added");
+        assertEquals(1, manager.getAllSubtasks().size(), "Should be added");
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
-        assertEquals(task1, manager.getPrioritizedTasks().getFirst(), "Should be only one task");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getFirst(), "Should be only one task");
     }
 
-    @Test
+    /*@Test
     public void shouldContainOldVersionOfTaskIfNewIsOverlap() {
         task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
         task1.setDuration(Duration.ofMinutes(5));
