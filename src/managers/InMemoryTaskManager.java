@@ -5,6 +5,7 @@ import tasks.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> allTasks;
@@ -42,9 +43,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
-        for (Integer id : allTasks.keySet()) {
-            history.remove(id);
-        }
+        allTasks.keySet().forEach(history::remove);
         prioritizedTasks.removeAll(allTasks.values());
         allTasks.clear();
     }
@@ -117,16 +116,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllSubTasks() {
-        for (Integer id : allSubTasks.keySet()) {
-            history.remove(id);
-        }
+        allSubTasks.keySet().forEach(history::remove);
         prioritizedTasks.removeAll(allSubTasks.values());
         allSubTasks.clear();
-        for (Epic epic : allEpics.values()) {
-            epic.removeAllSubTasks();
-            calculateNewEpicStatus(epic.getTaskId());
-            calculateNewEpicTime(epic.getTaskId());
-        }
+        allEpics.values()
+                .forEach(epic -> {
+                    epic.removeAllSubTasks();
+                    calculateNewEpicStatus(epic.getTaskId());
+                    calculateNewEpicTime(epic.getTaskId());
+                });
     }
 
     @Override
@@ -231,14 +229,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllEpics() {
-        for (Integer id : allEpics.keySet()) {
-            history.remove(id);
-        }
+        allEpics.keySet().forEach(history::remove);
         allEpics.clear();
-
-        for (Integer id : allSubTasks.keySet()) {
-            history.remove(id);
-        }
+        allSubTasks.keySet().forEach(history::remove);
         prioritizedTasks.removeAll(allSubTasks.values());
         allSubTasks.clear();
     }
@@ -290,12 +283,16 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        Epic epic = allEpics.get(id);
-        for (int subTaskId : epic.getSubTasks()) {
-            history.remove(subTaskId);
-            prioritizedTasks.remove(allSubTasks.get(subTaskId));
-            allSubTasks.remove(subTaskId);
-        }
+        allEpics.values().stream()
+                .filter(epic -> epic.getTaskId() == id)
+                .forEach(epic ->
+                        epic.getSubTasks()
+                                .forEach(subTaskId -> {
+                                    history.remove(subTaskId);
+                                    prioritizedTasks.remove(allSubTasks.get(subTaskId));
+                                    allSubTasks.remove(subTaskId);
+                                })
+                );
         history.remove(id);
         allEpics.remove(id);
     }
@@ -372,12 +369,13 @@ public class InMemoryTaskManager implements TaskManager {
             return null;
         }
 
-        ArrayList<SubTask> subTasks = new ArrayList<>();
-        Epic epic = allEpics.get(epicId);
-        for (int subTaskId : epic.getSubTasks()) {
-            subTasks.add(allSubTasks.get(subTaskId));
-        }
-        return subTasks;
+        return new ArrayList<>(allEpics.values().stream()
+                .filter(epic -> epic.getTaskId() == epicId)
+                .map(epic -> epic.getSubTasks().stream()
+                        .map(allSubTasks::get)
+                        .collect(Collectors.toList()))
+                .findFirst()
+                .orElse(new ArrayList<>()));
     }
 
     private boolean isIdOccupied(int target) {
@@ -399,7 +397,8 @@ public class InMemoryTaskManager implements TaskManager {
         return prioritizedTasks.stream()
                 .filter(t -> !task.equals(t))
                 .anyMatch(t -> {
-                    if (t.getStartTime().withNano(0).isBefore(task.getStartTime().withNano(0))) {
+                    if (t.getStartTime().withNano(0)
+                            .isBefore(task.getStartTime().withNano(0))) {
                         return t.getEndTime().withNano(0)
                                 .isAfter(task.getStartTime().withNano(0));
                     } else {
