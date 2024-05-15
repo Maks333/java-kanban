@@ -113,7 +113,6 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : allSubTasks.keySet()) {
             history.remove(id);
         }
-        //TODO test
         prioritizedTasks.removeAll(allSubTasks.values());
         allSubTasks.clear();
         for (Epic epic : allEpics.values()) {
@@ -150,7 +149,6 @@ public class InMemoryTaskManager implements TaskManager {
             newSubTask.setTaskId(++idCounter);
         }
 
-        //TODO test
         if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)) {
             prioritizedTasks.add(newSubTask);
         }
@@ -181,7 +179,6 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        //TODO test
         SubTask subTaskToRemove = (SubTask) prioritizedTasks.stream().
                 filter(t -> t.equals(newSubTask)).
                 findFirst().orElse(newSubTask);
@@ -205,9 +202,9 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = allEpics.get(subTask.getEpicId());
         epic.removeSubTask(id);
         history.remove(id);
-        //TODO test
         prioritizedTasks.remove(allSubTasks.get(id));
         allSubTasks.remove(id);
+
         calculateNewEpicStatus(epic.getTaskId());
         calculateNewEpicTime(epic.getTaskId());
     }
@@ -227,7 +224,6 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer id : allSubTasks.keySet()) {
             history.remove(id);
         }
-        //TODO test
         prioritizedTasks.removeAll(allSubTasks.values());
         allSubTasks.clear();
     }
@@ -282,7 +278,6 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = allEpics.get(id);
         for (int subTaskId : epic.getSubTasks()) {
             history.remove(subTaskId);
-            //TODO test
             prioritizedTasks.remove(allSubTasks.get(subTaskId));
             allSubTasks.remove(subTaskId);
         }

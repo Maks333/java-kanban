@@ -494,6 +494,41 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(manager.getPrioritizedTasks(), "Should be not null");
         assertEquals(0, manager.getPrioritizedTasks().size(), "All subTasks should be removed");
     }
+
+    @Test
+    public void afterEpicRemovalShouldRemoveSubTasksFromPrioritization() {
+        manager.createEpic(epic1);
+        manager.createEpic(epic2);
+
+        subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        subTask1.setDuration(Duration.ofMinutes(1));
+
+        subTask2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(4)));
+        subTask2.setDuration(Duration.ofMinutes(1));
+
+        subTask3.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(6)));
+        subTask3.setDuration(Duration.ofMinutes(1));
+
+        subTask4.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(8)));
+        subTask4.setDuration(Duration.ofMinutes(1));
+
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+        manager.createSubTask(subTask3);
+        manager.createSubTask(subTask4);
+
+        assertEquals(4, manager.getPrioritizedTasks().size(), "Should have subTasks");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(subTask4, manager.getPrioritizedTasks().getLast(), "Should be second");
+
+        manager.deleteEpicById(epic1.getTaskId());
+        assertEquals(1, manager.getPrioritizedTasks().size(),
+                "Should contain one subTask after deletion");
+        assertEquals(subTask4, manager.getPrioritizedTasks().getFirst(), "Should be first");
+
+        manager.deleteAllEpics();
+        assertEquals(0, manager.getPrioritizedTasks().size(), "Should be empty");
+    }
     //End of SubTask testing section
 
     //Start of Epic testing section
