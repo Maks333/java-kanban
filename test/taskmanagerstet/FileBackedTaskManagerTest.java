@@ -1,5 +1,6 @@
 package taskmanagerstet;
 
+import exceptions.ManagerSaveException;
 import managers.FileBackedTaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import tasks.TaskStatus;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -230,5 +233,14 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
         assertEquals(epic.getStartTime(), epic2.getStartTime(), "Should have the same startTime");
         assertEquals(epic.getDuration(), epic2.getDuration(), "Should have the same duration");
         assertEquals(epic.getEndTime(), epic2.getEndTime(), "Should have the same endTime");
+    }
+
+    @Test
+    public void incorrectFileValueDuringSaveException() {
+        assertThrows(ManagerSaveException.class, () -> {
+            file = Paths.get("someFile", ".txt").toFile();
+            manager = new FileBackedTaskManager(file);
+            manager.createTask(task1);
+        });
     }
 }
