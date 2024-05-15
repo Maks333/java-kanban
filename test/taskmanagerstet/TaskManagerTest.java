@@ -238,7 +238,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 task1.getStatus(), Duration.ofMinutes(1), LocalDateTime.now().plus(Duration.ofMinutes(5)));
         manager.updateTask(task);
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should update tasks with different time");
-        assertEquals(task1, manager.getPrioritizedTasks().getFirst());
+        assertEquals(task, manager.getPrioritizedTasks().getFirst());
         assertEquals(Duration.ofMinutes(1), manager.getPrioritizedTasks().getFirst().getDuration()
                 , "Should have the same duration");
         assertEquals(task.getStartTime().withNano(0),
@@ -425,6 +425,74 @@ public abstract class TaskManagerTest<T extends TaskManager> {
                 subTask.getStartTime().withNano(0), "Should be proper startTime");
         assertEquals(LocalDateTime.now().plus(Duration.ofMinutes(15)).withNano(0),
                 subTask.getEndTime().withNano(0), "Should be proper endTime");
+    }
+
+    @Test
+    void shouldProperlyPrioritizeSubTasks() {
+        manager.createEpic(epic1);
+
+        assertNotNull(manager.getPrioritizedTasks(), "Should be initialized");
+        assertEquals(0, manager.getPrioritizedTasks().size(), "Should not have subTasks");
+
+        subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(10)));
+        subTask1.setDuration(Duration.ofMinutes(5));
+
+        subTask2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        subTask2.setDuration(Duration.ofMinutes(2));
+
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should have subTasks");
+        assertEquals(subTask2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        int subTaskId3 = manager.createSubTask(subTask3);
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should have the same amount of subTasks");
+        assertFalse(manager.getPrioritizedTasks().contains(subTask3), "Should not contain this subTask");
+        assertEquals(subTask2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        SubTask subTask = new SubTask(subTask3.getName(), subTask3.getDescription(), subTask3.getTaskId(),
+                subTask3.getStatus(), subTask3.getEpicId(),
+                Duration.ofMinutes(1), LocalDateTime.now().plus(Duration.ofMinutes(5)));
+
+        manager.updateSubTask(subTask);
+        assertEquals(3, manager.getPrioritizedTasks().size(), "Should include updated subTasks");
+        assertTrue(manager.getPrioritizedTasks().contains(subTask), "Should contain this subTask");
+        assertEquals(subTask, manager.getPrioritizedTasks().get(1), "Updated subTask should be in the middle");
+        assertEquals(subTask2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        manager.deleteSubTaskById(subTaskId3);
+        assertEquals(2, manager.getPrioritizedTasks().size(), "SubTasks should be removed");
+        assertFalse(manager.getPrioritizedTasks().contains(subTask), "This subTask should be removed");
+        assertEquals(subTask2, manager.getPrioritizedTasks().getFirst(), "Should be first");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getLast(), "Should be last");
+
+        subTask = new SubTask(subTask2.getName(), subTask2.getDescription(), subTask2.getTaskId(), subTask2.getStatus(),
+                subTask2.getEpicId());
+        manager.updateSubTask(subTask);
+        assertEquals(1, manager.getPrioritizedTasks().size(), "Should remove subTasks with default time");
+        assertFalse(manager.getPrioritizedTasks().contains(subTask), "This subTask should be removed");
+        assertEquals(subTask1, manager.getPrioritizedTasks().getFirst(), "Should be first");
+
+        subTask = new SubTask(subTask1.getName(), subTask1.getDescription(), subTask1.getTaskId(),
+                subTask1.getStatus(), subTask1.getEpicId(),
+                Duration.ofMinutes(1), LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        manager.updateSubTask(subTask);
+        assertEquals(1, manager.getPrioritizedTasks().size(),
+                "Should update subTasks with different time");
+        assertEquals(subTask, manager.getPrioritizedTasks().getFirst());
+        assertEquals(Duration.ofMinutes(1), manager.getPrioritizedTasks().getFirst().getDuration()
+                , "Should have the same duration");
+        assertEquals(subTask.getStartTime().withNano(0),
+                manager.getPrioritizedTasks().getFirst().getStartTime().withNano(0),
+                "Should have the same startTime");
+
+        manager.deleteAllSubTasks();
+        assertNotNull(manager.getPrioritizedTasks(), "Should be not null");
+        assertEquals(0, manager.getPrioritizedTasks().size(), "All subTasks should be removed");
     }
     //End of SubTask testing section
 
