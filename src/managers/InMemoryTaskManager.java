@@ -159,6 +159,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)) {
+            //TODO test
+            if (isTaskOverlap(newSubTask)) {
+                return -1;
+            }
             prioritizedTasks.add(newSubTask);
         }
 
@@ -185,6 +189,12 @@ public class InMemoryTaskManager implements TaskManager {
 
         boolean isSameEpicId = allSubTasks.get(newSubTask.getTaskId()).getEpicId() == newSubTask.getEpicId();
         if (!isSameEpicId) {
+            return;
+        }
+
+        if (!newSubTask.getStartTime().equals(LocalDateTime.MIN)
+                && isTaskOverlap(newSubTask)) {
+            //TODO test
             return;
         }
 
