@@ -250,7 +250,20 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(0, manager.getPrioritizedTasks().size(), "All tasks should be removed");
     }
 
+    @Test
+    public void twoTaskShouldNotOverlap() {
+        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        task1.setDuration(Duration.ofMinutes(1));
 
+        task2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        task2.setDuration(Duration.ofMinutes(1));
+
+        manager.createTask(task1);
+        manager.createTask(task2);
+
+        assertEquals(2, manager.getAllTasks().size(), "Should be added");
+        assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
+    }
     //End of Task testing section
 
     //Start of SubTask testing section
