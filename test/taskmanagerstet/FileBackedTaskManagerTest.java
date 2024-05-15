@@ -243,4 +243,12 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
             manager.createTask(task1);
         });
     }
+
+    @Test
+    public void incorrectFileValueDuringLoadingException() {
+        assertThrows(ManagerSaveException.class, () -> {
+            file = Paths.get("someFile", ".txt").toFile();
+            manager = FileBackedTaskManager.loadFromFile(file);
+        });
+    }
 }
