@@ -1010,5 +1010,26 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(3, manager.getAllSubtasks().size(), "Should be 3 subTasks");
         assertEquals(TaskStatus.NEW, epicFromManager.getStatus(), "Status should be NEW");
     }
+
+    @Test
+    public void epicWithAllDoneSubTaskStatuses() {
+        int epicId = manager.createEpic(epic1);
+        Epic epicFromManager = manager.getEpicByID(epicId);
+
+        assertEquals(1, manager.getAllEpics().size(), "Should be one epic");
+        assertEquals(TaskStatus.NEW, epicFromManager.getStatus(), "Default status should be NEW");
+
+        subTask1.setStatus(TaskStatus.DONE);
+        subTask2.setStatus(TaskStatus.DONE);
+        subTask3.setStatus(TaskStatus.DONE);
+
+        manager.createSubTask(subTask1);
+        manager.createSubTask(subTask2);
+        manager.createSubTask(subTask3);
+
+        epicFromManager = manager.getEpicByID(epicId);
+        assertEquals(3, manager.getAllSubtasks().size(), "Should be 3 subTasks");
+        assertEquals(TaskStatus.DONE, epicFromManager.getStatus(), "Status should be DONE");
+    }
     //End of Epic testing section
 }
