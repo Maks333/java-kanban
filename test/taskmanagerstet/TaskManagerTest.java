@@ -249,6 +249,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(manager.getPrioritizedTasks(), "Should be not null");
         assertEquals(0, manager.getPrioritizedTasks().size(), "All tasks should be removed");
     }
+
+
     //End of Task testing section
 
     //Start of SubTask testing section

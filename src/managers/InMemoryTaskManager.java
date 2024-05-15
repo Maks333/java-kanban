@@ -71,6 +71,10 @@ public class InMemoryTaskManager implements TaskManager {
         }
 
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
+            //TODO test
+            if (isTaskOverlap(newTask)) {
+                return -1;
+            }
             prioritizedTasks.add(newTask);
         }
         allTasks.put(newTask.getTaskId(), newTask);
@@ -91,6 +95,10 @@ public class InMemoryTaskManager implements TaskManager {
                 .findFirst().orElse(newTask);
         prioritizedTasks.remove(taskToRemove);
         if (!newTask.getStartTime().equals(LocalDateTime.MIN)) {
+            //TODO test
+            if (isTaskOverlap(newTask)) {
+                return;
+            }
             prioritizedTasks.add(newTask);
         }
     }
@@ -381,7 +389,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     private boolean isTaskOverlap(Task task) {
         return prioritizedTasks.stream()
-                .anyMatch(t -> task.getEndTime().withNano(0)
-                        .isAfter(t.getStartTime().withNano(0)));
+                .filter(t -> !task.equals(t))
+                .anyMatch(t -> {
+                    if (t.getStartTime().withNano(0).isBefore(task.getStartTime().withNano(0))) {
+                        return t.getEndTime().withNano(0)
+                                .isAfter(task.getStartTime().withNano(0));
+                    } else {
+                        return task.getEndTime().withNano(0)
+                                .isAfter(t.getStartTime().withNano(0));
+                    }
+                });
     }
 }
