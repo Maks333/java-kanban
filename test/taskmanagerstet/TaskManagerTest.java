@@ -264,6 +264,22 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(2, manager.getAllTasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
     }
+
+    @Test
+    public void twoTaskShouldOverlap() {
+        task1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(3)));
+        task1.setDuration(Duration.ofMinutes(1));
+
+        task2.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
+        task2.setDuration(Duration.ofMinutes(3));
+
+        manager.createTask(task1);
+        manager.createTask(task2);
+
+        assertEquals(1, manager.getAllTasks().size(), "Should be added");
+        assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
+        assertEquals(task1, manager.getPrioritizedTasks().getFirst(), "Should be only one task");
+    }
     //End of Task testing section
 
     //Start of SubTask testing section
