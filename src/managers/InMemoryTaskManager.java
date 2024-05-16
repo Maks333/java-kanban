@@ -285,17 +285,12 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
 
-        //TODO fix
-        allEpics.values().stream()
-                .filter(epic -> epic.getTaskId() == id)
-                .forEach(epic ->
-                        epic.getSubTasks()
-                                .forEach(subTaskId -> {
-                                    history.remove(subTaskId);
-                                    prioritizedTasks.remove(allSubTasks.get(subTaskId));
-                                    allSubTasks.remove(subTaskId);
-                                })
-                );
+        allEpics.get(id).getSubTasks()
+                .forEach(subTaskId -> {
+                    history.remove(subTaskId);
+                    prioritizedTasks.remove(allSubTasks.get(subTaskId));
+                    allSubTasks.remove(subTaskId);
+                });
         history.remove(id);
         allEpics.remove(id);
     }
@@ -408,7 +403,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     private boolean isTaskOverlap(Task task) {
         return prioritizedTasks.stream()
-                .filter(t -> !task.equals(t))
+                .filter(t -> task.getTaskId() != t.getTaskId())
                 .anyMatch(t -> {
                     if (t.getStartTime().withNano(0)
                             .isBefore(task.getStartTime().withNano(0))) {
