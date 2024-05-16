@@ -10,7 +10,6 @@ public class Task {
     private String description;
     private int taskId;
     private TaskStatus status;
-    //TODO fix to null
     private Duration duration;
     private LocalDateTime startTime;
 
