@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subTasks;
-    private LocalDateTime endTime = LocalDateTime.MAX;
+    private LocalDateTime endTime;
 
     public Epic(String name, String description, int taskID, TaskStatus status) {
         super(name, description, taskID, status);
@@ -64,9 +64,9 @@ public class Epic extends Task {
                 ", taskId=" + getTaskId() +
                 ", status=" + getStatus() +
                 ", subTasksId=" + subTasks +
-                ", duration=" + getDuration().toMinutes() +
+                ", duration=" + (getDuration() == null ? "identified" : getDuration().toMinutes()) +
                 ", startTime=" +
-                (getStartTime().equals(LocalDateTime.MIN)
+                (getStartTime() == null
                         ? "identified"
                         : getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))) +
                 '}';

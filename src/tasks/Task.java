@@ -10,8 +10,9 @@ public class Task {
     private String description;
     private int taskId;
     private TaskStatus status;
-    private Duration duration = Duration.ZERO;
-    private LocalDateTime startTime = LocalDateTime.MIN;
+    //TODO fix to null
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description, int taskId, TaskStatus status, Duration duration,
                 LocalDateTime startTime) {
@@ -78,7 +79,7 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+        return startTime == null ? null : startTime.plus(duration);
     }
 
     public Duration getDuration() {
@@ -117,9 +118,9 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", taskId=" + taskId +
                 ", status=" + status +
-                ", duration=" + duration.toMinutes() +
+                ", duration=" + (duration == null ? "identified" : duration.toMinutes()) +
                 ", startTime=" +
-                (startTime.equals(LocalDateTime.MIN)
+                (startTime == null
                         ? "identified"
                         : startTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))) +
                 '}';

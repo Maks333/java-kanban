@@ -172,9 +172,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldProperlyWorkWithTimeVariablesOfTask() {
         Task task = new Task("task", "taskDesc", 15, TaskStatus.NEW);
-        assertEquals(Duration.ZERO, task.getDuration(), "Should be zero");
-        assertEquals(LocalDateTime.MIN, task.getStartTime(), "Should be default value");
-        assertEquals(LocalDateTime.MIN, task.getEndTime(), "Should be default value");
+        assertNull(task.getDuration(), "Should be default value");
+        assertNull(task.getStartTime(), "Should be default value");
+        assertNull(task.getEndTime(), "Should be default value");
 
 
         task = new Task("task", "taskDesc", 16, TaskStatus.NEW, Duration.ofMinutes(10),
@@ -472,9 +472,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     void shouldProperlyWorkWithTimeVariablesOfSubTask() {
         SubTask subTask = new SubTask("subTask", "subTaskDesc", 15, TaskStatus.NEW, 4);
-        assertEquals(Duration.ZERO, subTask.getDuration(), "Should be zero");
-        assertEquals(LocalDateTime.MIN, subTask.getStartTime(), "Should be default value");
-        assertEquals(LocalDateTime.MIN, subTask.getEndTime(), "Should be default value");
+        assertNull(subTask.getDuration(), "Should be zero");
+        assertNull(subTask.getStartTime(), "Should be default value");
+        assertNull(subTask.getEndTime(), "Should be default value");
 
 
         subTask = new SubTask("subTask", "subTaskDesc", 16, TaskStatus.NEW, 4, Duration.ofMinutes(10),
@@ -881,9 +881,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void shouldProperlyCalculateTimeForEpicDuringAdditionOfSubTasks() {
         int epicId = manager.createEpic(epic1);
         epic1 = manager.getEpicByID(epicId);
-        assertEquals(LocalDateTime.MIN, epic1.getStartTime(), "Should be equal to default startTime");
-        assertEquals(Duration.ZERO, epic1.getDuration(), "Should be equal to default duration");
-        assertEquals(LocalDateTime.MAX, epic1.getEndTime(), "Should be equal to default endTime");
+        assertNull(epic1.getStartTime(), "Should be equal to default startTime");
+        assertNull(epic1.getDuration(), "Should be equal to default duration");
+        assertNull(epic1.getEndTime(), "Should be equal to default endTime");
 
         subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
         subTask1.setDuration(Duration.ofMinutes(1));
@@ -910,9 +910,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     void shouldProperlyCalculateTimeForEpicDuringRemovalOfSubTasks() {
         int epicId = manager.createEpic(epic1);
         epic1 = manager.getEpicByID(epicId);
-        assertEquals(LocalDateTime.MIN, epic1.getStartTime(), "Should be equal to default startTime");
-        assertEquals(Duration.ZERO, epic1.getDuration(), "Should be equal to default duration");
-        assertEquals(LocalDateTime.MAX, epic1.getEndTime(), "Should be equal to default endTime");
+        assertNull(epic1.getStartTime(), "Should be equal to default startTime");
+        assertNull(epic1.getDuration(), "Should be equal to default duration");
+        assertNull(epic1.getEndTime(), "Should be equal to default endTime");
 
         subTask1.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(2)));
         subTask1.setDuration(Duration.ofMinutes(1));
@@ -953,18 +953,18 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteAllSubTasks();
         epic1 = manager.getEpicByID(epicId);
-        assertEquals(LocalDateTime.MIN, epic1.getStartTime(), "Should be equal to default startTime");
-        assertEquals(Duration.ZERO, epic1.getDuration(), "Should be equal to default duration");
-        assertEquals(LocalDateTime.MAX, epic1.getEndTime(), "Should be equal to default endTime");
+        assertNull(epic1.getStartTime(), "Should be equal to default startTime");
+        assertNull(epic1.getDuration(), "Should be equal to default duration");
+        assertNull(epic1.getEndTime(), "Should be equal to default endTime");
     }
 
     @Test
     void shouldProperlyCalculateTimeForEpicDuringUpdatingOfSubTasks() {
         int epicId = manager.createEpic(epic2);
         epic2 = manager.getEpicByID(epicId);
-        assertEquals(LocalDateTime.MIN, epic2.getStartTime(), "Should be equal to default startTime");
-        assertEquals(Duration.ZERO, epic2.getDuration(), "Should be equal to default duration");
-        assertEquals(LocalDateTime.MAX, epic2.getEndTime(), "Should be equal to default endTime");
+        assertNull(epic2.getStartTime(), "Should be equal to default startTime");
+        assertNull(epic2.getDuration(), "Should be equal to default duration");
+        assertNull(epic2.getEndTime(), "Should be equal to default endTime");
 
         subTask4.setStartTime(LocalDateTime.now().plus(Duration.ofMinutes(4)));
         subTask4.setDuration(Duration.ofMinutes(3));

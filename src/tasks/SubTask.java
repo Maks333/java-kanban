@@ -40,9 +40,9 @@ public class SubTask extends Task {
                 ", taskId=" + getTaskId() +
                 ", status=" + getStatus() +
                 ", epicId=" + epicId +
-                ", duration=" + getDuration().toMinutes() +
+                ", duration=" + (getDuration() == null ? "identified" : getDuration().toMinutes()) +
                 ", startTime=" +
-                (getStartTime().equals(LocalDateTime.MIN)
+                (getStartTime() == null
                         ? "identified"
                         : getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))) +
                 '}';
