@@ -1,9 +1,12 @@
 package tasks;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subTasks;
+    private LocalDateTime endTime;
 
     public Epic(String name, String description, int taskID, TaskStatus status) {
         super(name, description, taskID, status);
@@ -23,6 +26,16 @@ public class Epic extends Task {
     public Epic(Epic task) {
         super(task);
         subTasks = task.getSubTasks();
+        endTime = task.getEndTime();
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
     public ArrayList<Integer> getSubTasks() {
@@ -51,6 +64,11 @@ public class Epic extends Task {
                 ", taskId=" + getTaskId() +
                 ", status=" + getStatus() +
                 ", subTasksId=" + subTasks +
+                ", duration=" + (getDuration() == null ? "identified" : getDuration().toMinutes()) +
+                ", startTime=" +
+                (getStartTime() == null
+                        ? "identified"
+                        : getStartTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm:ss"))) +
                 '}';
     }
 }
