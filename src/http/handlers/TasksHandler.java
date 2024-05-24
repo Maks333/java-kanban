@@ -3,11 +3,13 @@ package http.handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import exceptions.NotFoundException;
+import exceptions.TaskOverlapException;
 import exceptions.UnknownHTTPMethodException;
 import managers.TaskManager;
 import tasks.Task;
 
 import java.io.IOException;
+import java.nio.file.InvalidPathException;
 import java.util.Arrays;
 
 public class TasksHandler extends BaseHttpHandler {
@@ -43,6 +45,8 @@ public class TasksHandler extends BaseHttpHandler {
                         } else {
                             manager.createTask(task);
                         }
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     sendText(exchange, "Modification is successful", 201);
                     break;
@@ -60,8 +64,12 @@ public class TasksHandler extends BaseHttpHandler {
             sendBadRequest(exchange, "Unable to parse Id");
         } catch (NotFoundException ex) {
             sendNotFound(exchange, ex.getMessage());
-        } catch (UnknownHTTPMethodException ex) {
+        } catch (InvalidPathException ex) {
+            sendBadRequest(exchange, ex.getMessage() + ex.getInput());
+        } catch (UnknownHTTPMethodException | IllegalArgumentException ex) {
             sendBadRequest(exchange, ex.getMessage());
+        } catch (TaskOverlapException ex) {
+            sendHasOverlaps(exchange, ex.getMessage());
         } catch (Exception ex) {
             System.out.println(ex.getClass());
             System.out.println(Arrays.toString(ex.getStackTrace()));
