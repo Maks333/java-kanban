@@ -32,4 +32,12 @@ abstract public class BaseHttpHandler implements HttpHandler {
         h.getResponseBody().write(resp);
         h.close();
     }
+
+    protected void sendNotFound(HttpExchange h, String text) throws IOException {
+        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+        h.getResponseHeaders().add("Content-Type", "text/text;charset=utf-8");
+        h.sendResponseHeaders(404, resp.length);
+        h.getResponseBody().write(resp);
+        h.close();
+    }
 }
