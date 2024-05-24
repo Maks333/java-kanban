@@ -1,6 +1,7 @@
 package taskmanagerstet;
 
 import exceptions.NotFoundException;
+import exceptions.TaskOverlapException;
 import managers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         int Task1ID = manager.createTask(task1);
         Task Task2 = new Task("Task2Name", "Task2Description", 5, TaskStatus.NEW);
 
-        manager.updateTask(Task2);
+        assertThrows(NotFoundException.class, () -> manager.updateTask(Task2), "Should not be updated");
         assertNotEquals(manager.getTaskById(Task1ID), Task2, "Should not have same id after update");
     }
 
@@ -274,7 +275,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         task2.setDuration(Duration.ofMinutes(3));
 
         manager.createTask(task1);
-        manager.createTask(task2);
+        assertThrows(TaskOverlapException.class, () -> manager.createTask(task2), "Should overlap");
 
         assertEquals(1, manager.getAllTasks().size(), "Should be added");
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
@@ -297,7 +298,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         Task task = new Task(task2.getName(), task2.getDescription(), task2.getTaskId(),
                 task2.getStatus(), Duration.ofMinutes(5), LocalDateTime.now().plus(Duration.ofMinutes(11)));
-        manager.updateTask(task);
+
+        assertThrows(TaskOverlapException.class, () -> manager.updateTask(task), "Should not be updated");
 
         assertEquals(2, manager.getAllTasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
