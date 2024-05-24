@@ -22,9 +22,13 @@ public class HttpTaskServer {
     private final HttpServer server;
     private final Gson gson;
 
-    public HttpTaskServer(TaskManager manager) throws IOException {
+    public HttpTaskServer(TaskManager manager) {
         this.manager = manager;
-        server = HttpServer.create(new InetSocketAddress(HttpTaskServer.PORT), 0);
+        try {
+            server = HttpServer.create(new InetSocketAddress(HttpTaskServer.PORT), 0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         gson = new GsonBuilder()
                 .serializeNulls()
@@ -42,7 +46,6 @@ public class HttpTaskServer {
     }
 
     public static void main(String[] args) {
-        try {
             TaskManager manager = Managers.getDefault();
             HttpTaskServer server = new HttpTaskServer(manager);
 
@@ -55,9 +58,11 @@ public class HttpTaskServer {
             //String jsonStr = gson.toJson(manager.getAllTasks().getFirst());
             //System.out.println(jsonStr);
             server.start();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 
     public void start() {
