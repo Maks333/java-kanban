@@ -24,6 +24,7 @@ public class InMemoryTaskManager implements TaskManager {
         allEpics = new HashMap<>();
         history = Managers.getDefaultHistory();
         prioritizedTasks = new TreeSet<>((t1, t2) -> {
+            if (t1.getStartTime() == null || t2.getStartTime() == null) return -1;
             if (t1.getStartTime().isBefore(t2.getStartTime())) {
                 return -1;
             } else if (t1.getStartTime().isAfter(t2.getStartTime())) {
@@ -102,6 +103,13 @@ public class InMemoryTaskManager implements TaskManager {
         if (newTask.getStartTime() != null) {
             prioritizedTasks.add(newTask);
         }
+        /*if (newTask.getStartTime() != null) {
+            Task taskToRemove = prioritizedTasks.stream()
+                    .filter(t -> t.getTaskId() == newTask.getTaskId())
+                    .findFirst().orElse(newTask);
+            prioritizedTasks.remove(taskToRemove);
+            prioritizedTasks.add(newTask);
+        }*/
     }
 
     @Override
