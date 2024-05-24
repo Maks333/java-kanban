@@ -29,11 +29,13 @@ public class TasksHandler extends BaseHttpHandler {
                     if (uri.length == 2) {
                         String allTasksJson = gson.toJson(manager.getAllTasks());
                         sendText(exchange, allTasksJson, 200);
-                    } else {
+                    } else if (uri.length == 3) {
                         int taskId = Integer.parseInt(uri[2]);
                         Task task = manager.getTaskById(taskId);
                         String taskJson = gson.toJson(task);
                         sendText(exchange, taskJson, 200);
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     break;
                 case "POST":
@@ -42,13 +44,14 @@ public class TasksHandler extends BaseHttpHandler {
                         Task task = gson.fromJson(in, Task.class);
                         if (task.getTaskId() != 0) {
                             manager.updateTask(task);
+                            sendText(exchange, "Successful update of task with " + task.getTaskId() + " id", 201);
                         } else {
-                            manager.createTask(task);
+                            int id = manager.createTask(task);
+                            sendText(exchange, "Successful creation of task with " + id + " id", 201);
                         }
                     } else {
                         throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
-                    sendText(exchange, "Modification is successful", 201);
                     break;
                 case "DELETE":
                     if (uri.length == 3) {
