@@ -1,5 +1,6 @@
 package managers;
 
+import exceptions.NotFoundException;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -55,6 +56,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = allTasks.get(id);
+        if (task == null) {
+            throw new NotFoundException("Cannot find task with id: " + id);
+        }
         history.add(task);
         return task;
     }
