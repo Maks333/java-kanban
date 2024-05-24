@@ -16,17 +16,17 @@ public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
         if (value != null) {
             out.value(value.format(dtf));
         } else {
-            out.value("null");
+            out.nullValue();
         }
     }
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
-        String str = in.nextString();
-        if (str.equals("null")) {
-            return null;
-        } else {
+        try {
             return LocalDateTime.parse(in.nextString(), dtf);
+        } catch (NumberFormatException | IllegalStateException ex) {
+            in.nextNull();
+            return null;
         }
     }
 }
