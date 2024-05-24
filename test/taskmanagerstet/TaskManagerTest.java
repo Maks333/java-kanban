@@ -1,5 +1,6 @@
 package taskmanagerstet;
 
+import exceptions.NotFoundException;
 import managers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,8 +116,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteTaskById(Task1Id);
 
-        Task notExistingTask = manager.getTaskById(Task1Id);
-        assertNull(notExistingTask, "Task should be removed");
+        assertThrows(NotFoundException.class, () -> manager.getTaskById(Task1Id), "Task not removed");
 
         List<Task> TasksAfterDeletion = manager.getAllTasks();
         assertTrue(TasksAfterDeletion.isEmpty(), "Task list should be empty");
