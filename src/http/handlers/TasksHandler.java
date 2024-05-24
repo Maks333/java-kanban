@@ -46,11 +46,17 @@ public class TasksHandler extends BaseHttpHandler {
                     sendText(exchange, "Modification is successful", 201);
                     break;
                 case "DELETE":
+                    if (uri.length == 3) {
+                        int taskId = Integer.parseInt(uri[2]);
+                        manager.deleteTaskById(taskId);
+                        sendText(exchange, "Task number " + taskId + " is successfully deleted", 201);
+                    }
                     break;
                 default:
+
             }
         } catch (NumberFormatException ex) {
-            sendBadRequest(exchange, "Bad request");
+            sendBadRequest(exchange, "Unable to parse Id");
         } catch (Exception ex) {
             System.out.println(ex.getClass());
             System.out.println(Arrays.toString(ex.getStackTrace()));
