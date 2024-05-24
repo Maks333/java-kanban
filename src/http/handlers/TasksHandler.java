@@ -20,21 +20,30 @@ public class TasksHandler extends BaseHttpHandler {
         try {
             String method = exchange.getRequestMethod();
             String[] uri = exchange.getRequestURI().getPath().split("/");
-            System.out.println(Arrays.toString(uri));
 
             switch (method) {
                 case "GET":
                     if (uri.length == 2) {
                         String allTasksJson = gson.toJson(manager.getAllTasks());
-                        sendText(exchange, allTasksJson);
+                        sendText(exchange, allTasksJson, 200);
                     } else {
                         int taskId = Integer.parseInt(uri[2]);
                         Task task = manager.getTaskById(taskId);
                         String taskJson = gson.toJson(task);
-                        sendText(exchange, taskJson);
+                        sendText(exchange, taskJson, 200);
                     }
                     break;
                 case "POST":
+                    if (uri.length == 2) {
+                        String in = new String(exchange.getRequestBody().readAllBytes());
+                        Task task = gson.fromJson(in, Task.class);
+                        if (task.getTaskId() != 0) {
+                            manager.updateTask(task);
+                        } else {
+                            manager.createTask(task);
+                        }
+                    }
+                    sendText(exchange, "Modification is successful", 201);
                     break;
                 case "DELETE":
                     break;
@@ -44,6 +53,7 @@ public class TasksHandler extends BaseHttpHandler {
             sendBadRequest(exchange, "Bad request");
         } catch (Exception ex) {
             System.out.println(ex.getClass());
+            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 }
