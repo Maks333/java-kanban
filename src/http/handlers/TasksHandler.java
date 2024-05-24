@@ -58,6 +58,8 @@ public class TasksHandler extends BaseHttpHandler {
                         int taskId = Integer.parseInt(uri[2]);
                         manager.deleteTaskById(taskId);
                         sendText(exchange, "Task number " + taskId + " is successfully deleted", 201);
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     break;
                 default:
@@ -67,8 +69,6 @@ public class TasksHandler extends BaseHttpHandler {
             sendBadRequest(exchange, "Unable to parse Id");
         } catch (NotFoundException ex) {
             sendNotFound(exchange, ex.getMessage());
-        } catch (InvalidPathException ex) {
-            sendBadRequest(exchange, ex.getMessage() + ex.getInput());
         } catch (UnknownHTTPMethodException | IllegalArgumentException ex) {
             sendBadRequest(exchange, ex.getMessage());
         } catch (TaskOverlapException ex) {

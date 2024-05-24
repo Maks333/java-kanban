@@ -114,6 +114,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(int id) {
+        if (allTasks.get(id) == null) {
+            throw new NotFoundException("There is no task with " + id + " id");
+        }
         history.remove(id);
         prioritizedTasks.remove(allTasks.get(id));
         allTasks.remove(id);
