@@ -1,6 +1,7 @@
 package managers;
 
 import exceptions.NotFoundException;
+import exceptions.TaskOverlapException;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -66,10 +67,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task newTask) {
         if (newTask == null) {
-            return -1;
+            throw new IllegalArgumentException("Created Task should not be null");
         }
         if (newTask.getStartTime() != null && isTaskOverlap(newTask)) {
-            return -1;
+            throw new TaskOverlapException("Created Task should not overlap with existed Tasks");
         }
         int oldId = newTask.getTaskId();
         if (oldId != 0 && !isIdOccupied(oldId)) {
@@ -90,14 +91,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task newTask) {
         if (newTask == null) {
-            return;
+            throw new IllegalArgumentException("New Task should not be null");
         }
         if (newTask.getStartTime() != null && isTaskOverlap(newTask)) {
-            return;
+            throw new TaskOverlapException("New Task should not overlap with existed Tasks");
         }
 
         if (allTasks.containsKey(newTask.getTaskId())) {
             allTasks.put(newTask.getTaskId(), newTask);
+        } else {
+            throw new NotFoundException("Task to update not found");
         }
 
         Task taskToRemove = prioritizedTasks.stream()
@@ -107,13 +110,6 @@ public class InMemoryTaskManager implements TaskManager {
         if (newTask.getStartTime() != null) {
             prioritizedTasks.add(newTask);
         }
-        /*if (newTask.getStartTime() != null) {
-            Task taskToRemove = prioritizedTasks.stream()
-                    .filter(t -> t.getTaskId() == newTask.getTaskId())
-                    .findFirst().orElse(newTask);
-            prioritizedTasks.remove(taskToRemove);
-            prioritizedTasks.add(newTask);
-        }*/
     }
 
     @Override
