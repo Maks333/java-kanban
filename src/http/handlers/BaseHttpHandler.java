@@ -17,10 +17,10 @@ abstract public class BaseHttpHandler implements HttpHandler {
         this.gson = gson;
     }
 
-    protected void sendText(HttpExchange h, String text) throws IOException {
+    protected void sendText(HttpExchange h, String text, int statusCode) throws IOException {
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-        h.sendResponseHeaders(200, resp.length);
+        h.sendResponseHeaders(statusCode, resp.length);
         h.getResponseBody().write(resp);
         h.close();
     }
