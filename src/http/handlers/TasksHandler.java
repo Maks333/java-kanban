@@ -2,6 +2,7 @@ package http.handlers;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
+import exceptions.UnknownHTTPMethodExceptions;
 import managers.TaskManager;
 import tasks.Task;
 
@@ -16,7 +17,6 @@ public class TasksHandler extends BaseHttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         System.out.println("Start handle /task handler");
-        //Get request method
         try {
             String method = exchange.getRequestMethod();
             String[] uri = exchange.getRequestURI().getPath().split("/");
@@ -53,10 +53,12 @@ public class TasksHandler extends BaseHttpHandler {
                     }
                     break;
                 default:
-
+                    throw new UnknownHTTPMethodExceptions("Unknown HTTP method: " + method);
             }
         } catch (NumberFormatException ex) {
             sendBadRequest(exchange, "Unable to parse Id");
+        } catch (UnknownHTTPMethodExceptions ex) {
+            sendBadRequest(exchange, ex.getMessage());
         } catch (Exception ex) {
             System.out.println(ex.getClass());
             System.out.println(Arrays.toString(ex.getStackTrace()));
