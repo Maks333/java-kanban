@@ -40,4 +40,12 @@ abstract public class BaseHttpHandler implements HttpHandler {
         h.getResponseBody().write(resp);
         h.close();
     }
+
+    protected void sendHasOverlaps(HttpExchange h, String text) throws IOException {
+        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+        h.getResponseHeaders().add("Content-Type", "text/text;charset=utf-8");
+        h.sendResponseHeaders(406, resp.length);
+        h.getResponseBody().write(resp);
+        h.close();
+    }
 }
