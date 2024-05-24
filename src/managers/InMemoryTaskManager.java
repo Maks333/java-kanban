@@ -426,4 +426,8 @@ public class InMemoryTaskManager implements TaskManager {
                     }
                 });
     }
+
+    public void resetIdCounter() {
+        idCounter = 0;
+    }
 }
