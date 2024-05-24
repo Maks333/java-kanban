@@ -2,7 +2,8 @@ package http.handlers;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
-import exceptions.UnknownHTTPMethodExceptions;
+import exceptions.NotFoundException;
+import exceptions.UnknownHTTPMethodException;
 import managers.TaskManager;
 import tasks.Task;
 
@@ -53,11 +54,13 @@ public class TasksHandler extends BaseHttpHandler {
                     }
                     break;
                 default:
-                    throw new UnknownHTTPMethodExceptions("Unknown HTTP method: " + method);
+                    throw new UnknownHTTPMethodException("Unknown HTTP method: " + method);
             }
         } catch (NumberFormatException ex) {
             sendBadRequest(exchange, "Unable to parse Id");
-        } catch (UnknownHTTPMethodExceptions ex) {
+        } catch (NotFoundException ex) {
+            sendNotFound(exchange, ex.getMessage());
+        } catch (UnknownHTTPMethodException ex) {
             sendBadRequest(exchange, ex.getMessage());
         } catch (Exception ex) {
             System.out.println(ex.getClass());
