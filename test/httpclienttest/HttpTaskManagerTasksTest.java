@@ -108,7 +108,21 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void shouldNotGetTaskIfIncorrectId() {
+    public void shouldNotGetTaskIfIncorrectId() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc",
+                1, TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        manager.createTask(task);
+        URI url = URI.create("http://localhost:8080/tasks/some_text");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode(), "Status code is not 400");
+
+        client.close();
     }
 
     @Test
