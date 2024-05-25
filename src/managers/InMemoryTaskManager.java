@@ -224,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubTaskById(int id) {
         if (!allSubTasks.containsKey(id)) {
-            return;
+            throw new NotFoundException("There is no subTask with " + id + " id");
         }
 
         SubTask subTask = allSubTasks.get(id);

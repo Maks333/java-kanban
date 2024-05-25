@@ -51,6 +51,15 @@ public class SubTasksHandler extends BaseHttpHandler {
                         throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     break;
+                case "DELETE":
+                    if (uri.length == 3) {
+                        int subTaskId = Integer.parseInt(uri[2]);
+                        manager.deleteSubTaskById(subTaskId);
+                        sendText(exchange, "SubTask number " + subTaskId + " is successfully deleted", 200);
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
+                    }
+                    break;
                 default:
                     throw new UnknownHTTPMethodException("Unknown HTTP method: " + method);
             }
