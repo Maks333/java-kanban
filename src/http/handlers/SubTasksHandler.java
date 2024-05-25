@@ -36,6 +36,21 @@ public class SubTasksHandler extends BaseHttpHandler {
                         throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     break;
+                case "POST":
+                    if (uri.length == 2) {
+                        String in = new String(exchange.getRequestBody().readAllBytes());
+                        SubTask subTask = gson.fromJson(in, SubTask.class);
+                        if (subTask.getTaskId() != 0) {
+                            manager.updateSubTask(subTask);
+                            sendText(exchange, "Successful update of subTask with " + subTask.getTaskId() + " id", 201);
+                        } else {
+                            int id = manager.createSubTask(subTask);
+                            sendText(exchange, "Successful creation of subTask with " + id + " id", 201);
+                        }
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
+                    }
+                    break;
                 default:
                     throw new UnknownHTTPMethodException("Unknown HTTP method: " + method);
             }
