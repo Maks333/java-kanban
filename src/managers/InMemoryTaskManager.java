@@ -255,6 +255,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicByID(int id) {
         Epic epic = allEpics.get(id);
+        if (epic == null) {
+            throw new NotFoundException("Cannot find epic with id: " + id);
+        }
         history.add(epic);
         return epic;
     }
@@ -388,7 +391,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<SubTask> getAllSubTasksOfEpic(int epicId) {
         if (!allEpics.containsKey(epicId)) {
-            return null;
+            throw new NotFoundException("Cannot find epic with id: " + epicId);
         }
 
         return new ArrayList<>(allEpics.values().stream()

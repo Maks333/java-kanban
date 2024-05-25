@@ -71,8 +71,6 @@ public class SubTasksHandler extends BaseHttpHandler {
             sendBadRequest(exchange, ex.getMessage());
         } catch (TaskOverlapException ex) {
             sendHasOverlaps(exchange, ex.getMessage());
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
         }
     }
 }
