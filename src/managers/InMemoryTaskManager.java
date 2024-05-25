@@ -299,7 +299,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicById(int id) {
         if (!allEpics.containsKey(id)) {
-            return;
+            throw new NotFoundException("Cannot find Epic with id: " + id);
         }
 
         allEpics.get(id).getSubTasks()

@@ -56,6 +56,15 @@ public class EpicsHandler extends BaseHttpHandler {
                         throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     break;
+                case "DELETE":
+                    if (uri.length == 3) {
+                        int epicId = Integer.parseInt(uri[2]);
+                        manager.deleteEpicById(epicId);
+                        sendText(exchange, "Epic number " + epicId + " is successfully deleted", 200);
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
+                    }
+                    break;
                 default:
                     throw new UnknownHTTPMethodException("Unknown HTTP method: " + method);
             }
