@@ -77,7 +77,34 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void shouldGetTaskById() {
+    public void shouldGetTaskById() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc",
+                1, TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        manager.createTask(task);
+        URI url = URI.create("http://localhost:8080/tasks/1");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(200, response.statusCode(), "Status code is not 200");
+
+        String jsonBody = response.body();
+
+
+        Task taskFromRequest = gson.fromJson(jsonBody, Task.class);
+        assertNotNull(taskFromRequest, "Should be not Null");
+        assertEquals(task, taskFromRequest, "Id not equal");
+        assertEquals(task.getName(), taskFromRequest.getName(), "Name not equal");
+        assertEquals(task.getDescription(), taskFromRequest.getDescription(), "Desc not equal");
+        assertEquals(task.getStatus(), taskFromRequest.getStatus(), "Status not equal");
+        assertEquals(task.getDuration(), taskFromRequest.getDuration(), "Duration not equal");
+        assertEquals(task.getStartTime().withNano(0),
+                taskFromRequest.getStartTime().withNano(0), "StartTime not equal");
+
+        client.close();
     }
 
     @Test
