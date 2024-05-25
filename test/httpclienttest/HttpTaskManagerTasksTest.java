@@ -294,6 +294,31 @@ public class HttpTaskManagerTasksTest {
 
     //DELETE
     @Test
-    public void shouldDeleteTaskById() {
+    public void shouldDeleteTaskById() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc", TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        manager.createTask(task);
+        assertEquals(1, manager.getAllTasks().size(), "Contains more/less than one task");
+
+        URI url = URI.create("http://localhost:8080/tasks/1");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(201, response.statusCode(), "Status code is not 201");
+        assertEquals(0, manager.getAllTasks().size(), "Not empty");
+        client.close();
     }
+
+    @Test
+    public void incorrectDeleteUriPath() {
+
+    }
+
+    @Test
+    public void incorrectHttpMethod() {
+    }
+
 }
