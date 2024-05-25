@@ -10,7 +10,6 @@ import tasks.Task;
 
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
-import java.util.Arrays;
 
 public class TasksHandler extends BaseHttpHandler {
     public TasksHandler(TaskManager manager, Gson gson) {
@@ -72,9 +71,6 @@ public class TasksHandler extends BaseHttpHandler {
             sendBadRequest(exchange, ex.getMessage());
         } catch (TaskOverlapException ex) {
             sendHasOverlaps(exchange, ex.getMessage());
-        } catch (Exception ex) {
-            System.out.println(ex.getClass());
-            System.out.println(Arrays.toString(ex.getStackTrace()));
         }
     }
 }
