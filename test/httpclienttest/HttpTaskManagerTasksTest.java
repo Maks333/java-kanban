@@ -313,8 +313,22 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void incorrectDeleteUriPath() {
+    public void incorrectDeleteUriPath() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc", TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        manager.createTask(task);
+        assertEquals(1, manager.getAllTasks().size(), "Contains more/less than one task");
 
+        URI url = URI.create("http://localhost:8080/tasks/some/path");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .DELETE()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode(), "Status code is not 400");
+        assertEquals(1, manager.getAllTasks().size(), "Empty");
+        client.close();
     }
 
     @Test
