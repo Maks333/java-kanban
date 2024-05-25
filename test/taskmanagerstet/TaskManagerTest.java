@@ -410,8 +410,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteSubTaskById(subTask1Id);
 
-        SubTask notExistingSubTask = manager.getSubTaskById(subTask1Id);
-        assertNull(notExistingSubTask, "Should be removed from the system");
+        assertThrows(NotFoundException.class, () -> manager.getSubTaskById(subTask1Id), "Should be removed from the system");
 
         List<SubTask> subTasksAfterDeletion = manager.getAllSubtasks();
         assertTrue(subTasksAfterDeletion.isEmpty(), "SubTask list should be empty");
@@ -830,7 +829,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         manager.deleteEpicById(epic1Id);
 
         assertNull(manager.getEpicByID(epic1Id), "Epic should be deleted");
-        assertNull(manager.getSubTaskById(subTaskId), "Epic's subTasks should be deleted");
+        assertThrows(NotFoundException.class, () -> manager.getSubTaskById(subTaskId), "Epic's subTasks should be deleted");
         assertTrue(manager.getAllEpics().isEmpty(), "Epic should be deleted");
         assertTrue(manager.getAllSubtasks().isEmpty(), "SubTasks should be deleted");
     }
