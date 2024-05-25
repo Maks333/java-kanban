@@ -126,7 +126,21 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void shouldNotGetTaskIfTaskNotFound() {
+    public void shouldNotGetTaskIfTaskNotFound() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc",
+                1, TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        manager.createTask(task);
+        URI url = URI.create("http://localhost:8080/tasks/2");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .GET()
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(404, response.statusCode(), "Status code is not 404");
+
+        client.close();
     }
 
     @Test
