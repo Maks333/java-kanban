@@ -348,8 +348,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", 15, TaskStatus.NEW, epic1.getTaskId());
 
-        manager.updateSubTask(subTask2);
-        assertNotEquals(manager.getSubTaskById(subTask1ID), subTask2, "Should not have the same id");
+        assertThrows(NotFoundException.class, () -> manager.updateSubTask(subTask2), "Should not be in the system");
     }
 
     @Test
@@ -617,7 +616,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subTask2.setDuration(Duration.ofMinutes(3));
 
         manager.createSubTask(subTask1);
-        manager.createSubTask(subTask2);
+        assertThrows(TaskOverlapException.class, () -> manager.createSubTask(subTask2), "Second subTask do not overlap");
 
         assertEquals(1, manager.getAllSubtasks().size(), "Should be added");
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
@@ -642,7 +641,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         SubTask subTask = new SubTask(subTask2.getName(), subTask2.getDescription(), subTask2.getTaskId(),
                 subTask2.getStatus(), subTask2.getEpicId(),
                 Duration.ofMinutes(5), LocalDateTime.now().plus(Duration.ofMinutes(11)));
-        manager.updateSubTask(subTask);
+        assertThrows(TaskOverlapException.class, () -> manager.updateSubTask(subTask), "Overlapped subTask should not be added");
 
         assertEquals(2, manager.getAllSubtasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
