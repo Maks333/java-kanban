@@ -153,16 +153,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createSubTask(SubTask newSubTask) {
         if (newSubTask == null) {
-            return -1;
+            throw new IllegalArgumentException("Created SubTask should not be null");
         }
 
         int epicId = newSubTask.getEpicId();
         if (!allEpics.containsKey(epicId)) {
-            return -1;
+            throw new NotFoundException("Cannot find epic with id: " + epicId);
         }
 
         if (newSubTask.getStartTime() != null && isTaskOverlap(newSubTask)) {
-            return -1;
+            throw new TaskOverlapException("Created SubTask should not overlap with existed Tasks");
         }
 
         int oldId = newSubTask.getTaskId();
