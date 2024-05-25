@@ -265,7 +265,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createEpic(Epic newEpic) {
         if (newEpic == null) {
-            return -1;
+            throw new IllegalArgumentException("Created Epic should not be null");
         }
         int oldId = newEpic.getTaskId();
         if (oldId != 0 && !isIdOccupied(oldId)) {
@@ -282,11 +282,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpic(Epic newEpic) {
         if (newEpic == null) {
-            return;
+            throw new IllegalArgumentException("Created Epic should not be null");
         }
 
         if (!allEpics.containsKey(newEpic.getTaskId())) {
-            return;
+            throw new NotFoundException("Cannot find Epic with id: " + newEpic.getTaskId());
         }
 
         Epic epic = allEpics.get(newEpic.getTaskId());

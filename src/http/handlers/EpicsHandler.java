@@ -41,6 +41,21 @@ public class EpicsHandler extends BaseHttpHandler {
                         throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }
                     break;
+                case "POST":
+                    if (uri.length == 2) {
+                        String in = new String(exchange.getRequestBody().readAllBytes());
+                        Epic epic = gson.fromJson(in, Epic.class);
+                        if (epic.getTaskId() != 0) {
+                            manager.updateEpic(epic);
+                            sendText(exchange, "Successful update of epic with " + epic.getTaskId() + " id", 201);
+                        } else {
+                            int id = manager.createEpic(epic);
+                            sendText(exchange, "Successful creation of epic with " + id + " id", 201);
+                        }
+                    } else {
+                        throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
+                    }
+                    break;
                 default:
                     throw new UnknownHTTPMethodException("Unknown HTTP method: " + method);
             }
