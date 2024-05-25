@@ -672,7 +672,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         Epic epic2 = new Epic("Epic2Name", "Epic2Description", 15);
 
-        manager.updateEpic(epic2);
+        assertThrows(NotFoundException.class, () -> manager.updateEpic(epic2), "Should not be updated");
         assertNotEquals(manager.getEpicByID(epicId1), epic2, "Should not have the same id");
     }
 
@@ -805,8 +805,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteEpicById(epic1Id);
 
-        Epic notExistingEpic = manager.getEpicByID(epic1Id);
-        assertNull(notExistingEpic, "Epic is no longer in the system");
+        assertThrows(NotFoundException.class, () -> manager.getEpicByID(epic1Id), "Epic is no longer in the system");
 
         List<Epic> EpicsAfterDeletion = manager.getAllEpics();
         assertTrue(EpicsAfterDeletion.isEmpty(), "System doesn't contains epic");
@@ -827,7 +826,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteEpicById(epic1Id);
 
-        assertNull(manager.getEpicByID(epic1Id), "Epic should be deleted");
+        assertThrows(NotFoundException.class, () -> manager.getEpicByID(epic1Id), "Epic should be deleted");
         assertThrows(NotFoundException.class, () -> manager.getSubTaskById(subTaskId), "Epic's subTasks should be deleted");
         assertTrue(manager.getAllEpics().isEmpty(), "Epic should be deleted");
         assertTrue(manager.getAllSubtasks().isEmpty(), "SubTasks should be deleted");
