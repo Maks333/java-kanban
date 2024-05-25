@@ -188,7 +188,32 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void shouldNotCreateTaskIfDateTimeOverlap() {
+    public void shouldNotCreateTaskIfDateTimeOverlap() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc", TaskStatus.NEW, Duration.ofMinutes(5), LocalDateTime.now());
+        Task task1 = new Task("task2", "task2Desc", TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+
+        URI url = URI.create("http://localhost:8080/tasks/");
+        String taskJson = gson.toJson(task);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(taskJson))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(201, response.statusCode(), "Status code is not 201");
+        assertEquals(1, manager.getAllTasks().size(), "Contains more than one task");
+
+        taskJson = gson.toJson(task1);
+        request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(taskJson))
+                .build();
+        response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(406, response.statusCode(), "Status code is not 406");
+        assertEquals(1, manager.getAllTasks().size(), "Overlap task should not be added");
+
+        client.close();
     }
 
     @Test
