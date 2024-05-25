@@ -3,11 +3,9 @@ package http.handlers;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import exceptions.NotFoundException;
-import exceptions.TaskOverlapException;
 import exceptions.UnknownHTTPMethodException;
 import managers.TaskManager;
 import tasks.Epic;
-import tasks.Task;
 
 import java.io.IOException;
 import java.nio.file.InvalidPathException;

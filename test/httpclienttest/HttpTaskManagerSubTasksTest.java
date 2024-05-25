@@ -8,12 +8,8 @@ import managers.TaskManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import tasks.Epic;
 import tasks.SubTask;
-import tasks.Task;
 import tasks.TaskStatus;
 
 import java.io.IOException;
@@ -24,6 +20,9 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class HttpTaskManagerSubTasksTest {
     TaskManager manager = new InMemoryTaskManager();
