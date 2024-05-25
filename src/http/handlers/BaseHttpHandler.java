@@ -8,7 +8,7 @@ import managers.TaskManager;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-abstract public class BaseHttpHandler implements HttpHandler {
+public abstract class BaseHttpHandler implements HttpHandler {
     TaskManager manager;
     Gson gson;
 
