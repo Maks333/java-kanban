@@ -276,7 +276,20 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void incorrectPostUriPath() {
+    public void incorrectPostUriPath() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc", TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+
+        URI url = URI.create("http://localhost:8080/tasks/some/path");
+        String taskJson = gson.toJson(task);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(taskJson))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode(), "Status code is not 400");
+        client.close();
     }
 
     //DELETE
