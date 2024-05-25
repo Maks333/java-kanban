@@ -332,7 +332,17 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void incorrectHttpMethod() {
+    public void incorrectHttpMethod() throws IOException, InterruptedException {
+        URI url = URI.create("http://localhost:8080/tasks/");
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .PUT(HttpRequest.BodyPublishers.ofString("body"))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response.statusCode(), "Status code is not 400");
+        client.close();
     }
 
 }
