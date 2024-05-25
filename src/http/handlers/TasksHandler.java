@@ -55,7 +55,7 @@ public class TasksHandler extends BaseHttpHandler {
                     if (uri.length == 3) {
                         int taskId = Integer.parseInt(uri[2]);
                         manager.deleteTaskById(taskId);
-                        sendText(exchange, "Task number " + taskId + " is successfully deleted", 201);
+                        sendText(exchange, "Task number " + taskId + " is successfully deleted", 200);
                     } else {
                         throw new InvalidPathException(exchange.getRequestURI().getPath(), "There is no such endpoint: ");
                     }

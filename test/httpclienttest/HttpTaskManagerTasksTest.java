@@ -307,7 +307,7 @@ public class HttpTaskManagerTasksTest {
                 .DELETE()
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        assertEquals(201, response.statusCode(), "Status code is not 201");
+        assertEquals(200, response.statusCode(), "Status code is not 200");
         assertEquals(0, manager.getAllTasks().size(), "Not empty");
         client.close();
     }
