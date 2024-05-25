@@ -45,6 +45,14 @@ public class Task {
         startTime = task.getStartTime();
     }
 
+    public Task(String name, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
     public String getName() {
         return name;
     }
