@@ -74,8 +74,6 @@ public class EpicsHandler extends BaseHttpHandler {
             sendNotFound(exchange, ex.getMessage());
         } catch (UnknownHTTPMethodException | IllegalArgumentException ex) {
             sendBadRequest(exchange, ex.getMessage());
-        } catch (TaskOverlapException ex) {
-            sendHasOverlaps(exchange, ex.getMessage());
         }
     }
 }
