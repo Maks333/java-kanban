@@ -244,7 +244,35 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void shouldNotUpdateTaskIfDateTimeOverlap() {
+    public void shouldNotUpdateTaskIfDateTimeOverlap() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc", 1, TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        Task task2 = new Task("task2", "task2Desc", 2, TaskStatus.NEW,
+                Duration.ofMinutes(5), LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        manager.createTask(task);
+        manager.createTask(task2);
+        assertEquals(2, manager.getAllTasks().size(), "Contains less than 2 task");
+
+        Task updatedTask = new Task("task", "desc", 1, TaskStatus.DONE,
+                Duration.ofMinutes(1), LocalDateTime.now().plus(Duration.ofMinutes(5)));
+        URI url = URI.create("http://localhost:8080/tasks/");
+        String taskJson = gson.toJson(updatedTask);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(taskJson))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(406, response.statusCode(), "Status code is not 406");
+        assertEquals(2, manager.getAllTasks().size(), "Contains no tasks");
+        assertEquals(1, manager.getAllTasks().getFirst().getTaskId(), "Should have correct id");
+        assertEquals(task.getName(), manager.getAllTasks().getFirst().getName(), "Name not equal");
+        assertEquals(task.getDescription(), manager.getAllTasks().getFirst().getDescription(), "Desc not equal");
+        assertEquals(task.getStatus(), manager.getAllTasks().getFirst().getStatus(), "Status not equal");
+        assertEquals(task.getDuration(), manager.getAllTasks().getFirst().getDuration(), "Duration not equal");
+        assertEquals(task.getStartTime().withNano(0),
+                manager.getAllTasks().getFirst().getStartTime().withNano(0), "StartTime not equal");
+        client.close();
     }
 
     @Test
