@@ -217,7 +217,30 @@ public class HttpTaskManagerTasksTest {
     }
 
     @Test
-    public void shouldUpdateTaskIfHasId() {
+    public void shouldUpdateTaskIfHasId() throws IOException, InterruptedException {
+        Task task = new Task("task1", "task1Desc", 1, TaskStatus.NEW, Duration.ofMinutes(1), LocalDateTime.now());
+        manager.createTask(task);
+
+        Task updatedTask = new Task("task", "desc", 1, TaskStatus.DONE, task.getDuration(), task.getStartTime());
+        URI url = URI.create("http://localhost:8080/tasks/");
+        String taskJson = gson.toJson(updatedTask);
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(url)
+                .POST(HttpRequest.BodyPublishers.ofString(taskJson))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertEquals(201, response.statusCode(), "Status code is not 201");
+        assertEquals(1, manager.getAllTasks().size(), "Contains no tasks");
+        assertEquals(1, manager.getAllTasks().getFirst().getTaskId(), "Should have correct id");
+        assertEquals("task", manager.getAllTasks().getFirst().getName(), "Name not equal");
+        assertEquals("desc", manager.getAllTasks().getFirst().getDescription(), "Desc not equal");
+        assertEquals(TaskStatus.DONE, manager.getAllTasks().getFirst().getStatus(), "Status not equal");
+        assertEquals(task.getDuration(), manager.getAllTasks().getFirst().getDuration(), "Duration not equal");
+        assertEquals(task.getStartTime().withNano(0),
+                manager.getAllTasks().getFirst().getStartTime().withNano(0), "StartTime not equal");
+        client.close();
     }
 
     @Test
