@@ -1,5 +1,7 @@
 package managers;
 
+import exceptions.NotFoundException;
+import exceptions.TaskOverlapException;
 import tasks.Epic;
 import tasks.SubTask;
 import tasks.Task;
@@ -24,6 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
         allEpics = new HashMap<>();
         history = Managers.getDefaultHistory();
         prioritizedTasks = new TreeSet<>((t1, t2) -> {
+            if (t1.getStartTime() == null || t2.getStartTime() == null) return -1;
             if (t1.getStartTime().isBefore(t2.getStartTime())) {
                 return -1;
             } else if (t1.getStartTime().isAfter(t2.getStartTime())) {
@@ -54,6 +57,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(int id) {
         Task task = allTasks.get(id);
+        if (task == null) {
+            throw new NotFoundException("Cannot find task with id: " + id);
+        }
         history.add(task);
         return task;
     }
@@ -61,10 +67,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task newTask) {
         if (newTask == null) {
-            return -1;
+            throw new IllegalArgumentException("Created Task should not be null");
         }
         if (newTask.getStartTime() != null && isTaskOverlap(newTask)) {
-            return -1;
+            throw new TaskOverlapException("Created Task should not overlap with existed Tasks");
         }
         int oldId = newTask.getTaskId();
         if (oldId != 0 && !isIdOccupied(oldId)) {
@@ -85,14 +91,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task newTask) {
         if (newTask == null) {
-            return;
+            throw new IllegalArgumentException("New Task should not be null");
         }
         if (newTask.getStartTime() != null && isTaskOverlap(newTask)) {
-            return;
+            throw new TaskOverlapException("New Task should not overlap with existed Tasks");
         }
 
         if (allTasks.containsKey(newTask.getTaskId())) {
             allTasks.put(newTask.getTaskId(), newTask);
+        } else {
+            throw new NotFoundException("Task to update not found");
         }
 
         Task taskToRemove = prioritizedTasks.stream()
@@ -106,6 +114,9 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteTaskById(int id) {
+        if (allTasks.get(id) == null) {
+            throw new NotFoundException("There is no task with " + id + " id");
+        }
         history.remove(id);
         prioritizedTasks.remove(allTasks.get(id));
         allTasks.remove(id);
@@ -132,6 +143,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public SubTask getSubTaskById(int id) {
         SubTask subTask = allSubTasks.get(id);
+        if (subTask == null) {
+            throw new NotFoundException("Cannot find subTask with id: " + id);
+        }
         history.add(subTask);
         return subTask;
     }
@@ -139,16 +153,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createSubTask(SubTask newSubTask) {
         if (newSubTask == null) {
-            return -1;
+            throw new IllegalArgumentException("Created SubTask should not be null");
         }
 
         int epicId = newSubTask.getEpicId();
         if (!allEpics.containsKey(epicId)) {
-            return -1;
+            throw new NotFoundException("Cannot find epic with id: " + epicId);
         }
 
         if (newSubTask.getStartTime() != null && isTaskOverlap(newSubTask)) {
-            return -1;
+            throw new TaskOverlapException("Created SubTask should not overlap with existed Tasks");
         }
 
         int oldId = newSubTask.getTaskId();
@@ -177,21 +191,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubTask(SubTask newSubTask) {
         if (newSubTask == null) {
-            return;
+            throw new IllegalArgumentException("New SubTask should not be null");
         }
 
         boolean isSubTaskInSystem = allSubTasks.containsKey(newSubTask.getTaskId());
         if (!isSubTaskInSystem) {
-            return;
+            throw new NotFoundException("SubTask to update not found");
         }
 
         boolean isSameEpicId = allSubTasks.get(newSubTask.getTaskId()).getEpicId() == newSubTask.getEpicId();
         if (!isSameEpicId) {
-            return;
+            throw new IllegalArgumentException("New SubTask should have the same epic id");
         }
 
         if (newSubTask.getStartTime() != null && isTaskOverlap(newSubTask)) {
-            return;
+            throw new TaskOverlapException("New SubTask should not overlap with existing Tasks");
         }
 
         SubTask subTaskToRemove = (SubTask) prioritizedTasks.stream()
@@ -210,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubTaskById(int id) {
         if (!allSubTasks.containsKey(id)) {
-            return;
+            throw new NotFoundException("There is no subTask with " + id + " id");
         }
 
         SubTask subTask = allSubTasks.get(id);
@@ -241,6 +255,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicByID(int id) {
         Epic epic = allEpics.get(id);
+        if (epic == null) {
+            throw new NotFoundException("Cannot find epic with id: " + id);
+        }
         history.add(epic);
         return epic;
     }
@@ -248,7 +265,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createEpic(Epic newEpic) {
         if (newEpic == null) {
-            return -1;
+            throw new IllegalArgumentException("Created Epic should not be null");
         }
         int oldId = newEpic.getTaskId();
         if (oldId != 0 && !isIdOccupied(oldId)) {
@@ -265,11 +282,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpic(Epic newEpic) {
         if (newEpic == null) {
-            return;
+            throw new IllegalArgumentException("Created Epic should not be null");
         }
 
         if (!allEpics.containsKey(newEpic.getTaskId())) {
-            return;
+            throw new NotFoundException("Cannot find Epic with id: " + newEpic.getTaskId());
         }
 
         Epic epic = allEpics.get(newEpic.getTaskId());
@@ -282,7 +299,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteEpicById(int id) {
         if (!allEpics.containsKey(id)) {
-            return;
+            throw new NotFoundException("Cannot find Epic with id: " + id);
         }
 
         allEpics.get(id).getSubTasks()
@@ -374,7 +391,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<SubTask> getAllSubTasksOfEpic(int epicId) {
         if (!allEpics.containsKey(epicId)) {
-            return null;
+            throw new NotFoundException("Cannot find epic with id: " + epicId);
         }
 
         return new ArrayList<>(allEpics.values().stream()
@@ -414,5 +431,9 @@ public class InMemoryTaskManager implements TaskManager {
                                 .isAfter(t.getStartTime().withNano(0));
                     }
                 });
+    }
+
+    public void resetIdCounter() {
+        idCounter = 0;
     }
 }

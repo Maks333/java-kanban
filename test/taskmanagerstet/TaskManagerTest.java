@@ -1,5 +1,7 @@
 package taskmanagerstet;
 
+import exceptions.NotFoundException;
+import exceptions.TaskOverlapException;
 import managers.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +62,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         int Task1ID = manager.createTask(task1);
         Task Task2 = new Task("Task2Name", "Task2Description", 5, TaskStatus.NEW);
 
-        manager.updateTask(Task2);
+        assertThrows(NotFoundException.class, () -> manager.updateTask(Task2), "Should not be updated");
         assertNotEquals(manager.getTaskById(Task1ID), Task2, "Should not have same id after update");
     }
 
@@ -115,8 +117,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteTaskById(Task1Id);
 
-        Task notExistingTask = manager.getTaskById(Task1Id);
-        assertNull(notExistingTask, "Task should be removed");
+        assertThrows(NotFoundException.class, () -> manager.getTaskById(Task1Id), "Task not removed");
 
         List<Task> TasksAfterDeletion = manager.getAllTasks();
         assertTrue(TasksAfterDeletion.isEmpty(), "Task list should be empty");
@@ -274,7 +275,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         task2.setDuration(Duration.ofMinutes(3));
 
         manager.createTask(task1);
-        manager.createTask(task2);
+        assertThrows(TaskOverlapException.class, () -> manager.createTask(task2), "Should overlap");
 
         assertEquals(1, manager.getAllTasks().size(), "Should be added");
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
@@ -297,7 +298,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         Task task = new Task(task2.getName(), task2.getDescription(), task2.getTaskId(),
                 task2.getStatus(), Duration.ofMinutes(5), LocalDateTime.now().plus(Duration.ofMinutes(11)));
-        manager.updateTask(task);
+
+        assertThrows(TaskOverlapException.class, () -> manager.updateTask(task), "Should not be updated");
 
         assertEquals(2, manager.getAllTasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
@@ -346,8 +348,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         SubTask subTask2 = new SubTask("SubTask2Name", "SubTask2Description", 15, TaskStatus.NEW, epic1.getTaskId());
 
-        manager.updateSubTask(subTask2);
-        assertNotEquals(manager.getSubTaskById(subTask1ID), subTask2, "Should not have the same id");
+        assertThrows(NotFoundException.class, () -> manager.updateSubTask(subTask2), "Should not be in the system");
     }
 
     @Test
@@ -408,8 +409,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteSubTaskById(subTask1Id);
 
-        SubTask notExistingSubTask = manager.getSubTaskById(subTask1Id);
-        assertNull(notExistingSubTask, "Should be removed from the system");
+        assertThrows(NotFoundException.class, () -> manager.getSubTaskById(subTask1Id), "Should be removed from the system");
 
         List<SubTask> subTasksAfterDeletion = manager.getAllSubtasks();
         assertTrue(subTasksAfterDeletion.isEmpty(), "SubTask list should be empty");
@@ -616,7 +616,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         subTask2.setDuration(Duration.ofMinutes(3));
 
         manager.createSubTask(subTask1);
-        manager.createSubTask(subTask2);
+        assertThrows(TaskOverlapException.class, () -> manager.createSubTask(subTask2), "Second subTask do not overlap");
 
         assertEquals(1, manager.getAllSubtasks().size(), "Should be added");
         assertEquals(1, manager.getPrioritizedTasks().size(), "Should be added");
@@ -641,7 +641,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         SubTask subTask = new SubTask(subTask2.getName(), subTask2.getDescription(), subTask2.getTaskId(),
                 subTask2.getStatus(), subTask2.getEpicId(),
                 Duration.ofMinutes(5), LocalDateTime.now().plus(Duration.ofMinutes(11)));
-        manager.updateSubTask(subTask);
+        assertThrows(TaskOverlapException.class, () -> manager.updateSubTask(subTask), "Overlapped subTask should not be added");
 
         assertEquals(2, manager.getAllSubtasks().size(), "Should be added");
         assertEquals(2, manager.getPrioritizedTasks().size(), "Should be added");
@@ -672,7 +672,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         Epic epic2 = new Epic("Epic2Name", "Epic2Description", 15);
 
-        manager.updateEpic(epic2);
+        assertThrows(NotFoundException.class, () -> manager.updateEpic(epic2), "Should not be updated");
         assertNotEquals(manager.getEpicByID(epicId1), epic2, "Should not have the same id");
     }
 
@@ -805,8 +805,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteEpicById(epic1Id);
 
-        Epic notExistingEpic = manager.getEpicByID(epic1Id);
-        assertNull(notExistingEpic, "Epic is no longer in the system");
+        assertThrows(NotFoundException.class, () -> manager.getEpicByID(epic1Id), "Epic is no longer in the system");
 
         List<Epic> EpicsAfterDeletion = manager.getAllEpics();
         assertTrue(EpicsAfterDeletion.isEmpty(), "System doesn't contains epic");
@@ -827,8 +826,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
         manager.deleteEpicById(epic1Id);
 
-        assertNull(manager.getEpicByID(epic1Id), "Epic should be deleted");
-        assertNull(manager.getSubTaskById(subTaskId), "Epic's subTasks should be deleted");
+        assertThrows(NotFoundException.class, () -> manager.getEpicByID(epic1Id), "Epic should be deleted");
+        assertThrows(NotFoundException.class, () -> manager.getSubTaskById(subTaskId), "Epic's subTasks should be deleted");
         assertTrue(manager.getAllEpics().isEmpty(), "Epic should be deleted");
         assertTrue(manager.getAllSubtasks().isEmpty(), "SubTasks should be deleted");
     }
